@@ -15,7 +15,11 @@
     "@mui/material": "5.13.0",
     "next": "13.4.2",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-icons": "^4.12.0",
+    "rechart": "^0.0.1",
+    "recharts": "^2.10.1",
+    "use-debounce": "^10.0.0"
   },
   "devDependencies": {
     "eslint": "^8.54.0",
