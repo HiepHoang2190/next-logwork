@@ -5,6 +5,7 @@ import { connectToDB } from './lib/utils'
 import { User } from './lib/models'
 import bcrypt from 'bcrypt'
 
+
 const login = async (credentials) => {
   try {
     connectToDB()
@@ -55,6 +56,7 @@ export const { signIn, signOut, auth } = NextAuth({
         session.user.img = token.img
       }
       return session
-    }
+    },
+
   }
 })

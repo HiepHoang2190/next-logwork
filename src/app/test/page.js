@@ -1,7 +1,7 @@
 const Page = () => { {
   const handleForm = async (formData) => {
     'use server'
-    // console.log(formData)
+    console.log(formData)
     const username = formData.get('username')
     // console.log('Hello', username)
   }
@@ -9,7 +9,8 @@ const Page = () => { {
   return (
     <div>
       <form action={handleForm}>
-        <input type="text" name="username" />
+      <input type="text" placeholder="username" name="username" />
+        <input type="password" placeholder="password" name="password" />
         <button>Send</button>
       </form>
     </div>
