@@ -165,3 +165,13 @@ export const authenticate = async ( prevState, formData) => {
     return 'Wrong Credentials!'
   }
 }
+
+export const authenticate2 = async ( formData) => {
+  const { username, password } = formData
+  try {
+    await signIn('credentials', { username, password} )
+    
+  } catch (err) {
+    return 'Wrong Credentials!'
+  }
+}
