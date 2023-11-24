@@ -10,7 +10,7 @@ import {
 
 const Navbar = () => {
   const pathname = usePathname()
-  console.log(pathname)
+  // console.log(pathname)
   return (
     <div className={styles.container}>
       <div className={styles.title}>{pathname.split('/').pop()}</div>
