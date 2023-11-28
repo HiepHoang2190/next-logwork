@@ -20,27 +20,27 @@ export default function LogWorksPage () {
   // const item = await getLogWork()
   // console.log(item)
 
-  const fetcher = (url) => fetch(url, {
-    method: 'GET',
-    headers: {
-      'Accept': 'application/json, text/plain, */*',
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    }
-  })
-    .then((res) => res.json())
+  // const fetcher = (url) => fetch(url, {
+  //   method: 'GET',
+  //   headers: {
+  //     'Accept': 'application/json, text/plain, */*',
+  //     'Content-Type': 'application/json',
+  //     'Access-Control-Allow-Origin': '*',
+  //     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  //     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  //   }
+  // })
+  //   .then((res) => res.json())
 
-  const { data, error, isLoading } = useSWR(
-    'http://api-jira.lotustest.net/rest/V1/user/thao',
-    fetcher,
-    {
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false
-    }
-  )
+  // const { data, error, isLoading } = useSWR(
+  //   'http://api-jira.lotustest.net/rest/V1/user/thao',
+  //   fetcher,
+  //   {
+  //     revalidateIfStale: false,
+  //     revalidateOnFocus: false,
+  //     revalidateOnReconnect: false
+  //   }
+  // )
   // console.log(data)
   // if (isLoading) {
   //   return <div>loading...</div>
@@ -94,7 +94,7 @@ export default function LogWorksPage () {
     startTime: { name: 'CREATED' },
     endTime: { name: 'UPDATED' }
   }
-  const eventSettings = { dataSource: data, fields: fieldsData }
+  const eventSettings = { dataSource: datasource, fields: fieldsData }
   return (
     <div className="mt-3">
 
