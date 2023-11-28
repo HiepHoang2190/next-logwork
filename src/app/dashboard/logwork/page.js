@@ -14,17 +14,62 @@ import '../../../../node_modules/@syncfusion/ej2-splitbuttons/styles/material.cs
 import '../../../../node_modules/@syncfusion/ej2-react-schedule/styles/material.css'
 
 import { datasource } from '@/app/lib/datasource'
+import getLogWork from "@/app/lib/getLogWork"
+import { useEffect, useState} from 'react'
+import useSWR from "swr";
+
+
 
 const  LogWorksPage = () => {
+//   const [ toDos, setToDos ] = useState()
+// const [isLoading, setIsLoading] = useState(false)
+// useEffect(() => {
+//   setIsLoading(true)
+//   fetch('http://api-jira.lotustest.net/rest/V1/user/thao',
+//   {
+//       method: 'GET',
+//       headers: {
+//         'Accept': 'application/json, text/plain, */*',
+//                       'Content-Type': 'application/json',
+//                       'Access-Control-Allow-Origin': 'http://192.168.11.153:3001',
+//     									'Access-Control-Allow-Methods':'*',
+//     									'Access-Control-Allow-Credentials':'true',
+//     									'Access-Control-Allow-Headers':'X-CSRF-Token'
+//       }})
+//       .then(response => response.json())
+//       .then(data => {
+//         console.log(data)
+//           setToDos(data) // Set the toDo variable
+//           setIsLoading(false)
+//       })
+// }, [])
+// if (isLoading) {
+//   return <p>Loading....</p>
+// }
+// if (!toDos) {
+//   return <p>No List to show</p>
+// }
+  // const logwork = use(getLogWork())
 
+
+  // useEffect(() => {
+  //   const handle = async () => {
+  //     const logwork = await getLogWork()
+
+  //     console.log(logwork)
+  //   }
+  //   handle
+    
+  // }, [])
   // const fetcher = (url) => fetch(url, {
   //   method: 'GET',
   //   headers: {
   //     'Accept': 'application/json, text/plain, */*',
-  //     'Content-Type': 'application/json',
-  //     'Access-Control-Allow-Origin': '*',
-  //     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  //     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  //                   'Content-Type': 'application/json',
+  //                   'Access-Control-Allow-Origin': 'http://192.168.11.153:3001',
+	// 									'Access-Control-Allow-Methods':'*',
+	// 									'Access-Control-Allow-Credentials':'true',
+	// 									'Access-Control-Allow-Headers':'X-CSRF-Token'
   //   }
   // })
   //   .then((res) => res.json())
@@ -44,18 +89,41 @@ const  LogWorksPage = () => {
   // }
 
 
-  const fieldsData = {
-    id: 'issueid',
-    subject: { name: 'SUMMARY' },
-    description: { name: 'timeworked' },
-    startTime: { name: 'CREATED' },
-    endTime: { name: 'UPDATED' }
-  }
-  const eventSettings = { dataSource: datasource, fields: fieldsData }
+
+  // const [datawork, setDataWork] = useState([])
+  // {logwork.map(item => {
+
+  //   setDataWork(current => [...current, item]);
+  // })}
+//   useEffect(() => {
+//     {logwork.map(item => {
+
+//       setDataWork(current => [...current, item]);
+//     })}
+//     setDataWork(datasource);
+// },[]);
+// datasource = logwork;
+const fieldsData = {
+  id: 'issueid',
+  subject: { name: 'SUMMARY' },
+  description: { name: 'timeworked' },
+  startTime: { name: 'CREATED' },
+  endTime: { name: 'UPDATED' }
+}
+  const eventSettings =  { dataSource: datasource, fields: fieldsData }
   return (
     <div className="mt-3">
 
-      <ScheduleComponent height='750px' currentView='Month' eventSettings={eventSettings}>
+    {/* <ul>
+      {logwork?.map(item => {
+        return(
+          <li key={item.isueid}>
+              {item.SUMMARY}
+          </li>
+        )
+      })}
+    </ul> */}
+    <ScheduleComponent height='750px' currentView='Month' eventSettings={eventSettings}>
         <ViewsDirective>
           <ViewDirective option='Week' readonly={true}/>
           <ViewDirective option='Month' readonly={true} />
@@ -66,7 +134,6 @@ const  LogWorksPage = () => {
         </ViewsDirective>
         <Inject services={[Year, Week, Month, Day]} />
       </ScheduleComponent>
-
     </div>
   )
 }
