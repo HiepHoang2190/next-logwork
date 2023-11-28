@@ -14,35 +14,78 @@ import '../../../../node_modules/@syncfusion/ej2-splitbuttons/styles/material.cs
 import '../../../../node_modules/@syncfusion/ej2-react-schedule/styles/material.css'
 
 import { datasource } from '@/app/lib/datasource'
+import useSWR from 'swr'
+// import { getLogWork } from '@/app/api/route'
+export default function LogWorksPage () {
+  // const item = await getLogWork()
+  // console.log(item)
 
-const  LogWorksPage = () => {
+  const fetcher = (url) => fetch(url, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    }
+  })
+    .then((res) => res.json())
 
-  // const fetcher = (url) => fetch(url, {
-  //   method: 'GET',
-  //   headers: {
-  //     'Accept': 'application/json, text/plain, */*',
-  //     'Content-Type': 'application/json',
-  //     'Access-Control-Allow-Origin': '*',
-  //     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  //     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-  //   }
-  // })
-  //   .then((res) => res.json())
-
-  // const { data, error, isLoading } = useSWR(
-  //   'http://api-jira.lotustest.net/rest/V1/user/thao',
-  //   fetcher,
-  //   {
-  //     revalidateIfStale: false,
-  //     revalidateOnFocus: false,
-  //     revalidateOnReconnect: false
-  //   }
-  // )
+  const { data, error, isLoading } = useSWR(
+    'http://api-jira.lotustest.net/rest/V1/user/thao',
+    fetcher,
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false
+    }
+  )
   // console.log(data)
   // if (isLoading) {
   //   return <div>loading...</div>
   // }
 
+
+  //   const [ toDos, setToDos ] = useState()
+  // const [isLoading, setIsLoading] = useState(false)
+  // useEffect(() => {
+  //   setIsLoading(true)
+  //   fetch('http://api-jira.lotustest.net/rest/V1/user/thao',
+  //   {
+  //       method: 'GET',
+  //       headers: {
+  //         'Accept': 'application/json, text/plain, */*',
+  //                       'Content-Type': 'application/json',
+  //                       'Access-Control-Allow-Origin': 'http://192.168.11.153:3001',
+  //     									'Access-Control-Allow-Methods':'*',
+  //     									'Access-Control-Allow-Credentials':'true',
+  //     									'Access-Control-Allow-Headers':'X-CSRF-Token'
+  //       }})
+  //       .then(response => response.json())
+  //       .then(data => {
+  //         console.log(data)
+  //           setToDos(data) // Set the toDo variable
+  //           setIsLoading(false)
+  //       })
+  // }, [])
+  // if (isLoading) {
+  //   return <p>Loading....</p>
+  // }
+  // if (!toDos) {
+  //   return <p>No List to show</p>
+  // }
+
+
+  // useEffect(() => {
+  //   const handle = async () => {
+  //     const logwork = await getLogWork()
+
+  //     console.log(logwork)
+  //   }
+  //   handle
+
+  // }, [])
 
   const fieldsData = {
     id: 'issueid',
@@ -51,7 +94,7 @@ const  LogWorksPage = () => {
     startTime: { name: 'CREATED' },
     endTime: { name: 'UPDATED' }
   }
-  const eventSettings = { dataSource: datasource, fields: fieldsData }
+  const eventSettings = { dataSource: data, fields: fieldsData }
   return (
     <div className="mt-3">
 
@@ -71,4 +114,4 @@ const  LogWorksPage = () => {
   )
 }
 
-export default LogWorksPage
+// export default LogWorksPage
