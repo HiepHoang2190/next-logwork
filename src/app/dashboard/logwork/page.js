@@ -103,6 +103,30 @@ const  LogWorksPage = () => {
 //     setDataWork(datasource);
 // },[]);
 // datasource = logwork;
+const [logWork, setLogWork] = useState([{
+  'issueid':'',
+  'SUMMARY':'',
+  'timeworked':'',
+  'CREATED':'',
+  'UPDATED':'',
+}]);
+   useEffect(() => {
+    const newLogWork = [...logWork]
+   datasource.map((item)=>{
+
+    newLogWork.push({
+      'issueid':item.issueid,
+      'SUMMARY':item.SUMMARY,
+      'timeworked':'Project: '+item.pkey+'\n\n Key: '+item.key+'\n\n Log Time: '+(item.timeworked)/3600+'h',
+      'CREATED':item.CREATED,
+      'UPDATED':item.UPDATED,
+    })
+    
+   })
+   setLogWork(newLogWork)
+    
+  }, [])
+  console.log(logWork)
 const fieldsData = {
   id: 'issueid',
   subject: { name: 'SUMMARY' },
@@ -110,7 +134,7 @@ const fieldsData = {
   startTime: { name: 'CREATED' },
   endTime: { name: 'UPDATED' }
 }
-  const eventSettings =  { dataSource: datasource, fields: fieldsData }
+  const eventSettings =  { dataSource: logWork, fields: fieldsData }
   return (
     <div className="mt-3">
 
