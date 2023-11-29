@@ -13,12 +13,19 @@ import '../../../../node_modules/@syncfusion/ej2-popups/styles/material.css'
 import '../../../../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css'
 import '../../../../node_modules/@syncfusion/ej2-react-schedule/styles/material.css'
 
-import { datasource } from '@/app/lib/datasource'
+import { datasource,dataAllUser } from '@/app/lib/datasource'
 import getLogWork from "@/app/lib/getLogWork"
 import { useEffect, useState} from 'react'
-import useSWR from "swr";
+import useSWR from "swr"
 
+import Box from '@mui/material/Box'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
+import Select from '@mui/material/Select'
 
+import axios from "axios"
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 const  LogWorksPage = () => {
 //   const [ toDos, setToDos ] = useState()
@@ -110,23 +117,90 @@ const [logWork, setLogWork] = useState([{
   'CREATED':'',
   'UPDATED':'',
 }]);
-   useEffect(() => {
-    const newLogWork = [...logWork]
-   datasource.map((item)=>{
+const [paramUserName, setParamUserName] = useState('')
+// const username = useSearchParams().get('username')
 
-    newLogWork.push({
-      'issueid':item.issueid,
-      'SUMMARY':item.SUMMARY,
-      'timeworked':'Project: '+item.pkey+'\n\n Key: '+item.key+'\n\n Log Time: '+(item.timeworked)/3600+'h',
-      'CREATED':item.CREATED,
-      'UPDATED':item.UPDATED,
-    })
+   useEffect(() => {
+
     
-   })
-   setLogWork(newLogWork)
+
+    const newLogWork = [...logWork]
+    if(paramUserName =='hieph'){
+      console.log("paramUserName",paramUserName)
+     
+      console.log('logWork',logWork)
     
+      datasource.map((item)=>{
+
+        newLogWork.push({
+          'issueid':item.issueid,
+          'SUMMARY':item.SUMMARY,
+          'timeworked':'Project: '+item.pkey+'\n\n Key: '+item.key+'\n\n Log Time: '+(item.timeworked)/3600+'h',
+          'CREATED':item.CREATED,
+          'UPDATED':item.UPDATED,
+        })
+        
+       })
+       console.log('newLogWork',newLogWork)
+       
+       setLogWork(newLogWork)
+       console.log('logWork',logWork)
+    } else {
+      setLogWork([{}])
+    }    
+  }, [paramUserName])
+
+
+  useEffect(() => {
+    const newLogWork = [...logWork]
+      datasource.map((item)=>{
+        newLogWork.push({
+          'issueid':item.issueid,
+          'SUMMARY':item.SUMMARY,
+          'timeworked':'Project: '+item.pkey+'\n\n Key: '+item.key+'\n\n Log Time: '+(item.timeworked)/3600+'h',
+          'CREATED':item.CREATED,
+          'UPDATED':item.UPDATED,
+        })     
+       }) 
+       setLogWork(newLogWork)
   }, [])
-  console.log(logWork)
+
+  // console.log(logWork)
+  // useEffect(() => {
+  //   axios
+  //     .get("http://api-jira.lotustest.net/rest/V1/user/hieph")
+  //     .then((res) => {
+  //       setData(res.data);
+  //       console.log("Result:", data);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }, []);
+
+
+
+  const [userName, setUserName] = useState('');
+
+  const searchParams = useSearchParams()
+  const { replace } = useRouter()
+  const pathname = usePathname()
+
+  const handleChange = (event) => {
+
+    setUserName(event.target.value);
+    const params = new URLSearchParams(searchParams)
+
+    if (event.target.value) {
+      params.set('username', event.target.value)
+      setParamUserName(event.target.value)
+    } else {
+      params.delete('username')
+    }
+    replace(`${pathname}?${params}`)
+
+  };
+
 const fieldsData = {
   id: 'issueid',
   subject: { name: 'SUMMARY' },
@@ -147,17 +221,46 @@ const fieldsData = {
         )
       })}
     </ul> */}
+     <Box sx={{ marginTop: 4 }}>
+      <FormControl>
+        <InputLabel style={{ color: "#FFFFFF"}} id="demo-simple-select-label">Name</InputLabel>
+        <Select
+        variant="outlined"
+        sx={{
+        width: 200,
+        marginRight: 15,
+        color: "#fff",
+        "& .MuiSvgIcon-root": {
+            color: "white",
+        },
+        }}
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        value={userName}
+        label="Name"
+        onChange={handleChange}
+      
+        >      
+        {dataAllUser.map((item)=>(
+            <MenuItem value={item.user_name}>{item.display_name}</MenuItem>
+          ))     
+        }       
+        </Select>
+      </FormControl>
+    </Box>
     <ScheduleComponent height='750px' currentView='Month' eventSettings={eventSettings}>
-        <ViewsDirective>
-          <ViewDirective option='Week' readonly={true}/>
-          <ViewDirective option='Month' readonly={true} />
-          <ViewDirective option='Day' readonly={true} />
+      <ViewsDirective>
+        <ViewDirective option='Week' readonly={true}/>
+        <ViewDirective option='Month' readonly={true} />
+        <ViewDirective option='Day' readonly={true} />
 
-          <ViewDirective option='Year' readonly={true} />
+        <ViewDirective option='Year' readonly={true} />
 
-        </ViewsDirective>
-        <Inject services={[Year, Week, Month, Day]} />
-      </ScheduleComponent>
+      </ViewsDirective>
+      <Inject services={[Year, Week, Month, Day]} />
+    </ScheduleComponent>
+
+   
     </div>
   )
 }

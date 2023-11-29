@@ -6685,3 +6685,451 @@ export const datasource =
     'comment': ''
   }
 ]
+
+
+export const dataleave = [
+  {
+      "creator": "hieph",
+      "summary": " Leave Request",
+      "desc": "Em bận việc nhà vào buổi chiều ngày 8/3/2021",
+      "create_date": "2021-03-05 15:54:19",
+      "due_date": "2021-03-08 00:00:00",
+      "id": "320",
+      "start_date": "2021-03-08 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": "Leave Request",
+      "desc": "Reason: Busy with housework",
+      "create_date": "2021-03-12 09:37:54",
+      "due_date": "2021-03-15 00:00:00",
+      "id": "324",
+      "start_date": "2021-03-15 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": " Leave Request",
+      "desc": "I go to travel",
+      "create_date": "2021-04-28 16:23:32",
+      "due_date": "2021-05-04 00:00:00",
+      "id": "355",
+      "start_date": "2021-05-04 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": " Leave Request",
+      "desc": "Reason: Busy with housework",
+      "create_date": "2021-07-01 08:47:34",
+      "due_date": "2021-07-01 00:00:00",
+      "id": "377",
+      "start_date": "2021-07-01 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": " Leave Request",
+      "desc": "Reason: Busy with housework",
+      "create_date": "2021-07-27 15:30:48",
+      "due_date": "2021-07-29 00:00:00",
+      "id": "401",
+      "start_date": "2021-07-29 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": " Leave Request",
+      "desc": "Reason: Busy with housework",
+      "create_date": "2021-09-28 16:01:44",
+      "due_date": "2021-09-29 00:00:00",
+      "id": "441",
+      "start_date": "2021-09-29 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": " Leave Request",
+      "desc": "busy house work",
+      "create_date": "2021-10-19 17:31:11",
+      "due_date": "2021-10-20 00:00:00",
+      "id": "456",
+      "start_date": "2021-10-20 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": " Leave Request",
+      "desc": "busy house work",
+      "create_date": "2021-11-22 21:32:22",
+      "due_date": "2021-11-23 00:00:00",
+      "id": "473",
+      "start_date": "2021-11-23 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": "Annual Leave Request",
+      "desc": "I'm tired after getting the third shot of covid vaccine",
+      "create_date": "2022-01-24 06:59:44",
+      "due_date": "2022-01-24 00:00:00",
+      "id": "536",
+      "start_date": "2022-01-24 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": "Annual Leave Request",
+      "desc": "I'm tired after get the third shot vaccin covid",
+      "create_date": "2022-01-25 07:47:42",
+      "due_date": "2022-01-25 00:00:00",
+      "id": "539",
+      "start_date": "2022-01-25 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": "Annual Leave Request",
+      "desc": "busy with housework",
+      "create_date": "2022-02-23 08:48:47",
+      "due_date": "2022-02-23 00:00:00",
+      "id": "564",
+      "start_date": "2022-02-23 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": "Annual Leave Request",
+      "desc": "busy house work",
+      "create_date": "2022-04-29 11:54:59",
+      "due_date": "2022-05-06 00:00:00",
+      "id": "598",
+      "start_date": "2022-05-06 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": "Annual Leave Request",
+      "desc": "busy house work",
+      "create_date": "2022-07-04 10:31:29",
+      "due_date": "2022-07-04 00:00:00",
+      "id": "629",
+      "start_date": "2022-07-04 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": "Annual Leave Request",
+      "desc": "busy house work",
+      "create_date": "2022-07-21 08:39:20",
+      "due_date": "2022-07-25 00:00:00",
+      "id": "647",
+      "start_date": "2022-07-25 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": "Annual Leave Request",
+      "desc": "busy house work",
+      "create_date": "2022-07-29 15:36:12",
+      "due_date": "2022-08-02 00:00:00",
+      "id": "655",
+      "start_date": "2022-08-02 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": "Annual Leave Request",
+      "desc": "busy house work",
+      "create_date": "2022-09-22 16:19:09",
+      "due_date": "2022-09-26 00:00:00",
+      "id": "688",
+      "start_date": "2022-09-26 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": "Annual Leave Request",
+      "desc": "I'm sick",
+      "create_date": "2022-11-01 21:43:57",
+      "due_date": "2022-11-01 00:00:00",
+      "id": "707",
+      "start_date": "2022-11-01 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": "Annual Leave Request",
+      "desc": "busy housework",
+      "create_date": "2022-12-26 11:14:57",
+      "due_date": "2022-12-28 00:00:00",
+      "id": "737",
+      "start_date": "2022-12-28 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": "Annual Leave Request",
+      "desc": null,
+      "create_date": "2023-03-15 14:03:06",
+      "due_date": "2023-03-16 00:00:00",
+      "id": "811",
+      "start_date": "2023-03-16 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": "Annual Leave Request",
+      "desc": null,
+      "create_date": "2023-03-15 14:04:42",
+      "due_date": "2023-03-19 00:00:00",
+      "id": "812",
+      "start_date": "2023-03-17 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": "Annual Leave Request",
+      "desc": null,
+      "create_date": "2023-03-15 14:08:58",
+      "due_date": "2023-03-20 00:00:00",
+      "id": "813",
+      "start_date": "2023-03-20 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": "Annual Leave Request",
+      "desc": "busy housework",
+      "create_date": "2023-04-20 08:34:51",
+      "due_date": "2023-04-20 00:00:00",
+      "id": "853",
+      "start_date": "2023-04-20 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": "Annual Leave Request",
+      "desc": "busy housework",
+      "create_date": "2023-05-16 14:34:09",
+      "due_date": "2023-05-17 00:00:00",
+      "id": "873",
+      "start_date": "2023-05-17 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": "Annual Leave Request",
+      "desc": "housework",
+      "create_date": "2023-07-24 10:58:36",
+      "due_date": "2023-07-27 00:00:00",
+      "id": "942",
+      "start_date": "2023-07-26 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": "Annual Leave Request",
+      "desc": "housework",
+      "create_date": "2023-08-01 14:30:24",
+      "due_date": "2023-08-01 00:00:00",
+      "id": "949",
+      "start_date": "2023-08-01 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": "Annual Leave Request",
+      "desc": "I'm sick",
+      "create_date": "2023-08-03 13:41:34",
+      "due_date": "2023-08-03 00:00:00",
+      "id": "953",
+      "start_date": "2023-08-03 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": "Annual Leave Request",
+      "desc": null,
+      "create_date": "2023-08-23 15:06:14",
+      "due_date": "2023-08-23 00:00:00",
+      "id": "978",
+      "start_date": "2023-08-23 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": "Annual Leave Request",
+      "desc": "housework",
+      "create_date": "2023-08-30 13:45:18",
+      "due_date": "2023-09-05 00:00:00",
+      "id": "985",
+      "start_date": "2023-09-05 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": "Annual Leave Request",
+      "desc": "housework",
+      "create_date": "2023-09-22 10:21:05",
+      "due_date": "2023-09-25 00:00:00",
+      "id": "997",
+      "start_date": "2023-09-25 00:00:00"
+  },
+  {
+      "creator": "hieph",
+      "summary": "Annual Leave Request",
+      "desc": "housework",
+      "create_date": "2023-09-22 10:21:33",
+      "due_date": "2023-09-28 00:00:00",
+      "id": "998",
+      "start_date": "2023-09-28 00:00:00"
+  }
+]
+
+export const dataleavetotal= [
+  {
+      "user": "hieph",
+      "time_estimate": "345600",
+      "time_remain": "72000",
+      "time_spent": "273600"
+  }
+]
+
+export const datalogin = [
+  {
+    "session": {
+        "name": "JSESSIONID",
+        "value": "188A86422CDE8EBF26729C70648B65C8"
+    },
+    "loginInfo": {
+        "failedLoginCount": 8,
+        "loginCount": 774,
+        "lastFailedLoginTime": "2023-11-29T11:33:16.809+0700",
+        "previousLoginTime": "2023-11-29T11:31:25.863+0700"
+    }
+}
+]
+
+export const datauser = [
+  {
+      "self": "https://jira.lotustest.net/rest/api/2/user?username=hieph",
+      "key": "hieph",
+      "name": "hieph",
+      "emailAddress": "hoangbachhiep2190@gmail.com",
+      "avatarUrls": {
+          "48x48": "https://www.gravatar.com/avatar/ae80f5bf935c359c3e28c38ef12c7623?d=mm&s=48",
+          "24x24": "https://www.gravatar.com/avatar/ae80f5bf935c359c3e28c38ef12c7623?d=mm&s=24",
+          "16x16": "https://www.gravatar.com/avatar/ae80f5bf935c359c3e28c38ef12c7623?d=mm&s=16",
+          "32x32": "https://www.gravatar.com/avatar/ae80f5bf935c359c3e28c38ef12c7623?d=mm&s=32"
+      },
+      "displayName": "Hiep Hoang",
+      "active": true,
+      "timeZone": "Asia/Ho_Chi_Minh",
+      "locale": "en_US"
+  }
+]
+
+export const dataAllUser= [
+  {
+      "user_name": "phuong",
+      "display_name": "Phuong Nguyen"
+  },
+  {
+      "user_name": "minh",
+      "display_name": "Minh Nguyen"
+  },
+  {
+      "user_name": "bich",
+      "display_name": "Bich Ho"
+  },
+  {
+      "user_name": "diep",
+      "display_name": "Diep Phan"
+  },
+  {
+      "user_name": "hoang",
+      "display_name": "Hoang Phan"
+  },
+  {
+      "user_name": "tri",
+      "display_name": "Tri Huynh"
+  },
+  {
+      "user_name": "victor",
+      "display_name": "Victor Tai"
+  },
+  {
+      "user_name": "duyh",
+      "display_name": "Duy Huynh"
+  },
+  {
+      "user_name": "hoangl",
+      "display_name": "Hoang Le"
+  },
+  {
+      "user_name": "tienn",
+      "display_name": "Tien Nguyen"
+  },
+  {
+      "user_name": "bao",
+      "display_name": "Bao Nguyen"
+  },
+  {
+      "user_name": "hieph",
+      "display_name": "Hiep Hoang"
+  },
+  {
+      "user_name": "thoang",
+      "display_name": "Thoang Le"
+  },
+  {
+      "user_name": "trinh",
+      "display_name": "Trinh Tran"
+  },
+  {
+      "user_name": "thao",
+      "display_name": "Thao Nguyen"
+  },
+  {
+      "user_name": "yen",
+      "display_name": "Yen Nguyen"
+  },
+  {
+      "user_name": "minht",
+      "display_name": "Minh Tran"
+  },
+  {
+      "user_name": "chin",
+      "display_name": "Chi Nguyen"
+  },
+  {
+      "user_name": "nguyent",
+      "display_name": "Nguyen Trinh"
+  },
+  {
+      "user_name": "thuan",
+      "display_name": "Thuan Nguyen"
+  },
+  {
+      "user_name": "nghia",
+      "display_name": "Nghia Nguyen"
+  },
+  {
+      "user_name": "phuc",
+      "display_name": "Phuc Ngo"
+  },
+  {
+      "user_name": "kha",
+      "display_name": "Kha Le"
+  },
+  {
+      "user_name": "ducn",
+      "display_name": "Duc Nguyen"
+  },
+  {
+      "user_name": "ngoc",
+      "display_name": "Ngoc Huynh"
+  },
+  {
+      "user_name": "hieu",
+      "display_name": "Hieu Nguyen"
+  },
+  {
+      "user_name": "hoa",
+      "display_name": "Hoa Huynh"
+  },
+  {
+      "user_name": "mang",
+      "display_name": "Mang Nguyen"
+  },
+  {
+      "user_name": "jolene",
+      "display_name": "Jolene Tan"
+  },
+  {
+      "user_name": "yuting",
+      "display_name": "Yuting Low"
+  },
+  {
+      "user_name": "cheryl",
+      "display_name": "Cheryl Quek"
+  },
+  {
+      "user_name": "thai",
+      "display_name": "Thai Tran"
+  }
+]
