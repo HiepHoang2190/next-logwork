@@ -14,12 +14,21 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'images.pexels.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.gravatar.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'jira.lotustest.net'
       }
     ]
   },
   async headers() {
     return [
       {
+        // matching all API routes
         source: '/api/:path*',
         headers: [
           { key: 'Access-Control-Allow-Credentials', value: 'true' },

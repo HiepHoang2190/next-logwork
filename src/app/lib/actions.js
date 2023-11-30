@@ -6,7 +6,8 @@ import { connectToDB } from './utils'
 import { redirect } from 'next/navigation'
 import bcrypt from 'bcrypt'
 import { signIn } from '../auth'
-
+import { toast } from 'react-toastify'
+// import { useRouter } from 'next/navigation'
 
 export const addUser = async (formData) => {
   const { username, email, password, phone, address, isAdmin, isActive } =
@@ -168,10 +169,20 @@ export const authenticate = async ( prevState, formData) => {
 
 export const authenticate2 = async ( formData) => {
   const { username, password } = formData
+  // const router = useRouter()
   try {
-    await signIn('credentials', { username, password} )
-    
+    await signIn('credentials', { username, password})
+    // await signIn('credentials', { username, password, redirect: false })
+    //   .then(({ ok, error }) => {
+    //     if (ok) {
+    //       router.push('/dashboard')
+    //     } else {
+    //       console.log(error)
+    //       // toast("Credentials do not match!", { type: "error" });
+    //     }
+    //   })
   } catch (err) {
-    return 'Wrong Credentials!'
+    return { error:'Wrong Credentials!' }
   }
 }
+

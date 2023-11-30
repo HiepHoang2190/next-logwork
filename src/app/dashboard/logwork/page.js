@@ -96,19 +96,6 @@ const LogWorksPage = () => {
   // }
 
 
-  // const [datawork, setDataWork] = useState([])
-  // {logwork.map(item => {
-
-  //   setDataWork(current => [...current, item]);
-  // })}
-  //   useEffect(() => {
-  //     {logwork.map(item => {
-
-  //       setDataWork(current => [...current, item]);
-  //     })}
-  //     setDataWork(datasource);
-  // },[]);
-  // datasource = logwork;
   const [logWork, setLogWork] = useState([{
     'issueid':'',
     'SUMMARY':'',
@@ -122,8 +109,8 @@ const LogWorksPage = () => {
   useEffect(() => {
 
 
-    const newLogWork = [...logWork]
     if (paramUserName =='hieph') {
+      const newLogWork = []
       console.log('paramUserName', paramUserName)
 
       console.log('logWork', logWork)
@@ -149,32 +136,44 @@ const LogWorksPage = () => {
   }, [paramUserName])
 
 
-  useEffect(() => {
-    const newLogWork = [...logWork]
-    datasource.map((item) => {
-      newLogWork.push({
-        'issueid':item.issueid,
-        'SUMMARY':item.SUMMARY,
-        'timeworked':'Project: '+item.pkey+'\n\n Key: '+item.key+'\n\n Log Time: '+(item.timeworked)/3600+'h',
-        'CREATED':item.CREATED,
-        'UPDATED':item.UPDATED
-      })
-    })
-    setLogWork(newLogWork)
-  }, [])
+  // useEffect(() => {
+  //   const newLogWork = [...logWork]
+  //   datasource.map((item) => {
+  //     newLogWork.push({
+  //       'issueid':item.issueid,
+  //       'SUMMARY':item.SUMMARY,
+  //       'timeworked':'Project: '+item.pkey+'\n\n Key: '+item.key+'\n\n Log Time: '+(item.timeworked)/3600+'h',
+  //       'CREATED':item.CREATED,
+  //       'UPDATED':item.UPDATED
+  //     })
+  //   })
+  //   setLogWork(newLogWork)
+  // }, [])
 
   // console.log(logWork)
-  // useEffect(() => {
-  //   axios
-  //     .get("http://api-jira.lotustest.net/rest/V1/user/hieph")
-  //     .then((res) => {
-  //       setData(res.data);
-  //       console.log("Result:", data);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }, []);
+  useEffect(() => {
+
+    axios
+      .get('http://localhost:8000/dataUserAction')
+      .then((res) => {
+        const newLogWork = [...logWork]
+
+        res.data.map((item) => {
+          newLogWork.push({
+            'issueid':item.issueid,
+            'SUMMARY':item.SUMMARY,
+            'timeworked':'Project: '+item.pkey+'\n\n Key: '+item.key+'\n\n Log Time: '+(item.timeworked)/3600+'h',
+            'CREATED':item.CREATED,
+            'UPDATED':item.UPDATED
+          })
+        })
+        setLogWork(newLogWork)
+
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }, [])
 
 
   const [userName, setUserName] = useState('')

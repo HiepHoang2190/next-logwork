@@ -1,7 +1,7 @@
 
 export default async function getLogWork() {
-  const response = await fetch('http://api-jira.lotustest.net/rest/V1/user/thao', {
-    method: 'GET',
+  const response = await fetch('http://localhost:8000/dataUserAction', {
+   				method: 'GET',
     headers: {
       'Accept': 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
