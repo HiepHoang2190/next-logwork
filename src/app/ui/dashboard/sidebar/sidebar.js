@@ -38,7 +38,13 @@ const menuItems = [
         title: 'Logwork',
         path: '/dashboard/logwork',
         icon: <MdAttachMoney />
+      },
+      {
+        title: 'Leave',
+        path: '/dashboard/leave',
+        icon: <MdAttachMoney />
       }
+
     ]
   },
   
