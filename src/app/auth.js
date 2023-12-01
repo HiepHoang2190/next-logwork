@@ -8,6 +8,8 @@ import bcrypt from 'bcrypt'
 
 const login = async (credentials) => {
   try {
+
+    console.log('credentials',credentials)
     const user={}
     const userLogin = await
     fetch('https://jira.lotustest.net/rest/auth/1/session',
@@ -25,8 +27,11 @@ const login = async (credentials) => {
       })
       .then(response => response.json())
       .then(data => {
-        if (data.session == undefined) {
+        if (data.errorMessages) {
+
+          console.log('data',data)
           throw new Error('Incorrect password!')
+
         } else {
 
           user.session = data.session
@@ -34,6 +39,7 @@ const login = async (credentials) => {
           user.username = credentials.username
         }
       })
+
     const userDetail = await
     fetch(`https://jira.lotustest.net/rest/api/2/user/search?username=${credentials.username}`,
       {
@@ -51,28 +57,18 @@ const login = async (credentials) => {
       })
       .then(response => response.json())
       .then(data => {
-
-        user.email = data[0].emailAddress
-        user.displayName = data[0].displayName
-
-        const propertyValues = Object.values(data[0].avatarUrls)
-        user.avatarUrls = propertyValues
-
+        console.log('data2',data)
+      
+          user.email = data[0].emailAddress
+          user.displayName = data[0].displayName
+  
+          const propertyValues = Object.values(data[0].avatarUrls)
+          user.avatarUrls = propertyValues
+        
       })
-    // connectToDB()
-    // const user = await User.findOne({ username: credentials.username })
+    
 
-    // if (!user || !user.isAdmin) throw new Error('Not Admin!')
-
-    // const isPasswordCorrect = await bcrypt.compare(
-    //   credentials.password,
-    //   user.password
-    // )
-
-    // if (!isPasswordCorrect) throw new Error('Wrong credentials!')
-    // console.log(user)
-
-    // console.log(user)
+    console.log('user in login fetch',user)
     return user
   } catch (err) {
     console.log(err)
@@ -87,7 +83,7 @@ export const { signIn, signOut, auth } = NextAuth({
       async authorize(credentials) {
         try {
           const user = await login(credentials)
-          console.log('use1', user)
+          console.log('user await login', user)
           return user
         } catch (err) {
           return null
