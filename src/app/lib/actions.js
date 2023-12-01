@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation'
 import bcrypt from 'bcrypt'
 import { signIn } from '../auth'
 import { toast } from 'react-toastify'
+import { auth, signOut } from '@/app/auth'
 // import { useRouter } from 'next/navigation'
 
 export const addUser = async (formData) => {
@@ -157,32 +158,59 @@ export const deleteProduct = async (formData) => {
   revalidatePath('/dashboard/products')
 }
 
-export const authenticate = async ( prevState, formData) => {
-  const { username, password } = Object.fromEntries(formData)
+// export const authenticate2 = async ( prevState, formData) => {
+//   const { username, password } = Object.fromEntries(formData)
 
-  try {
-    await signIn('credentials', { username, password }, { callbackUrl: '/dashboard' })
-  } catch (err) {
-    return 'Wrong Credentials!'
-  }
-}
+//   try {
+//     await signIn('credentials', { username, password }, { callbackUrl: '/dashboard' })
+//   } catch (err) {
+//     return 'Wrong Credentials!'
+//   }
+// }
 
-export const authenticate2 = async ( formData) => {
+export const authenticate = async ( formData) => {
   const { username, password } = formData
   // const router = useRouter()
   try {
-    await signIn('credentials', { username, password})
-    // await signIn('credentials', { username, password, redirect: false })
-    //   .then(({ ok, error }) => {
-    //     if (ok) {
-    //       router.push('/dashboard')
-    //     } else {
-    //       console.log(error)
-    //       // toast("Credentials do not match!", { type: "error" });
-    //     }
-    //   })
+    await signIn('credentials', { username, password, redirect: false })
+
   } catch (err) {
-    return { error:'Wrong Credentials!' }
+    console.log('err', err)
+    console.log(err.name, err.message)
+    // return { error:err.name+' '+ err.message }
+    return { error:'Incorrect Password!' }
   }
+}
+
+export const getDataTimeLeave = async () => {
+  try {
+    const { user } = await auth()
+    const arr=[]
+    const typeLeave = await
+    fetch(`http://api-jira.lotustest.net/rest/V1/leave/${user.username}`,
+      {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods':'*',
+          'Access-Control-Allow-Credentials':'true',
+          'Access-Control-Allow-Headers':'X-CSRF-Token'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        data.map((item) => (
+          arr.push(item)
+        ))
+      })
+
+    return arr
+  } catch (err) {
+    console.log(err)
+    throw new Error('Failed to get time leave for user!')
+  }
+
 }
 

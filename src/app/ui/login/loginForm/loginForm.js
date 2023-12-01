@@ -1,7 +1,7 @@
 'use client'
 
+
 import { authenticate } from '@/app/lib/actions'
-import { authenticate2, auth2 } from '@/app/lib/actions'
 import styles from './loginForm.module.css'
 import { useFormState } from 'react-dom'
 import { useState, useEffect } from 'react'
@@ -100,7 +100,7 @@ const LoginForm = () => {
   const [err, setErr] = useState()
 
   const sendValue = async () => {
-    const data = await authenticate2(values)
+    const data = await authenticate(values)
     console.log('data', data)
 
     if (!data?.error) {
