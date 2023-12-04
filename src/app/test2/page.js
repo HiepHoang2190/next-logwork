@@ -38,7 +38,7 @@ const PageLog = async () => {
   const dataIssue = await getUserIssue()
   return (
     <>
-    <LogWorksPage2 dataIssue = {dataIssue}></LogWorksPage2>
+    <LogWorksPage2 dataIssue = {dataIssue} dataUserName={user.username}></LogWorksPage2>
     </>
  
   )
