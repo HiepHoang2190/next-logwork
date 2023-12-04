@@ -28,8 +28,8 @@ import axios from 'axios'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 const LogWorksPage2 = (props) => {
-  const { dataIssue } = props
-  console.log('dataIssue', dataIssue)
+  const { dataIssue, dataUserName } = props
+  // console.log('dataIssue', dataIssue)
 
   const [logWork, setLogWork] = useState([{
     'issueid':'',
@@ -40,74 +40,37 @@ const LogWorksPage2 = (props) => {
   }])
   const [paramUserName, setParamUserName] = useState('')
 
-  useEffect(() => {
-
-
-    if (paramUserName =='hieph') {
-      const newLogWork = []
-      console.log('paramUserName', paramUserName)
-
-      console.log('logWork', logWork)
-
-      datasource.map((item) => {
-
-        newLogWork.push({
-          'issueid':item.issueid,
-          'SUMMARY':item.SUMMARY,
-          'timeworked':'Project: '+item.pkey+'\n\n Key: '+item.key+'\n\n Log Time: '+(item.timeworked)/3600+'h',
-          'CREATED':item.CREATED,
-          'UPDATED':item.UPDATED
-        })
-
-      })
-      console.log('newLogWork', newLogWork)
-
-      setLogWork(newLogWork)
-      console.log('logWork', logWork)
-    } else {
-      setLogWork([{}])
-    }
-  }, [paramUserName])
-
-
   // useEffect(() => {
-  //   const newLogWork = [...logWork]
-  //   datasource.map((item) => {
-  //     newLogWork.push({
-  //       'issueid':item.issueid,
-  //       'SUMMARY':item.SUMMARY,
-  //       'timeworked':'Project: '+item.pkey+'\n\n Key: '+item.key+'\n\n Log Time: '+(item.timeworked)/3600+'h',
-  //       'CREATED':item.CREATED,
-  //       'UPDATED':item.UPDATED
+
+
+  //   if (paramUserName =='hieph') {
+  //     const newLogWork = []
+  //     console.log('paramUserName', paramUserName)
+
+  //     // console.log('logWork', logWork)
+
+  //     datasource.map((item) => {
+
+  //       newLogWork.push({
+  //         'issueid':item.issueid,
+  //         'SUMMARY':item.SUMMARY,
+  //         'timeworked':'Project: '+item.pkey+'\n\n Key: '+item.key+'\n\n Log Time: '+(item.timeworked)/3600+'h',
+  //         'CREATED':item.CREATED,
+  //         'UPDATED':item.UPDATED
+  //       })
+
   //     })
-  //   })
-  //   setLogWork(newLogWork)
-  // }, [])
+  //     // console.log('newLogWork', newLogWork)
 
-  // console.log(logWork)
+  //     setLogWork(newLogWork)
+  //     console.log('logWork', logWork)
+  //   } else {
+  //     setLogWork([{}])
+  //   }
+  // }, [paramUserName])
+
+
   useEffect(() => {
-
-    // axios
-    //   .get('http://localhost:8000/dataUserAction')
-    //   .then((res) => {
-    //     const newLogWork = [...logWork]
-
-    //     res.data.map((item) => {
-    //       newLogWork.push({
-    //         'issueid':item.issueid,
-    //         'SUMMARY':item.SUMMARY,
-    //         'timeworked':'Project: '+item.pkey+'\n\n Key: '+item.key+'\n\n Log Time: '+(item.timeworked)/3600+'h',
-    //         'CREATED':item.CREATED,
-    //         'UPDATED':item.UPDATED
-    //       })
-    //     })
-    //     setLogWork(newLogWork)
-
-    //   })
-    //   .catch((error) => {
-    //     console.log(error)
-    //   })
-
     const newLogWork = [...logWork]
     dataIssue.map((item) => {
       newLogWork.push({
@@ -120,7 +83,7 @@ const LogWorksPage2 = (props) => {
     })
     setLogWork(newLogWork)
   }, [])
-  console.log('logwork', logWork)
+  // console.log('logwork', logWork)
 
   const [userName, setUserName] = useState('')
 
@@ -130,35 +93,32 @@ const LogWorksPage2 = (props) => {
 
   const handleChange = async (event) => {
 
-    // setUserName(event.target.value)
-    // const params = new URLSearchParams(searchParams)
+    setUserName(event.target.value)
+    const params = new URLSearchParams(searchParams)
 
-    // if (event.target.value) {
-    //   params.set('username', event.target.value)
-    //   setParamUserName(event.target.value)
-    // } else {
-    //   params.delete('username')
-    // }
-    // replace(`${pathname}?${params}`)
+    if (event.target.value) {
+      params.set('username', event.target.value)
+      setParamUserName(event.target.value)
+    } else {
+      params.delete('username')
+    }
+    replace(`${pathname}?${params}`)
 
     try {
-      const response = await fetch('api/getIssueList', {
+      const dataIssue = await fetch('api/getIssueList', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ name: 'test', message: 'sdsd@gmail.com' })
+        body: JSON.stringify({ username: event.target.value })
       })
+        .then(response => response.json())
+        .then(data => {
+          // console.log('data',data)
+          setLogWork(data.message)
 
-      if (response.ok) {
-        // Handle success
-        console.log('User added successfully')
-        // Optionally, you can reset the formValues state here
-        // setFormValues({ name: '', email: '' });
-      } else {
-        // Handle errors
-        console.error('Error adding user')
-      }
+        })
+
     } catch (error) {
       console.error('Error:', error)
     }
@@ -174,16 +134,6 @@ const LogWorksPage2 = (props) => {
   const eventSettings = { dataSource: logWork, fields: fieldsData }
   return (
     <div className="mt-3">
-
-      {/* <ul>
-      {logwork?.map(item => {
-        return(
-          <li key={item.isueid}>
-              {item.SUMMARY}
-          </li>
-        )
-      })}
-    </ul> */}
       <Box sx={{ marginTop: 4 }}>
         <FormControl>
           <InputLabel style={{ color: '#FFFFFF' }} id="demo-simple-select-label">Name</InputLabel>
