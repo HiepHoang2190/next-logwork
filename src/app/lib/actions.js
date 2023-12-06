@@ -8,6 +8,7 @@ import bcrypt from 'bcrypt'
 import { signIn } from '../auth'
 import { toast } from 'react-toastify'
 import { auth, signOut } from '@/app/auth'
+import { get } from 'mongoose'
 // import { useRouter } from 'next/navigation'
 
 export const addUser = async (formData) => {
@@ -214,6 +215,7 @@ export const getDataTimeLeave = async () => {
 
 }
 
+
 export const logTimeTotal = async (arr_log =[]) => {
 
   'use server'
@@ -223,5 +225,65 @@ export const logTimeTotal = async (arr_log =[]) => {
   }, 0)
 
 
-  return (t+ 'h')
+  return (t)
+}
+
+export const logTimeTotalIssue = async (arr_log =[]) => {
+
+  'use server'
+
+  const final = arr_log.map((item) => {
+    let t2 = Object.values(item['logs']).reduce(function(a, b) {
+      return Number(a) + Number((b['timeworked'] / 3600).toFixed(2))
+    }, 0)
+    return t2
+  }).reduce((prev, curr) => prev + curr, 0)
+
+  return final
+
+}
+
+
+export const logTimeTotalIssueByDay = (arr_log =[], number_day) => {
+
+  'use server'
+  var final = 0
+  var t2 = 0
+  arr_log.map((item) => {
+
+    Object.values(item['logs']).map((item2) => {
+      var createDate = item2['created'].substring(0, 10)
+      var createDate_arr = createDate.split('-')
+      var get_day = createDate_arr[2]
+
+      if (Number(number_day) == get_day) {
+        var ts = Number((item2['timeworked'] / 3600).toFixed(2))
+        t2 += ts
+
+      }
+    })
+    final = t2
+  })
+
+  return final
+
+
+}
+export const logTimeElement= (arr_log =[], ind) => {
+
+  let timeworked
+  let day_worked
+  {arr_log.map((element) => {
+
+    var createDate = element['created'].substring(0, 10)
+    var createDate_arr = createDate.split('-')
+    var get_day = createDate_arr[2]
+    if (Number(ind) == get_day) {
+      timeworked = Number((element['timeworked'] / 3600).toFixed(2))
+      day_worked = get_day
+    }
+  })}
+
+  return timeworked
+
 }

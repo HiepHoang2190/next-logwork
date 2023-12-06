@@ -1,17 +1,18 @@
 'use client'
 import styles from '@/app/ui/dashboard/logwork/logwork.module.css'
-import { ScheduleComponent, Year, Day, Week, WorkWeek, Month, Agenda, Inject, ViewsDirective, ViewDirective } from '@syncfusion/ej2-react-schedule'
+import { getCurrentViewDates,ScheduleComponent, Year, Day, Week, WorkWeek, Month, Agenda, Inject, ViewsDirective, ViewDirective } from '@syncfusion/ej2-react-schedule'
 
-import '../../../node_modules/@syncfusion/ej2-base/styles/material.css'
-import '../../../node_modules/@syncfusion/ej2-buttons/styles/material.css'
-import '../../../node_modules/@syncfusion/ej2-calendars/styles/material.css'
-import '../../../node_modules/@syncfusion/ej2-dropdowns/styles/material.css'
-import '../../../node_modules/@syncfusion/ej2-inputs/styles/material.css'
-import '../../../node_modules/@syncfusion/ej2-lists/styles/material.css'
-import '../../../node_modules/@syncfusion/ej2-navigations/styles/material.css'
-import '../../../node_modules/@syncfusion/ej2-popups/styles/material.css'
-import '../../../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css'
-import '../../../node_modules/@syncfusion/ej2-react-schedule/styles/material.css'
+
+import '../../../../../node_modules/@syncfusion/ej2-base/styles/material.css'
+import '../../../../../node_modules/@syncfusion/ej2-buttons/styles/material.css'
+import '../../../../../node_modules/@syncfusion/ej2-calendars/styles/material.css'
+import '../../../../../node_modules/@syncfusion/ej2-dropdowns/styles/material.css'
+import '../../../../../node_modules/@syncfusion/ej2-inputs/styles/material.css'
+import '../../../../../node_modules/@syncfusion/ej2-lists/styles/material.css'
+import '../../../../../node_modules/@syncfusion/ej2-navigations/styles/material.css'
+import '../../../../../node_modules/@syncfusion/ej2-popups/styles/material.css'
+import '../../../../../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css'
+import '../../../../../node_modules/@syncfusion/ej2-react-schedule/styles/material.css'
 
 import { datasource, dataAllUser } from '@/app/lib/datasource'
 import getLogWork from '@/app/lib/getLogWork'
@@ -28,7 +29,7 @@ import axios from 'axios'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import $ from 'jquery'
 
-const LogWorksPage2 = (props) => {
+const LogWorksUi = (props) => {
   const { dataIssue, dataUserName } = props
 
 
@@ -43,7 +44,7 @@ const LogWorksPage2 = (props) => {
   const [paramUserName, setParamUserName] = useState('')
 
   useEffect(() => {
-    console.log('texttt',($('.e-tbar-btn-text').html()))
+    // console.log('texttt',($('.e-tbar-btn-text').html()))
     const newLogWork = [...logWork]
     dataIssue.map((item) => {
       newLogWork.push({
@@ -116,6 +117,7 @@ const LogWorksPage2 = (props) => {
     endTime: { name: 'UPDATED' }
   }
   const eventSettings = { dataSource: logWork, fields: fieldsData }
+
   return (
     <div className="mt-3">
       <Box sx={{ marginTop: 4 }}>
@@ -145,7 +147,7 @@ const LogWorksPage2 = (props) => {
           </Select>
         </FormControl>
       </Box>
-      <ScheduleComponent height='750px' currentView='Month' eventSettings={eventSettings}>
+      <ScheduleComponent  height='750px' currentView='Month' eventSettings={eventSettings}>
         <ViewsDirective>
           <ViewDirective option='Week' readonly={true}/>
           <ViewDirective option='Month' readonly={true} />
@@ -162,4 +164,4 @@ const LogWorksPage2 = (props) => {
   )
 }
 
-export default LogWorksPage2
+export default LogWorksUi
