@@ -1,7 +1,7 @@
 
 'use server'
 import { auth } from '@/app/auth'
-
+import { logTimeTotal } from '@/app/lib/actions'
 const PageTest = async () => {
 
   const { user } = await auth()
@@ -34,6 +34,15 @@ const PageTest = async () => {
     return arr
   }
 
+  //   const logTimeTotal =  (arr_log) => {
+  //     'use server'
+  //     const t = arr_log.reduce(function(a, b) {
+  //           return a + (b['timeworked'] / 3600).toFixed(2)
+  //         }, 0)
+
+
+  //     return (t+ 'h')
+  //   }
   const dataIssue = await getUserIssue()
   let issue_list = []
 
@@ -170,7 +179,8 @@ const PageTest = async () => {
                         // return <td key={ind}>{() => (arr_group[index].logs.reduce(function(a, b) {
                         //   return a + (b['timeworked'] / 3600).toFixed(2)
                         // }, 0) + 'h')}</td>
-                        return <td key={ind}>test11</td>
+                        const result = Object.values(arr_group[index].logs)
+                        return <td key={ind}>{ logTimeTotal(result)}</td>
                       } else {
                         return <td key={ind}>test</td>
                       }

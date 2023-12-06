@@ -214,3 +214,14 @@ export const getDataTimeLeave = async () => {
 
 }
 
+export const logTimeTotal = async (arr_log =[]) => {
+
+  'use server'
+
+  const t = arr_log.reduce(function(a, b) {
+    return Number(a) + Number((b['timeworked'] / 3600).toFixed(2))
+  }, 0)
+
+
+  return (t+ 'h')
+}
