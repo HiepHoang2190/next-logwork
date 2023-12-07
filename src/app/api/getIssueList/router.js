@@ -1,17 +1,11 @@
+import { NextResponse } from 'next/server'
 
-
-import LogWorksUi from '../../ui/dashboard/logwork/logwork'
-
-import { auth } from '@/app/auth'
-
-const LogWorksPage = async () => {
-
-  const { user } = await auth()
-  const getUserIssue = async () => {
-    'use server'
-    const arr=[]
+export async function POST(request) {
+  const data = await request.json()
+  const arr=[]
+  if (data.username) {
     const totalTimeLive = await
-    fetch(`http://api-jira.lotustest.net/rest/V1/user/${user.username}`,
+    fetch(`http://api-jira.lotustest.net/rest/V1/user/${data.username}`,
       {
         method: 'GET',
         headers: {
@@ -32,17 +26,10 @@ const LogWorksPage = async () => {
         ))
 
       })
-
-    return arr
+  } else {
+    return NextResponse.json({ error: 'user not found' })
   }
 
-  const dataIssue = await getUserIssue()
-  return (
-    <>
-      <LogWorksUi dataIssue = {dataIssue} dataUserName={user.username}></LogWorksUi>
-    </>
-
-  )
+  // Return a response
+  return NextResponse.json({ message: arr })
 }
-
-export default LogWorksPage

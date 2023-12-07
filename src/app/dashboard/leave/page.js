@@ -2,7 +2,7 @@ import { auth, signOut } from '@/app/auth'
 import { dataleave, dataleavetotal } from '@/app/lib/datasource'
 
 
-import LeavePage2 from '../test/uitest'
+import LeavePage from '../../ui/dashboard/leave/leave'
 const Page = async () => { {
 
   const { user } = await auth()
@@ -134,15 +134,9 @@ const Page = async () => { {
   ))
   return (
     <div>
-      <form action={handleForm}>
-        <input type="text" placeholder="username" name="username" />
-        <input type="password" placeholder="password" name="password" />
-        <button>Send</button>
-      </form>
       <div className="mt-3">
-        <LeavePage2 arr_time_leave={arr_time_leave} data_time_leave_total={data_time_leave_total} ></LeavePage2>
+        <LeavePage arr_time_leave={arr_time_leave} data_time_leave_total={data_time_leave_total} ></LeavePage>
       </div>
-
     </div>
   )
 }}

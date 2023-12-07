@@ -24,46 +24,52 @@ const menuItems = [
         path: '/dashboard',
         icon: <MdDashboard />
       },
-      {
-        title: 'Users',
-        path: '/dashboard/users',
-        icon: <MdSupervisedUserCircle />
-      },
-      {
-        title: 'Products',
-        path: '/dashboard/products',
-        icon: <MdShoppingBag />
-      },
+      // {
+      //   title: 'Users',
+      //   path: '/dashboard/users',
+      //   icon: <MdSupervisedUserCircle />
+      // },
+      // {
+      //   title: 'Products',
+      //   path: '/dashboard/products',
+      //   icon: <MdShoppingBag />
+      // },
       {
         title: 'Logwork',
         path: '/dashboard/logwork',
         icon: <MdAttachMoney />
+      },
+      {
+        title: 'Leave',
+        path: '/dashboard/leave',
+        icon: <MdAttachMoney />
       }
+
     ]
   },
-  
+
   {
     title: 'User',
     list: [
-      
+
     ]
   }
 ]
 const Sidebar = async () => {
   const { user } = await auth()
-  // console.log(user)
+  console.log('user in sidebar.js', user)
   return (
     <div className={styles.container}>
       <div className={styles.user}>
         <Image
           className={styles.userImage}
-          src={user.img || '/noavatar.png'}
+          src={user.avatarUrls !== undefined ? user.avatarUrls[0] : '/noavatar.png'}
           alt=""
           width="50"
           height="50"
         />
         <div className={styles.userDetail}>
-          <span className={styles.username}>{user.username}</span>
+          <span className={styles.username}>{user.displayName}</span>
           <span className={styles.userTitle}>Administrator</span>
         </div>
       </div>

@@ -6,7 +6,10 @@ import { connectToDB } from './utils'
 import { redirect } from 'next/navigation'
 import bcrypt from 'bcrypt'
 import { signIn } from '../auth'
-
+import { toast } from 'react-toastify'
+import { auth, signOut } from '@/app/auth'
+import { get } from 'mongoose'
+// import { useRouter } from 'next/navigation'
 
 export const addUser = async (formData) => {
   const { username, email, password, phone, address, isAdmin, isActive } =
@@ -156,22 +159,131 @@ export const deleteProduct = async (formData) => {
   revalidatePath('/dashboard/products')
 }
 
-export const authenticate = async ( prevState, formData) => {
-  const { username, password } = Object.fromEntries(formData)
+// export const authenticate2 = async ( prevState, formData) => {
+//   const { username, password } = Object.fromEntries(formData)
 
+//   try {
+//     await signIn('credentials', { username, password }, { callbackUrl: '/dashboard' })
+//   } catch (err) {
+//     return 'Wrong Credentials!'
+//   }
+// }
+
+export const authenticate = async ( formData) => {
+  const { username, password } = formData
+  // const router = useRouter()
   try {
-    await signIn('credentials', { username, password }, { callbackUrl: '/dashboard' })
+    await signIn('credentials', { username, password, redirect: false })
+
   } catch (err) {
-    return 'Wrong Credentials!'
+    console.log('err', err)
+    console.log(err.name, err.message)
+    // return { error:err.name+' '+ err.message }
+    return { error:'Incorrect Password!' }
   }
 }
 
-export const authenticate2 = async ( formData) => {
-  const { username, password } = formData
+export const getDataTimeLeave = async () => {
   try {
-    await signIn('credentials', { username, password} )
-    
+    const { user } = await auth()
+    const arr=[]
+    const typeLeave = await
+    fetch(`http://api-jira.lotustest.net/rest/V1/leave/${user.username}`,
+      {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods':'*',
+          'Access-Control-Allow-Credentials':'true',
+          'Access-Control-Allow-Headers':'X-CSRF-Token'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        data.map((item) => (
+          arr.push(item)
+        ))
+      })
+
+    return arr
   } catch (err) {
-    return 'Wrong Credentials!'
+    console.log(err)
+    throw new Error('Failed to get time leave for user!')
   }
+
+}
+
+
+export const logTimeTotal = async (arr_log =[]) => {
+
+  'use server'
+
+  const t = arr_log.reduce(function(a, b) {
+    return Number(a) + Number((b['timeworked'] / 3600).toFixed(2))
+  }, 0)
+
+
+  return (t)
+}
+
+export const logTimeTotalIssue = async (arr_log =[]) => {
+
+  'use server'
+
+  const final = arr_log.map((item) => {
+    let t2 = Object.values(item['logs']).reduce(function(a, b) {
+      return Number(a) + Number((b['timeworked'] / 3600).toFixed(2))
+    }, 0)
+    return t2
+  }).reduce((prev, curr) => prev + curr, 0)
+
+  return final
+
+}
+
+
+export const logTimeTotalIssueByDay = (arr_log =[], number_day) => {
+
+  'use server'
+  var final = 0
+  var t2 = 0
+  arr_log.map((item) => {
+
+    Object.values(item['logs']).map((item2) => {
+      var createDate = item2['created'].substring(0, 10)
+      var createDate_arr = createDate.split('-')
+      var get_day = createDate_arr[2]
+
+      if (Number(number_day) == get_day) {
+        var ts = Number((item2['timeworked'] / 3600).toFixed(2))
+        t2 += ts
+
+      }
+    })
+    final = t2
+  })
+
+  return final
+
+
+}
+export const logTimeElement= (arr_log =[], ind) => {
+
+  let timeworked
+  let day_worked
+  {arr_log.map((element) => {
+
+    var createDate = element['created'].substring(0, 10)
+    var createDate_arr = createDate.split('-')
+    var get_day = createDate_arr[2]
+    if (Number(ind) == get_day) {
+      timeworked = Number((element['timeworked'] / 3600).toFixed(2))
+      day_worked = get_day
+    }
+  })}
+
+  return timeworked
+
 }

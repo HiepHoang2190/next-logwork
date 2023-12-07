@@ -8,18 +8,67 @@ import bcrypt from 'bcrypt'
 
 const login = async (credentials) => {
   try {
-    connectToDB()
-    const user = await User.findOne({ username: credentials.username })
 
-    if (!user || !user.isAdmin) throw new Error('Not Admin!')
+    console.log('credentials',credentials)
+    const user={}
+    const userLogin = await
+    fetch('https://jira.lotustest.net/rest/auth/1/session',
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods':'*',
+          'Access-Control-Allow-Credentials':'true',
+          'Access-Control-Allow-Headers':'X-CSRF-Token'
+        },
+        body: JSON.stringify({ username: credentials.username, password: credentials.password })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.errorMessages) {
 
-    const isPasswordCorrect = await bcrypt.compare(
-      credentials.password,
-      user.password
-    )
+          console.log('data',data)
+          throw new Error('Incorrect password!')
 
-    if (!isPasswordCorrect) throw new Error('Wrong credentials!')
+        } else {
 
+          user.session = data.session
+          user.loginInfo = data.loginInfo
+          user.username = credentials.username
+        }
+      })
+
+    const userDetail = await
+    fetch(`https://jira.lotustest.net/rest/api/2/user/search?username=${credentials.username}`,
+      {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods':'*',
+          'Access-Control-Allow-Credentials':'true',
+          'Access-Control-Allow-Headers':'X-CSRF-Token',
+          'Cookie':`JSESSIONID=${user.session.value}`
+
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('data2',data)
+      
+          user.email = data[0].emailAddress
+          user.displayName = data[0].displayName
+  
+          const propertyValues = Object.values(data[0].avatarUrls)
+          user.avatarUrls = propertyValues
+        
+      })
+    
+
+    console.log('user in login fetch',user)
     return user
   } catch (err) {
     console.log(err)
@@ -34,6 +83,7 @@ export const { signIn, signOut, auth } = NextAuth({
       async authorize(credentials) {
         try {
           const user = await login(credentials)
+          console.log('user await login', user)
           return user
         } catch (err) {
           return null
@@ -46,17 +96,23 @@ export const { signIn, signOut, auth } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.username = user.username
-        token.img = user.img
+        token.session = user.session
+        token.email = user.email
+        token.displayName = user.displayName
+        token.avatarUrls = user.avatarUrls
       }
       return token
     },
     async session({ session, token }) {
       if (token) {
         session.user.username = token.username
-        session.user.img = token.img
+        session.user.session = token.session
+        session.user.email = token.email
+        session.user.displayName = token.displayName
+        session.user.avatarUrls = token.avatarUrls
       }
       return session
-    },
+    }
 
   }
 })

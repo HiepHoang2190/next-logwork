@@ -1,10 +1,9 @@
 
 
-import LogWorksUi from '../../ui/dashboard/logwork/logwork'
-
+import LogWorksPage2 from '../test2/uitest2'
 import { auth } from '@/app/auth'
 
-const LogWorksPage = async () => {
+const PageLog = async () => {
 
   const { user } = await auth()
   const getUserIssue = async () => {
@@ -39,10 +38,10 @@ const LogWorksPage = async () => {
   const dataIssue = await getUserIssue()
   return (
     <>
-      <LogWorksUi dataIssue = {dataIssue} dataUserName={user.username}></LogWorksUi>
+    <LogWorksPage2 dataIssue = {dataIssue} dataUserName={user.username}></LogWorksPage2>
     </>
-
+ 
   )
 }
 
-export default LogWorksPage
+export default PageLog
