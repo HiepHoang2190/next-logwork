@@ -5,19 +5,19 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 
-const UiPage3 = () => {
+const LogWorkTablePage = () => {
 
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
   }, [])
-  
+
   const [startDate, setStartDate] = useState(new Date())
   const searchParams = useSearchParams()
   const { replace } = useRouter()
   const pathname = usePathname()
-  // console.log('startDate', startDate)
+
   return (
     <div className='box-datetime'>
       <DatePicker
@@ -46,4 +46,4 @@ const UiPage3 = () => {
   )
 }
 
-export default UiPage3
+export default LogWorkTablePage

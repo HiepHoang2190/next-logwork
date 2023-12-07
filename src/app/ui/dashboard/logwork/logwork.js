@@ -1,6 +1,6 @@
 'use client'
 import styles from '@/app/ui/dashboard/logwork/logwork.module.css'
-import { getCurrentViewDates,ScheduleComponent, Year, Day, Week, WorkWeek, Month, Agenda, Inject, ViewsDirective, ViewDirective } from '@syncfusion/ej2-react-schedule'
+import { getCurrentViewDates, ScheduleComponent, Year, Day, Week, WorkWeek, Month, Agenda, Inject, ViewsDirective, ViewDirective } from '@syncfusion/ej2-react-schedule'
 
 
 import '../../../../../node_modules/@syncfusion/ej2-base/styles/material.css'
@@ -24,6 +24,8 @@ import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
+import { SxProps } from '@mui/material/styles';
+
 
 import axios from 'axios'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
@@ -31,6 +33,9 @@ import $ from 'jquery'
 
 const LogWorksUi = (props) => {
   const { dataIssue, dataUserName } = props
+
+  const userAdmin = ['phuong', 'minh', 'admin', 'hieph', 'minht']
+  const isUserAdmin = userAdmin.includes(dataUserName)
 
 
   const [logWork, setLogWork] = useState([{
@@ -120,34 +125,39 @@ const LogWorksUi = (props) => {
 
   return (
     <div className="mt-3">
-      <Box sx={{ marginTop: 4 }}>
-        <FormControl>
-          <InputLabel style={{ color: '#FFFFFF' }} id="demo-simple-select-label">Name</InputLabel>
-          <Select
-            variant="outlined"
-            sx={{
-              width: 200,
-              marginRight: 15,
-              color: '#fff',
-              '& .MuiSvgIcon-root': {
-                color: 'white'
-              }
-            }}
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={userName}
-            label="Name"
-            onChange={handleChange}
+      {isUserAdmin ? (
+        <Box sx={{ marginBottom: 4, marginTop: 4, display:'flex', justifyContent:'end' }}>
+          <FormControl>
+            <InputLabel style={{ color: '#FFFFFF' }} id="demo-simple-select-label">Name</InputLabel>
+            <Select
+              variant="outlined"
+              sx={{
+                width: 200,
+                marginRight: 0,
+                color: '#fff',
+                '& .MuiSvgIcon-root': {
+                  color: 'white'
+                }
+              }}
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={userName}
+              label="Name"
+              onChange={handleChange}
 
-          >
-            {dataAllUser.map((item) => (
-              <MenuItem key={item.user_name} value={item.user_name}>{item.display_name}</MenuItem>
-            ))
-            }
-          </Select>
-        </FormControl>
-      </Box>
-      <ScheduleComponent  height='750px' currentView='Month' eventSettings={eventSettings}>
+            >
+              {dataAllUser.map((item) => (
+                <MenuItem key={item.user_name} value={item.user_name}>{item.display_name}</MenuItem>
+              ))
+              }
+            </Select>
+          </FormControl>
+        </Box>
+      ) : (
+        <></>
+      )}
+
+      <ScheduleComponent height='750px' currentView='Month' eventSettings={eventSettings}>
         <ViewsDirective>
           <ViewDirective option='Week' readonly={true}/>
           <ViewDirective option='Month' readonly={true} />

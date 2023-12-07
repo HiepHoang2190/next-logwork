@@ -1,224 +1,298 @@
 
-'use server'
-import { auth } from '@/app/auth'
-import { logTimeTotal, logTimeElement, logTimeTotalIssue, logTimeTotalIssueByDay } from '@/app/lib/actions'
-import UiPage3 from '../test3/uitest3'
-const PageTest = async () => {
+// 'use server'
+// import { auth } from '@/app/auth'
+// import { logTimeTotal, logTimeElement, logTimeTotalIssue, logTimeTotalIssueByDay } from '@/app/lib/actions'
+// import UiPage3 from '../test3/uitest3'
 
-  const { user } = await auth()
-  const getUserIssue = async () => {
-    'use server'
-    const arr=[]
-    const totalTimeLive = await
-    fetch(`http://api-jira.lotustest.net/rest/V1/user/${user.username}`,
-      {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods':'*',
-          'Access-Control-Allow-Credentials':'true',
-          'Access-Control-Allow-Headers':'X-CSRF-Token'
+// const PageTest = async ({ searchParams }) => {
+
+//   var month = searchParams?.month
+//   var year = searchParams?.year
+//   month = (month !== undefined) ? month : new Date().getMonth() + 1
+//   year = (year !== undefined) ? year : new Date().getFullYear()
+//   var year_url =(year !== undefined) ? year.toString().substr(-2) : new Date().getFullYear().toString().substr(-2)
 
 
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-        data.map((item) => (
-          arr.push(item)
-        ))
-
-      })
-
-    return arr
-  }
-
-  const dataIssue = await getUserIssue()
-  let issue_list = []
-
-
-  issue_list = dataIssue.filter(function(el) {
-    var month = 10
-    month = (month !== undefined) ? month : new Date().getMonth() + 1
-    var createDate = el.STARTDATE.substring(0, 10)
-    var monthLog = new Date(createDate).getMonth() + 1
-    var yearLog = new Date(createDate).getFullYear().toString().substr(-2)
-    var yearRequest = 23
-    yearRequest = (yearRequest !== undefined) ? yearRequest : new Date().getFullYear().toString().substr(-2)
-    return monthLog == month && yearLog == yearRequest
-  })
+//   const { user } = await auth()
+//   const getUserIssue = async () => {
+//     'use server'
+//     const arr=[]
+//     const totalTimeLive = await
+//     fetch(`http://api-jira.lotustest.net/rest/V1/user/${user.username}`,
+//       {
+//         method: 'GET',
+//         headers: {
+//           'Accept': 'application/json, text/plain, */*',
+//           'Content-Type': 'application/json',
+//           'Access-Control-Allow-Origin': '*',
+//           'Access-Control-Allow-Methods':'*',
+//           'Access-Control-Allow-Credentials':'true',
+//           'Access-Control-Allow-Headers':'X-CSRF-Token'
 
 
-  let arr_group = []
-  issue_list.forEach(value => {
-    // Extract the day from the STARTDATE using JavaScript's Date object
-    let logDay = new Date(value.STARTDATE).getDate().toString()
+//         }
+//       })
+//       .then(response => response.json())
+//       .then(data => {
+//         data.map((item) => (
+//           arr.push(item)
+//         ))
 
-    // Check if the key exists in the arr_group
-    if (arr_group[value.key]) {
-      // Check if the logDay exists in the logs arr_group
-      if (arr_group[value.key].logs[logDay]) {
-        // If logDay exists, add the timeworked to the existing value
-        arr_group[value.key].logs[logDay].timeworked += value.timeworked
-      } else {
-        // If logDay does not exist, create a new entry in the logs arr_group
-        arr_group[value.key].logs[logDay] = {
-          comment: value.comment,
-          timeworked: value.timeworked,
-          created: value.STARTDATE
-        }
-      }
-    } else {
-      // If the key does not exist, create a new entry in the arr_group
-      arr_group[value.key] = {
-        key: value.key,
-        pkey: value.pkey,
-        summary: value.SUMMARY,
-        logs: {
-          [logDay]: {
-            comment: value.comment,
-            timeworked: value.timeworked,
-            created: value.STARTDATE
-          }
-        }
-      }
-    }
-  })
+//       })
 
-  let year = 2023
-  let month = 10
-  let today = new Date().toISOString().slice(0, 10).replace(/-/g, '/')
-  let current = new Date().getDate()
-  let stringMaY = new Date().toISOString().slice(5, 7) + '/' + new Date().getFullYear()
-  let thisyear = new Date().getFullYear()
+//     return arr
+//   }
+
+//   const dataIssue = await getUserIssue()
+//   var issue_list = []
 
 
-  const arr_days = []
-  const arr_days_tbody = []
-  let days = new Date(thisyear, month, 0).getDate()
-  let days_tbody = days + 4
+//   issue_list = dataIssue.filter(function(el) {
 
-  for (let i = 1; i < days +1; i++) {
-    arr_days.push(i)
-  }
+//     var createDate = el.STARTDATE.substring(0, 10)
+//     var monthLog = new Date(createDate).getMonth() + 1
+//     var yearLog = new Date(createDate).getFullYear().toString().substr(-2)
+//     var yearRequest = year_url
+//     yearRequest = (yearRequest !== undefined) ? yearRequest : new Date().getFullYear().toString().substr(-2)
+//     return monthLog == month && yearLog == yearRequest
+//   })
 
-  for (let i = 1; i < days_tbody +1; i++) {
-    arr_days_tbody.push(i)
-  }
-  // console.log('daysss', days)
-  // console.log('arr_days', arr_days)
-  // console.log('arr_days_tbody', arr_days_tbody)
 
-  function getDatefromDay(day, thismonth, thisyear) {
-    let fullday = thismonth + '/' + day + '/' + thisyear
-    let dt = new Date(fullday)
-    // console.log('fullday', fullday)
-    // console.log('dttttt', dt)
-    // console.log('getday', dt.getDay())
-    let days = new Array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')
-    return days[dt.getDay()].toUpperCase().slice(0, 2)
-  }
-  // let t = getDatefromDay(2, 10, 2023)
-  // console.log('today',today)
-  // console.log('current',current)
-  // console.log('stringMaY',stringMaY)
-  // console.log('thisyear',thisyear)
-  // console.log('days',days)
-  // console.log('ttttt', t)
-  // console.log('issue_list', issue_list)
-  console.log('arr_group', arr_group)
-  const toTalTimeIssue = logTimeTotalIssue(Object.values(arr_group))
+//   var arr_group = []
+//   issue_list.forEach(value => {
+//     // Extract the day from the STARTDATE using JavaScript's Date object
+//     let logDay = new Date(value.STARTDATE).getDate().toString()
 
-  return (
-    <>
-    
-      <div>
+//     // Check if the key exists in the arr_group
+//     if (arr_group[value.key]) {
+//       // Check if the logDay exists in the logs arr_group
+//       if (arr_group[value.key].logs[logDay]) {
+//         // If logDay exists, add the timeworked to the existing value
+//         arr_group[value.key].logs[logDay].timeworked += value.timeworked
+//       } else {
+//         // If logDay does not exist, create a new entry in the logs arr_group
+//         arr_group[value.key].logs[logDay] = {
+//           comment: value.comment,
+//           timeworked: value.timeworked,
+//           created: value.STARTDATE
+//         }
+//       }
+//     } else {
+//       // If the key does not exist, create a new entry in the arr_group
+//       arr_group[value.key] = {
+//         key: value.key,
+//         pkey: value.pkey,
+//         summary: value.SUMMARY,
+//         logs: {
+//           [logDay]: {
+//             comment: value.comment,
+//             timeworked: value.timeworked,
+//             created: value.STARTDATE
+//           }
+//         }
+//       }
+//     }
+//   })
 
-        <table id="content-bottom">
-          <thead>
-            <tr>
-              <th style={{ textAlign: 'left', width: 500, fontWeight: 700 }}>Issue</th>
-              <th style={{ width: 75, fontWeight: 700 }}>Key</th>
-              <th style={{ width: 75, fontWeight: 700 }}>Projects</th>
-              <th style={{ width: 75, fontWeight: 700 }}>Log Time</th>
-              {
-                arr_days.map((item) => (
-                  (item < 10)
-                    ? (
-                      <th className={(item == current && new Date().getMonth() + 1 == month && new Date().getFullYear() == year) ?'current date' : 'date'} id={(getDatefromDay(item, month, thisyear) === 'SA' || getDatefromDay(item, month, thisyear) === 'SU') ? 'weekend' : ''} key={item} ><strong>{'0'+item}</strong><br />{getDatefromDay(item, month, thisyear)}</th>
-                    )
-                    : (
-                      <th className={(item == current && new Date().getMonth() + 1 == month && new Date().getFullYear() == year) ? 'current date' : 'date'} d={(getDatefromDay(item, month, thisyear) === 'SA' || getDatefromDay(item, month, thisyear) === 'SU') ? 'weekend' : ''} key={item} ><strong>{item}</strong><br />{getDatefromDay(item, month, thisyear)}</th>
-                    )
-                ))
-              }
-            </tr>
-          </thead>
-          <tbody>
-            {
-              Object
-                .keys(arr_group).map((index) => (
 
-                  <tr key={index}>
-                    {arr_days_tbody.map( (element, ind) => {
-                      if (element === 1) {
-                        return <td key={ind}><a target="_blank" rel="noreferrer" href={`https://jira.lotustest.net/browse/${arr_group[index].key}`} className="title">{arr_group[index].summary}</a></td>
-                      } else if (element === 2) {
-                        return <td key={ind}>{arr_group[index].key}</td>
-                      } else if (element === 3) {
-                        return <td key={ind}>{arr_group[index].pkey}</td>
-                      } else if (element === 4) {
+//   var today = new Date().toISOString().slice(0, 10).replace(/-/g, '/')
+//   var current = new Date().getDate()
+//   var stringMaY = new Date().toISOString().slice(5, 7) + '/' + new Date().getFullYear()
+//   var thisyear = new Date().getFullYear()
 
-                        const result = Object.values(arr_group[index].logs)
-                        return <td key={ind}>{ logTimeTotal(result)}h</td>
-                      } else if (getDatefromDay(element-4, month, thisyear) == 'SA' || getDatefromDay(element-4, month, thisyear) == 'SU') {
-                        return (<td key={ind} id="weekend"></td>)
-                      } else {
 
-                        let inde = (element - 4)
-                        const result2 = Object.values(arr_group[index].logs)
-                        let timeworked = logTimeElement(result2, inde)
+//   const arr_days = []
+//   const arr_days_tbody = []
+//   var days = new Date(thisyear, month, 0).getDate()
+//   var days_tbody = days + 4
 
-                        if (timeworked !== undefined) {
-                          return <td className="timeworked" key={ind}>{timeworked}h</td>
-                        } else {
-                          return <td key={ind}></td>
-                        }
+//   for (let i = 1; i < days +1; i++) {
+//     arr_days.push(i)
+//   }
 
-                      }
+//   for (let i = 1; i < days_tbody +1; i++) {
+//     arr_days_tbody.push(i)
+//   }
 
-                    })}
-                  </tr>
-                ))
-            }
 
-            <tr className="last">
-              <td colSpan={3}>Total</td>
-              <td className="total">{toTalTimeIssue}h</td>
-              {
-                arr_days.map((item) => {
-                  const countWorkDay = logTimeTotalIssueByDay(Object.values(arr_group), item)
-                  // console.log('countWorkDay', countWorkDay)
-                  if (countWorkDay == 0) {
-                    return (<td key={item}></td>)
-                  } else {
-                    return (<td key={item}>{countWorkDay} h</td>)
-                  }
-                }
+//   function getDatefromDay(day, thismonth, thisyear) {
+//     let fullday = thismonth + '/' + day + '/' + thisyear
+//     let dt = new Date(fullday)
 
-                )
-              }
-            </tr>
+//     let days = new Array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')
+//     return days[dt.getDay()].toUpperCase().slice(0, 2)
+//   }
 
-          </tbody>
-        </table>
-      </div>
-      <UiPage3></UiPage3>
-    </>
+//   const toTalTimeIssue = logTimeTotalIssue(Object.values(arr_group))
 
-  )
-}
+//   return (
+//     <div>
+//       <div className='wrapper-datetime'>
+//         <UiPage3></UiPage3>
+//       </div>
+//       <div>
+//         {/* <TableContainer component={Paper}>
+//           <Table sx={{ minWidth: 650 }} aria-label="simple table" id="content-bottom">
+//             <TableHead>
+//               <TableRow>
+//                 <TableCell style={{ textAlign: 'left', width: 500, fontWeight: 700 }}>Issue</TableCell>
+//                 <TableCell style={{ width: 75, fontWeight: 700 }}>Key</TableCell>
+//                 <TableCell style={{ width: 75, fontWeight: 700 }}>Projects</TableCell>
+//                 <TableCell style={{ width: 75, fontWeight: 700 }}>Log Time</TableCell>
+//                 {
+//                   arr_days.map((item) => (
+//                     (item < 10)
+//                       ? (
+//                         <th className={(item == current && new Date().getMonth() + 1 == month && new Date().getFullYear() == year) ?'current date' : 'date'} id={(getDatefromDay(item, month, thisyear) === 'SA' || getDatefromDay(item, month, thisyear) === 'SU') ? 'weekend' : ''} key={item} ><strong>{'0'+item}</strong><br />{getDatefromDay(item, month, thisyear)}</th>
+//                       )
+//                       : (
+//                         <th className={(item == current && new Date().getMonth() + 1 == month && new Date().getFullYear() == year) ? 'current date' : 'date'} d={(getDatefromDay(item, month, thisyear) === 'SA' || getDatefromDay(item, month, thisyear) === 'SU') ? 'weekend' : ''} key={item} ><strong>{item}</strong><br />{getDatefromDay(item, month, thisyear)}</th>
+//                       )
+//                   ))
+//                 }
+//               </TableRow>
+//             </TableHead>
+//             <TableBody>
+//               {
+//                 Object
+//                   .keys(arr_group).map((index) => (
 
-export default PageTest
+//                     <TableRow key={index}>
+//                       {arr_days_tbody.map( (element, ind) => {
+//                         if (element === 1) {
+//                           return <TableCell key={ind}><a target="_blank" rel="noreferrer" href={`https://jira.lotustest.net/browse/${arr_group[index].key}`} className="title">{arr_group[index].summary}</a></TableCell>
+//                         } else if (element === 2) {
+//                           return <TableCell key={ind}>{arr_group[index].key}</TableCell>
+//                         } else if (element === 3) {
+//                           return <TableCell key={ind}>{arr_group[index].pkey}</TableCell>
+//                         } else if (element === 4) {
+
+//                           const result = Object.values(arr_group[index].logs)
+//                           return <TableCell key={ind}>{ logTimeTotal(result)}h</TableCell>
+//                         } else if (getDatefromDay(element-4, month, thisyear) == 'SA' || getDatefromDay(element-4, month, thisyear) == 'SU') {
+//                           return (<TableCell key={ind} id="weekend"></TableCell>)
+//                         } else {
+
+//                           let inde = (element - 4)
+//                           const result2 = Object.values(arr_group[index].logs)
+//                           let timeworked = logTimeElement(result2, inde)
+
+//                           if (timeworked !== undefined) {
+//                             return <TableCell className="timeworked" key={ind}>{timeworked}h</TableCell>
+//                           } else {
+//                             return <TableCell key={ind}></TableCell>
+//                           }
+
+//                         }
+
+//                       })}
+//                     </TableRow>
+//                   ))
+//               }
+
+//               <TableRow className="last">
+//                 <TableCell colSpan={3}>Total</TableCell>
+//                 <TableCell className="total">{toTalTimeIssue}h</TableCell>
+//                 {
+//                   arr_days.map((item) => {
+//                     const countWorkDay = logTimeTotalIssueByDay(Object.values(arr_group), item)
+//                     // console.log('countWorkDay', countWorkDay)
+//                     if (countWorkDay == 0) {
+//                       return (<TableCell key={item}></TableCell>)
+//                     } else {
+//                       return (<TableCell key={item}>{countWorkDay} h</TableCell>)
+//                     }
+//                   }
+
+//                   )
+//                 }
+//               </TableRow>
+
+//             </TableBody>
+//           </Table>
+//         </TableContainer> */}
+//         <table className="log-work" id="content-bottom">
+//           <thead>
+//             <tr>
+//               <th style={{ textAlign: 'left', width: 500, fontWeight: 700 }}>Issue</th>
+//               <th style={{ width: 75, fontWeight: 700 }}>Key</th>
+//               <th style={{ width: 75, fontWeight: 700 }}>Projects</th>
+//               <th style={{ width: 75, fontWeight: 700 }}>Log Time</th>
+//               {
+//                 arr_days.map((item) => (
+//                   (item < 10)
+//                     ? (
+//                       <th className={(item == current && new Date().getMonth() + 1 == month && new Date().getFullYear() == year) ?'current date' : 'date'} id={(getDatefromDay(item, month, thisyear) === 'SA' || getDatefromDay(item, month, thisyear) === 'SU') ? 'weekend' : ''} key={item} ><strong>{'0'+item}</strong><br />{getDatefromDay(item, month, thisyear)}</th>
+//                     )
+//                     : (
+//                       <th className={(item == current && new Date().getMonth() + 1 == month && new Date().getFullYear() == year) ? 'current date' : 'date'} id={(getDatefromDay(item, month, thisyear) === 'SA' || getDatefromDay(item, month, thisyear) === 'SU') ? 'weekend' : ''} key={item} ><strong>{item}</strong><br />{getDatefromDay(item, month, thisyear)}</th>
+//                     )
+//                 ))
+//               }
+//             </tr>
+//           </thead>
+//           <tbody>
+//             {
+//               Object
+//                 .keys(arr_group).map((index) => (
+
+//                   <tr key={index}>
+//                     {arr_days_tbody.map( (element, ind) => {
+//                       if (element === 1) {
+//                         return <td key={ind} className="title-issue"><a target="_blank" rel="noreferrer" href={`https://jira.lotustest.net/browse/${arr_group[index].key}`} className="title">{arr_group[index].summary}</a></td>
+//                       } else if (element === 2) {
+//                         return <td key={ind}>{arr_group[index].key}</td>
+//                       } else if (element === 3) {
+//                         return <td key={ind}>{arr_group[index].pkey}</td>
+//                       } else if (element === 4) {
+
+//                         const result = Object.values(arr_group[index].logs)
+//                         return <td key={ind}>{ logTimeTotal(result)}h</td>
+//                       } else if (getDatefromDay(element-4, month, thisyear) == 'SA' || getDatefromDay(element-4, month, thisyear) == 'SU') {
+//                         return (<td key={ind} id="weekend"></td>)
+//                       } else {
+
+//                         let inde = (element - 4)
+//                         const result2 = Object.values(arr_group[index].logs)
+//                         let timeworked = logTimeElement(result2, inde)
+
+//                         if (timeworked !== undefined) {
+//                           return <td className="timeworked" key={ind}>{timeworked}h</td>
+//                         } else {
+//                           return <td key={ind}></td>
+//                         }
+
+//                       }
+
+//                     })}
+//                   </tr>
+//                 ))
+//             }
+
+//             <tr className="last">
+//               <td colSpan={3}>Total</td>
+//               <td className="total">{toTalTimeIssue}h</td>
+//               {
+//                 arr_days.map((item) => {
+//                   const countWorkDay = logTimeTotalIssueByDay(Object.values(arr_group), item)
+//                   // console.log('countWorkDay', countWorkDay)
+//                   if (countWorkDay == 0) {
+//                     return (<td key={item}></td>)
+//                   } else {
+//                     return (<td key={item}>{countWorkDay} h</td>)
+//                   }
+//                 }
+
+//                 )
+//               }
+//             </tr>
+
+//           </tbody>
+//         </table>
+//       </div>
+//     </div>
+
+//   )
+// }
+
+// export default PageTest

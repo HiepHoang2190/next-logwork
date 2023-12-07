@@ -225,7 +225,7 @@ export const logTimeTotal = async (arr_log =[]) => {
   }, 0)
 
 
-  return (t)
+  return t
 }
 
 export const logTimeTotalIssue = async (arr_log =[]) => {
@@ -286,4 +286,14 @@ export const logTimeElement= (arr_log =[], ind) => {
 
   return timeworked
 
+}
+
+export const getDatefromDay = (day, thismonth, thisyear) => {
+  let fullday = thismonth + '/' + day + '/' + thisyear
+  let dt = new Date(fullday)
+  // console.log('fullday', fullday)
+  // console.log('dttttt', dt)
+  // console.log('getday', dt.getDay())
+  let days = new Array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')
+  return days[dt.getDay()].toUpperCase().slice(0, 2)
 }
