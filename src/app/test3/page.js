@@ -2,6 +2,7 @@
 'use server'
 import { auth } from '@/app/auth'
 import { logTimeTotal, logTimeElement, logTimeTotalIssue, logTimeTotalIssueByDay } from '@/app/lib/actions'
+import UiPage3 from '../test3/uitest3'
 const PageTest = async () => {
 
   const { user } = await auth()
@@ -129,8 +130,10 @@ const PageTest = async () => {
   // console.log('issue_list', issue_list)
   console.log('arr_group', arr_group)
   const toTalTimeIssue = logTimeTotalIssue(Object.values(arr_group))
+
   return (
     <>
+    
       <div>
 
         <table id="content-bottom">
@@ -197,7 +200,7 @@ const PageTest = async () => {
               {
                 arr_days.map((item) => {
                   const countWorkDay = logTimeTotalIssueByDay(Object.values(arr_group), item)
-                  console.log('countWorkDay', countWorkDay)
+                  // console.log('countWorkDay', countWorkDay)
                   if (countWorkDay == 0) {
                     return (<td key={item}></td>)
                   } else {
@@ -212,7 +215,7 @@ const PageTest = async () => {
           </tbody>
         </table>
       </div>
-
+      <UiPage3></UiPage3>
     </>
 
   )
