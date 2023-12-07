@@ -1,7 +1,8 @@
 
 'use server'
 import { auth } from '@/app/auth'
-import { logTimeTotal} from '@/app/lib/actions'
+import { logTimeTotal, logTimeElement, logTimeTotalIssue, logTimeTotalIssueByDay } from '@/app/lib/actions'
+import UiPage3 from '../test3/uitest3'
 const PageTest = async () => {
 
   const { user } = await auth()
@@ -34,15 +35,6 @@ const PageTest = async () => {
     return arr
   }
 
-//   const logTimeTotal =  (arr_log) => {
-//     'use server'
-//     const t = arr_log.reduce(function(a, b) {
-//           return a + (b['timeworked'] / 3600).toFixed(2)
-//         }, 0) 
-   
-
-//     return (t+ 'h')
-//   }
   const dataIssue = await getUserIssue()
   let issue_list = []
 
@@ -108,16 +100,16 @@ const PageTest = async () => {
   let days = new Date(thisyear, month, 0).getDate()
   let days_tbody = days + 4
 
-  for (let i = 1; i < days; i++) {
+  for (let i = 1; i < days +1; i++) {
     arr_days.push(i)
   }
 
-  for (let i = 1; i < days_tbody; i++) {
+  for (let i = 1; i < days_tbody +1; i++) {
     arr_days_tbody.push(i)
   }
-
-  console.log('arr_days', arr_days)
-  console.log('arr_days_tbody', arr_days_tbody)
+  // console.log('daysss', days)
+  // console.log('arr_days', arr_days)
+  // console.log('arr_days_tbody', arr_days_tbody)
 
   function getDatefromDay(day, thismonth, thisyear) {
     let fullday = thismonth + '/' + day + '/' + thisyear
@@ -128,18 +120,20 @@ const PageTest = async () => {
     let days = new Array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')
     return days[dt.getDay()].toUpperCase().slice(0, 2)
   }
-  let t = getDatefromDay(2, 10, 2023)
+  // let t = getDatefromDay(2, 10, 2023)
   // console.log('today',today)
   // console.log('current',current)
   // console.log('stringMaY',stringMaY)
   // console.log('thisyear',thisyear)
   // console.log('days',days)
-  console.log('ttttt', t)
+  // console.log('ttttt', t)
   // console.log('issue_list', issue_list)
   console.log('arr_group', arr_group)
+  const toTalTimeIssue = logTimeTotalIssue(Object.values(arr_group))
 
   return (
     <>
+    
       <div>
 
         <table id="content-bottom">
@@ -168,21 +162,31 @@ const PageTest = async () => {
                 .keys(arr_group).map((index) => (
 
                   <tr key={index}>
-                    {arr_days_tbody.map((element, ind) => {
+                    {arr_days_tbody.map( (element, ind) => {
                       if (element === 1) {
-                        return <td key={ind}><a target="_blank" rel="noreferrer" href="https://jira.lotustest.net/browse/" className="title">{arr_group[index].summary}</a></td>
+                        return <td key={ind}><a target="_blank" rel="noreferrer" href={`https://jira.lotustest.net/browse/${arr_group[index].key}`} className="title">{arr_group[index].summary}</a></td>
                       } else if (element === 2) {
                         return <td key={ind}>{arr_group[index].key}</td>
                       } else if (element === 3) {
                         return <td key={ind}>{arr_group[index].pkey}</td>
                       } else if (element === 4) {
-                        // return <td key={ind}>{() => (arr_group[index].logs.reduce(function(a, b) {
-                        //   return a + (b['timeworked'] / 3600).toFixed(2)
-                        // }, 0) + 'h')}</td>
-                        const result = Object.values(arr_group[index].logs);
-                        return <td key={ind}>{ logTimeTotal(result)}</td>
+
+                        const result = Object.values(arr_group[index].logs)
+                        return <td key={ind}>{ logTimeTotal(result)}h</td>
+                      } else if (getDatefromDay(element-4, month, thisyear) == 'SA' || getDatefromDay(element-4, month, thisyear) == 'SU') {
+                        return (<td key={ind} id="weekend"></td>)
                       } else {
-                        return <td key={ind}>test</td>
+
+                        let inde = (element - 4)
+                        const result2 = Object.values(arr_group[index].logs)
+                        let timeworked = logTimeElement(result2, inde)
+
+                        if (timeworked !== undefined) {
+                          return <td className="timeworked" key={ind}>{timeworked}h</td>
+                        } else {
+                          return <td key={ind}></td>
+                        }
+
                       }
 
                     })}
@@ -192,11 +196,26 @@ const PageTest = async () => {
 
             <tr className="last">
               <td colSpan={3}>Total</td>
-              <td className="total">h</td></tr>
+              <td className="total">{toTalTimeIssue}h</td>
+              {
+                arr_days.map((item) => {
+                  const countWorkDay = logTimeTotalIssueByDay(Object.values(arr_group), item)
+                  // console.log('countWorkDay', countWorkDay)
+                  if (countWorkDay == 0) {
+                    return (<td key={item}></td>)
+                  } else {
+                    return (<td key={item}>{countWorkDay} h</td>)
+                  }
+                }
+
+                )
+              }
+            </tr>
+
           </tbody>
         </table>
       </div>
-
+      <UiPage3></UiPage3>
     </>
 
   )

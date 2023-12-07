@@ -24,16 +24,16 @@ const menuItems = [
         path: '/dashboard',
         icon: <MdDashboard />
       },
-      {
-        title: 'Users',
-        path: '/dashboard/users',
-        icon: <MdSupervisedUserCircle />
-      },
-      {
-        title: 'Products',
-        path: '/dashboard/products',
-        icon: <MdShoppingBag />
-      },
+      // {
+      //   title: 'Users',
+      //   path: '/dashboard/users',
+      //   icon: <MdSupervisedUserCircle />
+      // },
+      // {
+      //   title: 'Products',
+      //   path: '/dashboard/products',
+      //   icon: <MdShoppingBag />
+      // },
       {
         title: 'Logwork',
         path: '/dashboard/logwork',
