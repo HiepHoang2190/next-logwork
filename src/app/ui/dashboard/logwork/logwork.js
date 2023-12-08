@@ -1,6 +1,6 @@
 'use client'
 import styles from '@/app/ui/dashboard/logwork/logwork.module.css'
-import { ScheduleComponent, Year, Day, Week, WorkWeek, Month, Agenda, Inject, ViewsDirective, ViewDirective } from '@syncfusion/ej2-react-schedule'
+import { getCurrentViewDates, ScheduleComponent, Year, Day, Week, WorkWeek, Month, Agenda, Inject, ViewsDirective, ViewDirective } from '@syncfusion/ej2-react-schedule'
 
 
 import '../../../../../node_modules/@syncfusion/ej2-base/styles/material.css'
@@ -14,22 +14,21 @@ import '../../../../../node_modules/@syncfusion/ej2-popups/styles/material.css'
 import '../../../../../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css'
 import '../../../../../node_modules/@syncfusion/ej2-react-schedule/styles/material.css'
 
-import { datasource, dataAllUser } from '@/app/lib/datasource'
-import getLogWork from '@/app/lib/getLogWork'
 import { useEffect, useState } from 'react'
-import useSWR from 'swr'
+
 
 import Box from '@mui/material/Box'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
-
-import axios from 'axios'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 const LogWorksUi = (props) => {
-  const { dataIssue, dataUserName } = props
+  const { dataIssue, dataUserName, dataAllUser } = props
+
+  const userAdmin = ['phuong', 'minh', 'admin', 'hieph', 'minht']
+  const isUserAdmin = userAdmin.includes(dataUserName)
 
 
   const [logWork, setLogWork] = useState([{
@@ -43,6 +42,7 @@ const LogWorksUi = (props) => {
   const [paramUserName, setParamUserName] = useState('')
 
   useEffect(() => {
+
     const newLogWork = [...logWork]
     dataIssue.map((item) => {
       newLogWork.push({
@@ -78,7 +78,7 @@ const LogWorksUi = (props) => {
     replace(`${pathname}?${params}`)
 
     try {
-      const dataIssue = await fetch('api/getIssueList', {
+      const dataIssue = await fetch('http://localhost:3000/api/getIssueList', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -115,35 +115,69 @@ const LogWorksUi = (props) => {
     endTime: { name: 'UPDATED' }
   }
   const eventSettings = { dataSource: logWork, fields: fieldsData }
+
+  const selectFieldStyles = {
+    '.MuiOutlinedInput-notchedOutline': {
+      borderColor: '#E34824'
+    },
+    '&:hover .MuiOutlinedInput-notchedOutline': {
+      borderColor: '#E34824',
+      borderWidth: 'thin'
+    },
+    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+      borderColor: '#E34824',
+      borderWidth: 'thin'
+    }
+  }
   return (
     <div className="mt-3">
-      <Box sx={{ marginTop: 4 }}>
-        <FormControl>
-          <InputLabel style={{ color: '#FFFFFF' }} id="demo-simple-select-label">Name</InputLabel>
-          <Select
-            variant="outlined"
-            sx={{
-              width: 200,
-              marginRight: 15,
-              color: '#fff',
-              '& .MuiSvgIcon-root': {
-                color: 'white'
-              }
-            }}
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={userName}
-            label="Name"
-            onChange={handleChange}
+      {isUserAdmin ? (
+        <Box sx={{ marginBottom: 4, marginTop: 4, display:'flex', justifyContent:'end' }}>
+          <FormControl>
+            <InputLabel style={{ color: '#FFFFFF' }} id="demo-simple-select-label">Name</InputLabel>
+            <Select
+              variant="outlined"
+              sx={{
+                width: 200,
+                marginRight: 0,
+                color: '#fff',
+                '& .MuiSvgIcon-root': {
+                  color: 'white'
+                },
+                'MuiOutlinedInput': {
+                  borderColor: 'white'
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#115191',
+                  borderWidth: '0.15rem'
+                },
+                '.MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'white',
+                  borderWidth: '0.15rem'
+                },
+                // '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                //   borderColor: '#E34824',
+                //   borderWidth: 'thin'
+                // }
+              }}
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={userName}
+              label="Name"
+              onChange={handleChange}
 
-          >
-            {dataAllUser.map((item) => (
-              <MenuItem key={item.user_name} value={item.user_name}>{item.display_name}</MenuItem>
-            ))
-            }
-          </Select>
-        </FormControl>
-      </Box>
+            >
+              {dataAllUser.map((item) => (
+                <MenuItem key={item.user_name} value={item.user_name}>{item.display_name}</MenuItem>
+              ))
+              }
+            </Select>
+          </FormControl>
+        </Box>
+      ) : (
+        <></>
+      )}
+
       <ScheduleComponent height='750px' currentView='Month' eventSettings={eventSettings}>
         <ViewsDirective>
           <ViewDirective option='Week' readonly={true}/>

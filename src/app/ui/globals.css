@@ -28,3 +28,48 @@ a {
   border-radius: 10px;
   margin-top: 10px;
 }
+table.log-work {
+  margin: 20px 0px;
+}
+table.log-work,table.log-work th, table.log-work td {
+  border: 1px solid ;
+  border-collapse: collapse
+}
+table.log-work td, table.log-work th {
+  padding: 4px;
+  text-align: center;
+}
+table.log-work {
+  font-size: 12px;
+}
+
+table.log-work tbody td.title-issue {
+  text-align: left;
+}
+th.date {
+  width: 45px;
+  height: 45px;
+}
+#weekend {
+  background-color: #a3a79a4d;
+}
+.last > td {
+  font-weight: 500;
+}
+.current {
+  background-color: #ee4f4cf5;
+  border: 1px solid #ee4f4cf5;
+}
+.wrapper-datetime {
+  display: flex;
+  justify-content: end;
+  margin: 20px 0px;
+}
+.wrapper-datetime .react-datepicker-ignore-onclickoutside input, 
+.wrapper-datetime .react-datepicker__input-container input {
+  padding: 4px;
+  border-radius: 5px;
+  outline: none;
+  border: none;
+
+}
