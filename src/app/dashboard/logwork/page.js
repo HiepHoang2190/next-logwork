@@ -3,6 +3,7 @@
 import LogWorksUi from '../../ui/dashboard/logwork/logwork'
 import { logTimeTotal, logTimeElement, logTimeTotalIssue, logTimeTotalIssueByDay } from '@/app/lib/actions'
 import LogWorkTablePage from '../../ui/dashboard/logwork/logworkTable'
+import LogWorkExcelPage from '../../ui/dashboard/logwork/logworkExcel'
 import { auth } from '@/app/auth'
 
 const LogWorksPage = async ({ searchParams }) => {
@@ -14,7 +15,7 @@ const LogWorksPage = async ({ searchParams }) => {
     'use server'
     const arr=[]
     const totalTimeLive = await
-    fetch(`http://api-jira.lotustest.net/rest/V1/user/${username}`,
+    fetch(`${process.env.API_PATH}/V1/user/${username}`,
       {
         method: 'GET',
         headers: {
@@ -39,9 +40,37 @@ const LogWorksPage = async ({ searchParams }) => {
     return arr
   }
 
-  const dataIssue = await getUserIssue()
-  // console.log(dataIssue)
+  const getAllDataUser = async () => {
+    'use server'
+    const arr_user=[]
+    const totalTimeLive = await
+    fetch(`${process.env.API_PATH}/V1/all-user`,
+      {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods':'*',
+          'Access-Control-Allow-Credentials':'true',
+          'Access-Control-Allow-Headers':'X-CSRF-Token'
 
+
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        data.map((item) => (
+          arr_user.push(item)
+        ))
+
+      })
+
+    return arr_user
+  }
+
+  const dataIssue = await getUserIssue()
+  const dataAllUser = await getAllDataUser()
 
   var month = searchParams?.month
   var year = searchParams?.year
@@ -103,7 +132,7 @@ const LogWorksPage = async ({ searchParams }) => {
   var stringMaY = new Date().toISOString().slice(5, 7) + '/' + new Date().getFullYear()
   var thisyear = year
 
-
+  
   const arr_days = []
   const arr_days_tbody = []
   var days = new Date(thisyear, month, 0).getDate()
@@ -127,17 +156,15 @@ const LogWorksPage = async ({ searchParams }) => {
   }
 
   const toTalTimeIssue = logTimeTotalIssue(Object.values(arr_group))
-  // console.log('dataIssue',dataIssue)
-  // console.log('arr_group',arr_group)
-
 
   return (
     <>
       <div className='wrapper-datetime'>
         <LogWorkTablePage></LogWorkTablePage>
+        <LogWorkExcelPage username={username} month={month} year={year}></LogWorkExcelPage>
       </div>
       <div>
-        <table className="log-work" id="content-bottom">
+        <table className="log-work" id="table-to-xls">
           <thead>
             <tr>
               <th style={{ textAlign: 'left', width: 500, fontWeight: 700 }}>Issue</th>
@@ -214,7 +241,7 @@ const LogWorksPage = async ({ searchParams }) => {
           </tbody>
         </table>
       </div>
-      <LogWorksUi dataIssue = {dataIssue} dataUserName={user.username}></LogWorksUi>
+      <LogWorksUi dataIssue = {dataIssue} dataAllUser={dataAllUser} dataUserName={user.username}></LogWorksUi>
     </>
 
   )

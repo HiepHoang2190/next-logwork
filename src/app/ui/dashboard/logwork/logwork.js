@@ -14,25 +14,25 @@ import '../../../../../node_modules/@syncfusion/ej2-popups/styles/material.css'
 import '../../../../../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css'
 import '../../../../../node_modules/@syncfusion/ej2-react-schedule/styles/material.css'
 
-import { datasource, dataAllUser } from '@/app/lib/datasource'
-import getLogWork from '@/app/lib/getLogWork'
 import { useEffect, useState } from 'react'
-import useSWR from 'swr'
+
 
 import Box from '@mui/material/Box'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
-import { SxProps } from '@mui/material/styles';
-
-
-import axios from 'axios'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import $ from 'jquery'
 
 const LogWorksUi = (props) => {
-  const { dataIssue, dataUserName } = props
+
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const { dataIssue, dataUserName, dataAllUser } = props
 
   const userAdmin = ['phuong', 'minh', 'admin', 'hieph', 'minht']
   const isUserAdmin = userAdmin.includes(dataUserName)
@@ -49,7 +49,7 @@ const LogWorksUi = (props) => {
   const [paramUserName, setParamUserName] = useState('')
 
   useEffect(() => {
-    // console.log('texttt',($('.e-tbar-btn-text').html()))
+
     const newLogWork = [...logWork]
     dataIssue.map((item) => {
       newLogWork.push({
@@ -123,6 +123,19 @@ const LogWorksUi = (props) => {
   }
   const eventSettings = { dataSource: logWork, fields: fieldsData }
 
+  const selectFieldStyles = {
+    '.MuiOutlinedInput-notchedOutline': {
+      borderColor: '#E34824'
+    },
+    '&:hover .MuiOutlinedInput-notchedOutline': {
+      borderColor: '#E34824',
+      borderWidth: 'thin'
+    },
+    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+      borderColor: '#E34824',
+      borderWidth: 'thin'
+    }
+  }
   return (
     <div className="mt-3">
       {isUserAdmin ? (
@@ -137,7 +150,22 @@ const LogWorksUi = (props) => {
                 color: '#fff',
                 '& .MuiSvgIcon-root': {
                   color: 'white'
-                }
+                },
+                'MuiOutlinedInput': {
+                  borderColor: 'white'
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#115191',
+                  borderWidth: '0.15rem'
+                },
+                '.MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'white',
+                  borderWidth: '0.15rem'
+                },
+                // '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                //   borderColor: '#E34824',
+                //   borderWidth: 'thin'
+                // }
               }}
               labelId="demo-simple-select-label"
               id="demo-simple-select"

@@ -10,7 +10,7 @@ const PageLog = async () => {
     'use server'
     const arr=[]
     const totalTimeLive = await
-    fetch(`http://api-jira.lotustest.net/rest/V1/user/${user.username}`,
+    fetch(`${process.env.API_PATH}/V1/user/${user.username}`,
       {
         method: 'GET',
         headers: {

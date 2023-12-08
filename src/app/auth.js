@@ -12,7 +12,7 @@ const login = async (credentials) => {
     console.log('credentials',credentials)
     const user={}
     const userLogin = await
-    fetch('https://jira.lotustest.net/rest/auth/1/session',
+    fetch(`${process.env.JIRA_PATH}/auth/1/session`,
       {
         method: 'POST',
         headers: {
@@ -41,7 +41,7 @@ const login = async (credentials) => {
       })
 
     const userDetail = await
-    fetch(`https://jira.lotustest.net/rest/api/2/user/search?username=${credentials.username}`,
+    fetch(`${process.env.JIRA_PATH}/api/2/user/search?username=${credentials.username}`,
       {
         method: 'GET',
         headers: {

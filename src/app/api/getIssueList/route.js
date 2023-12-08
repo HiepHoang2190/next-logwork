@@ -5,7 +5,7 @@ export async function POST(request) {
   const arr=[]
   if (data.username) {
     const totalTimeLive = await
-    fetch(`http://api-jira.lotustest.net/rest/V1/user/${data.username}`,
+    fetch(`${process.env.API_PATH}/V1/user/${data.username}`,
       {
         method: 'GET',
         headers: {

@@ -71,5 +71,14 @@ th.date {
   border-radius: 5px;
   outline: none;
   border: none;
-
+  margin-right: 20px;
+}
+#table-export-xls-button {
+  padding: 4px 4px;
+  border-radius: 5px;
+  outline: none;
+  border: none;
+  background: #c0d1dd66;
+  color: white;
+  cursor: pointer;
 }
