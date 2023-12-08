@@ -10,7 +10,7 @@ const Page = async () => { {
     'use server'
     const arr=[]
     const totalTimeLive = await
-    fetch(`http://api-jira.lotustest.net/rest/V1/timeleave/${user.username}`,
+    fetch(`${process.env.API_PATH}/V1/timeleave/${user.username}`,
       {
         method: 'GET',
         headers: {
@@ -38,7 +38,7 @@ const Page = async () => { {
     'use server'
     const arr=[]
     const typeLeave = await
-    fetch(`http://api-jira.lotustest.net/rest/V1/leave/${user.username}`,
+    fetch(`${process.env.API_PATH}/V1/leave/${user.username}`,
       {
         method: 'GET',
         headers: {

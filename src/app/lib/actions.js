@@ -188,7 +188,7 @@ export const getDataTimeLeave = async () => {
     const { user } = await auth()
     const arr=[]
     const typeLeave = await
-    fetch(`http://api-jira.lotustest.net/rest/V1/leave/${user.username}`,
+    fetch(`${process.env.API_PATH}/V1/leave/${user.username}`,
       {
         method: 'GET',
         headers: {
