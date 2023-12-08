@@ -3,6 +3,7 @@
 import LogWorksUi from '../../ui/dashboard/logwork/logwork'
 import { logTimeTotal, logTimeElement, logTimeTotalIssue, logTimeTotalIssueByDay } from '@/app/lib/actions'
 import LogWorkTablePage from '../../ui/dashboard/logwork/logworkTable'
+import LogWorkExcelPage from '../../ui/dashboard/logwork/logworkExcel'
 import { auth } from '@/app/auth'
 
 const LogWorksPage = async ({ searchParams }) => {
@@ -131,7 +132,7 @@ const LogWorksPage = async ({ searchParams }) => {
   var stringMaY = new Date().toISOString().slice(5, 7) + '/' + new Date().getFullYear()
   var thisyear = year
 
-
+  
   const arr_days = []
   const arr_days_tbody = []
   var days = new Date(thisyear, month, 0).getDate()
@@ -160,9 +161,10 @@ const LogWorksPage = async ({ searchParams }) => {
     <>
       <div className='wrapper-datetime'>
         <LogWorkTablePage></LogWorkTablePage>
+        <LogWorkExcelPage username={username} month={month} year={year}></LogWorkExcelPage>
       </div>
       <div>
-        <table className="log-work" id="content-bottom">
+        <table className="log-work" id="table-to-xls">
           <thead>
             <tr>
               <th style={{ textAlign: 'left', width: 500, fontWeight: 700 }}>Issue</th>
