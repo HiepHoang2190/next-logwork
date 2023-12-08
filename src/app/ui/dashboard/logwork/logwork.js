@@ -78,7 +78,7 @@ const LogWorksUi = (props) => {
     replace(`${pathname}?${params}`)
 
     try {
-      const dataIssue = await fetch('http://localhost:3000/api/getIssueList', {
+      const dataIssue = await fetch('http://192.168.11.213:3001/api/getIssueList', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
