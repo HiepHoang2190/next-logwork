@@ -1,6 +1,5 @@
 'use client'
 
-
 import { authenticate } from '@/app/lib/actions'
 import styles from './loginForm.module.css'
 import { useFormState } from 'react-dom'
@@ -44,7 +43,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
   [theme.breakpoints.up('sm')]: { width: '28rem' }
 }))
 
-const LinkStyled = styled('a')(({ theme }) => ({
+const LinkStyled = styled('p')(({ theme }) => ({
   fontSize: '0.875rem',
   textDecoration: 'none',
   color: theme.palette.primary.main
@@ -75,7 +74,7 @@ const LoginForm = () => {
 
   // ** State
   const [values, setValues] = useState({
-    username:'',
+    username: '',
     password: '',
     showPassword: false
   })
@@ -101,6 +100,7 @@ const LoginForm = () => {
 
   const sendValue = async () => {
     const data = await authenticate(values)
+   
     console.log('data', data)
 
     if (!data?.error) {
@@ -124,78 +124,99 @@ const LoginForm = () => {
         {state && state}
       </form> */}
       {mounted &&
- <Box className='content-center'>
-   <Card sx={{ zIndex: 1 }}>
-     <CardContent >
+        <Box className='content-center'>
+          <Card sx={{ zIndex: 1 }}>
+            <CardContent >
 
-       <Box sx={{ mb: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-         <img style={{ textAlign: 'center', marginBottom: '0px' }} src="/jira-logo.png"/>
-       </Box>
-       <Box sx={{ mb: 6 }}>
-         <Typography variant='h5' className={styles.text_center} sx={{ fontWeight: 600, marginBottom: 1.5 }}>
-       Welcome to Lotus! 👋🏻
-         </Typography>
-       </Box>
-       <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-         <TextField onChange={handleChange('username')} autoFocus fullWidth id='username' label='Username' sx={{ marginBottom: 4 }} />
-         <FormControl fullWidth>
-           <InputLabel htmlFor='auth-login-password'>Password</InputLabel>
-           <OutlinedInput
-             label='Password'
-             value={values.password}
-             id='auth-login-password'
-             onChange={handleChange('password')}
-             type={values.showPassword ? 'text' : 'password'}
-             endAdornment={
-               <InputAdornment position='end'>
-                 <IconButton
-                   edge='end'
-                   onClick={handleClickShowPassword}
-                   onMouseDown={handleMouseDownPassword}
-                   aria-label='toggle password visibility'
-                 >
-                   {values.showPassword ? <EyeOutline /> : <EyeOffOutline />}
-                 </IconButton>
-               </InputAdornment>
-             }
-           />
-         </FormControl>
-         <Box
-           sx={{ mb: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-between' }}
-         >
-           <FormControlLabel control={<Checkbox />} label='Remember Me' />
-           <Link passHref href='/'>
-             <LinkStyled onClick={e => e.preventDefault()}>Forgot Password?</LinkStyled>
-           </Link>
-         </Box>
-         <Button
-           fullWidth
-           size='large'
-           variant='contained'
-           sx={{ marginBottom: 7 }}
-           onClick={sendValue}
-         >
-       Login
-         </Button>
-         <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+              <Box sx={{ mb: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <img style={{ textAlign: 'center', marginBottom: '0px' }} src="/jira-logo.png" />
+              </Box>
+              <Box sx={{ mb: 6 }}>
+                <Typography
+                  variant='h5'
+                  className={styles.text_center}
+                  sx={{ fontWeight: 600, marginBottom: 1.5 }}
+                >
+                  Welcome to Lotus! 👋🏻
+                </Typography>
+              </Box>
 
-           <Typography variant='body2'>
-             {err && err}
-           </Typography>
-         </Box>
+              <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
+                <TextField
+                  onChange={handleChange('username')}
+                  autoFocus
+                  fullWidth
+                  id='username'
+                  label='Username'
+                  sx={{ marginBottom: 4 }}
+                />
 
+                <FormControl fullWidth>
+                  <InputLabel htmlFor='auth-login-password'>Password</InputLabel>
 
-       </form>
-     </CardContent>
-   </Card>
+                  <OutlinedInput
+                    label='Password'
+                    value={values.password}
+                    id='auth-login-password'
+                    onChange={handleChange('password')}
+                    type={values.showPassword ? 'text' : 'password'}
+                    endAdornment={
+                      <InputAdornment position='end'>
+                        <IconButton
+                          edge='end'
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          aria-label='toggle password visibility'
+                        >
+                          {values.showPassword ? <EyeOutline /> : <EyeOffOutline />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
 
- </Box>
+                <Box
+                  sx={{
+                    mb: 4,
+                    display: 'flex',
+                    alignItems: 'center',
+                    flexWrap: 'wrap',
+                    justifyContent: 'space-between'
+                  }}
+                >
+                  <FormControlLabel control={<Checkbox />} label='Remember Me' />
+                  <Link passHref href='/'>
+                    <LinkStyled onClick={e => e.preventDefault()}>Forgot Password?</LinkStyled>
+                  </Link>
+                </Box>
 
+                <Button
+                  fullWidth
+                  size='large'
+                  variant='contained'
+                  sx={{ marginBottom: 7 }}
+                  onClick={sendValue}
+                >
+                  Login
+                </Button>
+
+                <Box sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  flexWrap: 'wrap',
+                  justifyContent: 'center'
+                }}>
+                  <Typography variant='body2'>
+                    {err && err}
+                  </Typography>
+                </Box>
+
+              </form>
+            </CardContent>
+          </Card>
+        </Box>
       }
-
-
     </>
-
   )
 }
 
