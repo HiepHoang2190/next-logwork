@@ -17,15 +17,16 @@ const LeavePage = (props) => {
 
   const { arr_time_leave, data_time_leave_total } = props
 
-  const [data, setData] = useState([])
-  const [product, setProduct] = useState([])
+  const [timeLeave, setTimeLeave] = useState([])
+  const [totalTimeLeave, setTotalTimeLeave] = useState([])
 
   useEffect(() => {
-    setData(arr_time_leave)
-    setProduct(data_time_leave_total)
+    setTimeLeave(arr_time_leave)
+    setTotalTimeLeave(data_time_leave_total)
 
+  }, [timeLeave, totalTimeLeave])
 
-  }, [data, product])
+  const currentYear = totalTimeLeave[totalTimeLeave.length - 1];
 
   return (
     <div className="mt-3">
@@ -41,8 +42,8 @@ const LeavePage = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((row) => (
-              <TableRow key={row.id} className={row.difference_in_days<2 ? styles.row_incorrect_time_limit : ''}>
+            {timeLeave.map((row) => (
+              <TableRow key={row.id} className={row.difference_in_days < 2 ? styles.row_incorrect_time_limit : ''}>
                 <TableCell component="th" scope="row">
                   {row.summary}
                 </TableCell>
@@ -52,22 +53,19 @@ const LeavePage = (props) => {
                 <TableCell align="right">{row.due_date}</TableCell>
               </TableRow>
             ))}
-
           </TableBody>
         </Table>
       </TableContainer>
-      <Box sx={{ width: '100%', maxWidth: 500, marginTop:2 }}>
-        {
-          product.map((item) => (
-            <><Typography variant="subtitle1" gutterBottom>
-              <span className={styles.title_total}>Time Estimated:</span> {((item.time_estimate / 3600 / 8)) + ' days'}
+      <Box sx={{ width: '100%', maxWidth: 500, marginTop: 2 }}>
+        {currentYear && (
+          <><Typography variant="subtitle1" gutterBottom>
+            <span className={styles.title_total}>Time Estimated:</span> {((currentYear.time_estimate / 3600 / 8)) + ' days'}
+          </Typography><Typography variant="subtitle1" gutterBottom>
+              <span className={styles.title_total}>Time Spent:</span> {((currentYear.time_spent / 3600 / 8)) + ' days'}
             </Typography><Typography variant="subtitle1" gutterBottom>
-              <span className={styles.title_total}>Time Spent:</span> {((item.time_spent / 3600 / 8)) + ' days'}
-            </Typography><Typography variant="subtitle1" gutterBottom>
-              <span className={styles.title_total}>Time Remaining:</span> {((item.time_remain / 3600 / 8)) + ' days'}
+              <span className={styles.title_total}>Time Remaining:</span> {((currentYear.time_remain / 3600 / 8)) + ' days'}
             </Typography></>
-          ))
-        }
+        )}
       </Box>
     </div>
   )
