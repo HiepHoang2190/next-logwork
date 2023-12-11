@@ -169,7 +169,7 @@ export const deleteProduct = async (formData) => {
 //   }
 // }
 
-export const authenticate = async ( formData) => {
+export const authenticate = async (formData) => {
   const { username, password } = formData
   // const router = useRouter()
   try {
@@ -179,111 +179,133 @@ export const authenticate = async ( formData) => {
     console.log('err', err)
     console.log(err.name, err.message)
     // return { error:err.name+' '+ err.message }
-    return { error:'Incorrect Password!' }
+    return { error: 'Incorrect Password!' }
   }
 }
 
-export const getDataTimeLeave = async () => {
-  try {
-    const { user } = await auth()
-    const arr=[]
-    const typeLeave = await
-    fetch(`${process.env.API_PATH}/V1/leave/${user.username}`,
-      {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods':'*',
-          'Access-Control-Allow-Credentials':'true',
-          'Access-Control-Allow-Headers':'X-CSRF-Token'
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-        data.map((item) => (
-          arr.push(item)
-        ))
-      })
+// export const logTimeTotal = async (arr_log = []) => {
 
-    return arr
-  } catch (err) {
-    console.log(err)
-    throw new Error('Failed to get time leave for user!')
-  }
-
-}
+//   const t = arr_log.reduce(function (a, b) {
+//     return Number(a) + Number((b['timeworked'] / 3600).toFixed(2))
+//   }, 0)
 
 
-export const logTimeTotal = async (arr_log =[]) => {
+//   return (t)
+// }
 
-  'use server'
+// export const logTimeTotalIssue = async (arr_log = []) => {
 
-  const t = arr_log.reduce(function(a, b) {
-    return Number(a) + Number((b['timeworked'] / 3600).toFixed(2))
-  }, 0)
+//   const final = arr_log.map((item) => {
+//     let t2 = Object.values(item['logs']).reduce(function (a, b) {
+//       return Number(a) + Number((b['timeworked'] / 3600).toFixed(2))
+//     }, 0)
+//     return t2
+//   }).reduce((prev, curr) => prev + curr, 0)
 
+//   return final
 
-  return (t)
-}
+// }
 
-export const logTimeTotalIssue = async (arr_log =[]) => {
+// export const logTimeTotalIssueByDay = (arr_log = [], number_day) => {
 
-  'use server'
+//   var final = 0
+//   var t2 = 0
+//   arr_log.map((item) => {
 
-  const final = arr_log.map((item) => {
-    let t2 = Object.values(item['logs']).reduce(function(a, b) {
-      return Number(a) + Number((b['timeworked'] / 3600).toFixed(2))
-    }, 0)
-    return t2
-  }).reduce((prev, curr) => prev + curr, 0)
+//     Object.values(item['logs']).map((item2) => {
+//       var createDate = item2['created'].substring(0, 10)
+//       var createDate_arr = createDate.split('-')
+//       var get_day = createDate_arr[2]
 
-  return final
+//       if (Number(number_day) == get_day) {
+//         var ts = Number((item2['timeworked'] / 3600).toFixed(2))
+//         t2 += ts
 
-}
+//       }
+//     })
+//     final = t2
+//   })
 
-
-export const logTimeTotalIssueByDay = (arr_log =[], number_day) => {
-
-  'use server'
-  var final = 0
-  var t2 = 0
-  arr_log.map((item) => {
-
-    Object.values(item['logs']).map((item2) => {
-      var createDate = item2['created'].substring(0, 10)
-      var createDate_arr = createDate.split('-')
-      var get_day = createDate_arr[2]
-
-      if (Number(number_day) == get_day) {
-        var ts = Number((item2['timeworked'] / 3600).toFixed(2))
-        t2 += ts
-
-      }
-    })
-    final = t2
-  })
-
-  return final
+//   return final
 
 
-}
-export const logTimeElement= (arr_log =[], ind) => {
+// }
 
-  let timeworked
-  let day_worked
-  {arr_log.map((element) => {
+// export const logTimeElement = (arr_log = [], ind) => {
 
-    var createDate = element['created'].substring(0, 10)
-    var createDate_arr = createDate.split('-')
-    var get_day = createDate_arr[2]
-    if (Number(ind) == get_day) {
-      timeworked = Number((element['timeworked'] / 3600).toFixed(2))
-      day_worked = get_day
+//   let timeworked
+//   let day_worked
+//   {
+//     arr_log.map((element) => {
+
+//       var createDate = element['created'].substring(0, 10)
+//       var createDate_arr = createDate.split('-')
+//       var get_day = createDate_arr[2]
+//       if (Number(ind) == get_day) {
+//         timeworked = Number((element['timeworked'] / 3600).toFixed(2))
+//         day_worked = get_day
+//       }
+//     })
+//   }
+
+//   return timeworked
+
+// }
+
+export const fetchData = async (url) => {
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': '*',
+      'Access-Control-Allow-Credentials': 'true',
+      'Access-Control-Allow-Headers': 'X-CSRF-Token'
     }
-  })}
+  });
 
-  return timeworked
+  const data = await response.json();
+  return data;
+};
 
+export const getUserIssue = async (username) => {
+  const url = `${process.env.API_PATH}/V1/user/${username}`;
+  const data = await fetchData(url);
+  const arr = []
+  data.map((item) => (
+    arr.push(item)
+  ));
+  return arr
+};
+
+export const getAllDataUser = async () => {
+  const url = `${process.env.API_PATH}/V1/all-user`;
+  const data = await fetchData(url);
+  const arr = []
+  data.map((item) => (
+    arr.push(item)
+  ));
+  return arr
+};
+
+export const getTimeLeaveTotal = async (username) => {
+  const url = `${process.env.API_PATH}/V1/timeleave/${username}`;
+  const data = await fetchData(url);
+  const arr = []
+
+  data.map((item) => (
+    arr.push(item)
+  ));
+  return arr
+}
+
+export const getTimeLeave = async (username) => {
+  const url = `${process.env.API_PATH}/V1/leave/${username}`;
+  const data = await fetchData(url);
+  const arr = []
+  data.map((item) => (
+    arr.push(item)
+  ));
+  return arr
 }

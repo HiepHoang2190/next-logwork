@@ -3,6 +3,11 @@ import Sidebar from '../ui/dashboard/sidebar/sidebar'
 import styles from '../ui/dashboard/dashboard.module.css'
 // import Footer from '../ui/dashboard/footer/footer'
 
+export const metadata = {
+  title: "Lotus's Logwork Dashboard",
+  description: "Logwork page by Lotus Outsourcing",
+}
+
 const Layout = ({ children }) => {
   return (
     <div className={styles.container}>
