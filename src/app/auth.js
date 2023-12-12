@@ -1,6 +1,7 @@
-import NextAuth from 'next-auth'
-import CredentialsProvider from 'next-auth/providers/credentials'
-import { authConfig } from './authconfig'
+import NextAuth from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { authConfig } from './authconfig';
+import {fetchWithCredentials} from '@/app/lib/fetchApi';
 import { connectToDB } from './lib/utils'
 import { User } from './lib/models'
 import bcrypt from 'bcrypt'
@@ -8,73 +9,54 @@ import bcrypt from 'bcrypt'
 
 const login = async (credentials) => {
   try {
-
-    console.log('credentials',credentials)
-    const user={}
-    const userLogin = await
-    fetch(`${process.env.JIRA_PATH}/auth/1/session`,
+    const user = {};
+  
+    const sessionResponse = await fetchWithCredentials(
+      `${process.env.JIRA_PATH}/auth/1/session`,
       {
         method: 'POST',
-        headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods':'*',
-          'Access-Control-Allow-Credentials':'true',
-          'Access-Control-Allow-Headers':'X-CSRF-Token'
-        },
-        body: JSON.stringify({ username: credentials.username, password: credentials.password })
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.errorMessages) {
+        body: JSON.stringify({ username: credentials.username, password: credentials.password }),
+      }
+    );
 
-          console.log('data',data)
-          throw new Error('Incorrect password!')
+    if (sessionResponse.errorMessages) {
+      console.error('Incorrect password!');
+      throw new Error('Incorrect password!');
+    }
 
-        } else {
+    user.session = sessionResponse.session;
+    user.loginInfo = sessionResponse.loginInfo;
+    user.username = credentials.username;
 
-          user.session = data.session
-          user.loginInfo = data.loginInfo
-          user.username = credentials.username
-        }
-      })
 
-    const userDetail = await
-    fetch(`${process.env.JIRA_PATH}/api/2/user/search?username=${credentials.username}`,
+    const userDetailResponse = await fetchWithCredentials(
+      `${process.env.JIRA_PATH}/api/2/user/search?username=${credentials.username}`,
       {
         method: 'GET',
         headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods':'*',
-          'Access-Control-Allow-Credentials':'true',
-          'Access-Control-Allow-Headers':'X-CSRF-Token',
-          'Cookie':`JSESSIONID=${user.session.value}`
+          'Cookie': `JSESSIONID=${user.session.value}`,
+        },
+      }
+    );
 
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('data2',data)
-      
-          user.email = data[0].emailAddress
-          user.displayName = data[0].displayName
-  
-          const propertyValues = Object.values(data[0].avatarUrls)
-          user.avatarUrls = propertyValues
-        
-      })
-    
+    if (!userDetailResponse || userDetailResponse.errorMessages || userDetailResponse.length === 0) {
+      console.error('User details not found:', userDetailResponse);
+      throw new Error('User details not found.');
+    }
 
-    console.log('user in login fetch',user)
-    return user
+    const userData = userDetailResponse[0];
+
+    user.email = userData.emailAddress;
+    user.displayName = userData.displayName;
+    user.avatarUrls = Object.values(userData.avatarUrls);
+
+    console.log('user in login fetch', user);
+    return user;
   } catch (err) {
-    console.log(err)
-    throw new Error('Failed to login!')
+    console.error('Login error:', err);
+    throw new Error('Failed to login!');
   }
-}
+};
 
 export const { signIn, signOut, auth } = NextAuth({
   ...authConfig,
@@ -82,16 +64,15 @@ export const { signIn, signOut, auth } = NextAuth({
     CredentialsProvider({
       async authorize(credentials) {
         try {
-          const user = await login(credentials)
-          console.log('user await login', user)
-          return user
+          const user = await login(credentials);
+          console.log('user await login', user);
+          return user;
         } catch (err) {
-          return null
+          return null;
         }
-      }
-    })
+      },
+    }),
   ],
-  // ADD ADDITIONAL INFORMATION TO SESSION
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
@@ -115,4 +96,4 @@ export const { signIn, signOut, auth } = NextAuth({
     }
 
   }
-})
+});

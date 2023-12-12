@@ -1,5 +1,5 @@
 import { auth } from '@/app/auth'
-import { getTimeLeaveTotal, getTimeLeave, getAllDataUser } from '@/app/lib/actions'
+import { getTimeLeaveTotal, getTimeLeave, getAllDataUser } from '@/app/lib/fetchApi'
 import LeavePage from '../../ui/dashboard/leave/leave'
 
 export async function generateMetadata({ searchParams }) {

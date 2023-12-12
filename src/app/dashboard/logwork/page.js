@@ -3,7 +3,7 @@ import LogWorkTablePage from '../../ui/dashboard/logwork/logworkTable'
 import LogWorkExcelPage from '../../ui/dashboard/logwork/logworkExcel'
 import LogWorksUi from '../../ui/dashboard/logwork/logwork'
 import { auth } from '@/app/auth'
-import { getUserIssue, getAllDataUser } from '@/app/lib/actions'
+import { getUserIssue, getAllDataUser } from '@/app/lib/fetchApi'
 
 export async function generateMetadata({ searchParams }) {
   const { user } = await auth()
