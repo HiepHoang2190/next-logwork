@@ -4,47 +4,57 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
-
 const LogWorkDatePicker = () => {
-
   const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
   const [startDate, setStartDate] = useState(new Date())
   const searchParams = useSearchParams()
   const { replace } = useRouter()
   const pathname = usePathname()
 
+  useEffect(() => {
+    setMounted(true)
+ 
+   // Check if 'month' and 'year' exist in searchParams
+   if (searchParams.has('month') && searchParams.has('year')) {
+    const month = parseInt(searchParams.get('month'), 10)
+    const year = parseInt(searchParams.get('year'), 10)
+
+    if (!isNaN(month) && !isNaN(year)) {
+      setStartDate(new Date(year, month - 1, 1)) // Adjust month value since it's zero-based
+    }
+  }
+}, [searchParams])
+
+  const handleDateChange = (date) => {
+    const params = new URLSearchParams(searchParams)
+    const month = date.getMonth() + 1
+    const year = date.getFullYear()
+
+    if (month) {
+      params.set('month', month)
+      params.set('year', year)
+    } else {
+      params.delete('month')
+      params.delete('year')
+    }
+
+    replace(`${pathname}?${params}`)
+    setStartDate(date)
+  }
+
   return (
     <>
-      {mounted ? (
+      {mounted && (
         <div className='box-datetime'>
           <DatePicker
             selected={startDate}
-            onChange={(date) => {
-              const params = new URLSearchParams(searchParams)
-              var month = date.getMonth() + 1
-              var year = date.getFullYear()
-              if (month) {
-                params.set('month', month)
-                params.set('year', year)
-              } else {
-                params.delete('month')
-                params.delete('year')
-              }
-              replace(`${pathname}?${params}`)
-
-              setStartDate(date)
-
-            }}
+            onChange={handleDateChange}
             value={startDate}
             dateFormat="MM/yyyy"
             showMonthYearPicker
           />
-        </div>) : ("")}
+        </div>
+      )}
     </>
   )
 }
