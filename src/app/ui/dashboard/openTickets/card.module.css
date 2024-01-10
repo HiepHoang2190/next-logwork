@@ -1,10 +1,9 @@
 .container {
   background-color: var(--bgSoft);
-  padding: 20px;
+  padding: 20px 10px;
   border-radius: 10px;
   display: flex;
   gap: 20px;
-  /* cursor: pointer; */
   width: 100%;
 }
 
@@ -16,6 +15,23 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  width: 100%;
+}
+
+.title:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.issues{
+  text-align: left;
+  line-height: 3;
+  font-weight: 700;
+}
+.issueInfo {
+  text-align: left;
+  line-height: 3;
+  font-weight: 400;
 }
 
 .number {

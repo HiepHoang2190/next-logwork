@@ -1,7 +1,6 @@
 'use client'
 
 import styles from '@/app/ui/dashboard/leave/leave.module.css'
-import { dataleave, dataleavetotal } from '@/app/lib/datasource'
 import { useEffect, useState } from 'react'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'

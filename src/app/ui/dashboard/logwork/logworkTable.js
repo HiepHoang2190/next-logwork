@@ -13,6 +13,7 @@ import {
 
 const LogWorkTablePage = (props) => {
   const { dataIssue, month, year } = props;
+  
   const [dataTable, setDataTable] = useState();
 
   useEffect(() => {
@@ -76,7 +77,7 @@ const LogWorkTablePage = (props) => {
                           <a
                             target="_blank"
                             rel="noreferrer"
-                            href={`https://jira.lotustest.net/browse/${key}`}
+                            href={`https://pm.lotustest.net/browse/${key}`}
                             className="title"
                           >
                             {summary}

@@ -1,19 +1,8 @@
-import styles from './sidebar.module.css'
-import {
-  MdDashboard,
-  MdSupervisedUserCircle,
-  MdShoppingBag,
-  MdAttachMoney,
-  MdWork,
-  MdAnalytics,
-  MdPeople,
-  MdOutlineSettings,
-  MdHelpCenter,
-  MdLogout
-} from 'react-icons/md'
-import MenuLink from './menuLink/menuLink'
 import Image from 'next/image'
+import styles from './sidebar.module.css'
+import MenuLink from './menuLink/menuLink'
 import { auth, signOut } from '@/app/auth'
+import {MdDashboard, MdAttachMoney, MdLogout } from 'react-icons/md'
 
 const menuItems = [
   {
@@ -24,19 +13,14 @@ const menuItems = [
         path: '/dashboard',
         icon: <MdDashboard />
       },
-      // {
-      //   title: 'Users',
-      //   path: '/dashboard/users',
-      //   icon: <MdSupervisedUserCircle />
-      // },
-      // {
-      //   title: 'Products',
-      //   path: '/dashboard/products',
-      //   icon: <MdShoppingBag />
-      // },
       {
-        title: 'Logwork',
-        path: '/dashboard/logwork',
+        title: 'Logwork Calendar',
+        path: '/dashboard/calendar',
+        icon: <MdAttachMoney />
+      },
+      {
+        title: 'Logwork Report',
+        path: '/dashboard/report',
         icon: <MdAttachMoney />
       },
       {
@@ -47,7 +31,6 @@ const menuItems = [
 
     ]
   },
-
   {
     title: 'User',
     list: [
@@ -57,7 +40,7 @@ const menuItems = [
 ]
 const Sidebar = async () => {
   const { user } = await auth()
-  console.log('user in sidebar.js', user)
+
   return (
     <div className={styles.container}>
       <div className={styles.user}>
@@ -70,7 +53,7 @@ const Sidebar = async () => {
         />
         <div className={styles.userDetail}>
           <span className={styles.username}>{user.displayName}</span>
-          <span className={styles.userTitle}>Administrator</span>
+          {/* <span className={styles.userTitle}>Administrator</span> */}
         </div>
       </div>
       <ul className={styles.list}>

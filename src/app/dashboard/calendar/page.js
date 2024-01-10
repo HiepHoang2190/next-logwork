@@ -1,6 +1,3 @@
-import LogWorkDatePicker from '../../ui/dashboard/logwork/logworkDatePicker'
-import LogWorkTablePage from '../../ui/dashboard/logwork/logworkTable'
-import LogWorkExcelPage from '../../ui/dashboard/logwork/logworkExcel'
 import LogWorksUi from '../../ui/dashboard/logwork/logwork'
 import { auth } from '@/app/auth'
 import { getUserIssue, getAllDataUser } from '@/app/lib/fetchApi'
@@ -14,37 +11,27 @@ export async function generateMetadata({ searchParams }) {
       (dataAllUser.filter(item => (item.user_name === searchParams?.username)).map(user => user.display_name))
       :
       (user.displayName)
-      } - Logwork tháng ${searchParams?.month || new Date().getMonth() + 1}`,
+      } - Calendar`,
   }
 }
 
 
-const LogWorksPage = async ({ searchParams }) => {
+const LogWorkCalendarPage = async ({ searchParams }) => {
 
   const { user } = await auth()
-
   var username = searchParams?.username
-
   username = (username !== undefined) ? username : user.username
 
-  const dataIssue = await getUserIssue(username);
+  //Get data Issues for current User
   const dataAllUser = await getAllDataUser();
-
-  const month = searchParams?.month || new Date().getMonth() + 1;
-  const year = searchParams?.year || new Date().getFullYear();
+  const currentUserData = dataAllUser.find(data => data.user_name === username)
+  const dataIssue = await getUserIssue(currentUserData.user_key);
 
   return (
     <>
-      <div className='wrapper-datetime'>
-        <LogWorkDatePicker />
-        <LogWorkExcelPage username={username} month={month} year={year} />
-      </div>
-
-      <LogWorkTablePage dataIssue={dataIssue} month={month} year={year} />
-
       <LogWorksUi dataIssue={dataIssue} dataAllUser={dataAllUser} dataUserName={user.username} />
     </>
   )
 }
 
-export default LogWorksPage
+export default LogWorkCalendarPage
