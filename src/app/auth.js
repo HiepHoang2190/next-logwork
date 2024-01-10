@@ -2,17 +2,13 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { authConfig } from './authconfig';
 import {fetchWithCredentials} from '@/app/lib/fetchApi';
-import { connectToDB } from './lib/utils'
-import { User } from './lib/models'
-import bcrypt from 'bcrypt'
-
 
 const login = async (credentials) => {
   try {
     const user = {};
   
     const sessionResponse = await fetchWithCredentials(
-      `${process.env.JIRA_PATH}/auth/1/session`,
+      `${process.env.NEW_JIRA_PATH}/auth/1/session`,
       {
         method: 'POST',
         body: JSON.stringify({ username: credentials.username, password: credentials.password }),
@@ -30,7 +26,7 @@ const login = async (credentials) => {
 
 
     const userDetailResponse = await fetchWithCredentials(
-      `${process.env.JIRA_PATH}/api/2/user/search?username=${credentials.username}`,
+      `${process.env.NEW_JIRA_PATH}/api/2/user/search?username=${credentials.username}`,
       {
         method: 'GET',
         headers: {

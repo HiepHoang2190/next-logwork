@@ -67,18 +67,38 @@ th.date {
 }
 .wrapper-datetime .react-datepicker-ignore-onclickoutside input, 
 .wrapper-datetime .react-datepicker__input-container input {
-  padding: 4px;
+  padding: 7px 8px;
   border-radius: 5px;
-  outline: none;
-  border: none;
+  outline: white;
+  border: 1px solid;
+  background: transparent;
+  color: white;
   margin-right: 20px;
 }
+
+.wrapper-datetime .react-datepicker-ignore-onclickoutside input:hover, 
+.wrapper-datetime .react-datepicker__input-container input:hover {
+  outline: black;
+  border: 1px solid;
+  background: white;
+  color: black;
+  cursor: pointer;
+}
+
 #table-export-xls-button {
-  padding: 4px 4px;
+  padding: 7px 8px;
   border-radius: 5px;
-  outline: none;
-  border: none;
-  background: #c0d1dd66;
+  outline: white;
+  border: 1px solid;
+  background: transparent;
   color: white;
+}
+
+#table-export-xls-button:hover {
+  outline: black;
+  border: 1px solid;
+  background: white;
+  color: black;
+  cursor: pointer;
   cursor: pointer;
 }

@@ -1,15 +1,17 @@
 'use client'
-import { useEffect, useState } from 'react'
 import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
+import { useEffect, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 const LogWorkDatePicker = () => {
+  
+  const pathname = usePathname()
+  const { replace } = useRouter()
+  const searchParams = useSearchParams()
+
   const [mounted, setMounted] = useState(false)
   const [startDate, setStartDate] = useState(new Date())
-  const searchParams = useSearchParams()
-  const { replace } = useRouter()
-  const pathname = usePathname()
+
 
   useEffect(() => {
     setMounted(true)

@@ -1,6 +1,7 @@
+'use server'
 import { auth } from '@/app/auth'
-import { getTimeLeaveTotal, getTimeLeave, getAllDataUser } from '@/app/lib/fetchApi'
 import LeavePage from '../../ui/dashboard/leave/leave'
+import { getTimeLeaveTotal, getTimeLeave, getAllDataUser } from '@/app/lib/fetchApi'
 
 export async function generateMetadata({ searchParams }) {
   const { user } = await auth()
@@ -75,7 +76,12 @@ const fetchData = async (username) => {
 const Page = () => {
   const fetchDataAndRender = async () => {
     const { user } = await auth()
-    const { arr_time_leave, arr_time_leave_total } = await fetchData(user.username)
+
+    //Get data leave request for current User
+    const username = user.username
+    const dataAllUser = await getAllDataUser();
+    const currentUserData = dataAllUser.find(data => data.user_name === username)
+    const { arr_time_leave, arr_time_leave_total } = await fetchData(currentUserData.user_key)
 
     return (
       <div className="mt-3">
@@ -83,7 +89,6 @@ const Page = () => {
       </div>
     )
   }
-
   return fetchDataAndRender()
 }
 

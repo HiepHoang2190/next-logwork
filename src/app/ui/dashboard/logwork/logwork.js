@@ -1,83 +1,31 @@
 'use client'
-import styles from '@/app/ui/dashboard/logwork/logwork.module.css'
 import { useEffect, useState } from 'react'
+import { getUserIssue } from '@/app/lib/fetchApi'
+import UserSelection from './logworkUserSelection'
 import {
-  getCurrentViewDates,
-  ScheduleComponent,
-  Year,
   Day,
   Week,
-  WorkWeek,
   Month,
-  Agenda,
+  Year,
   Inject,
+  ViewDirective,
   ViewsDirective,
-  ViewDirective
+  ScheduleComponent,
 } from '@syncfusion/ej2-react-schedule'
 
 import '@syncfusion/ej2-base/styles/material.css'
+import '@syncfusion/ej2-lists/styles/material.css'
+import '@syncfusion/ej2-popups/styles/material.css'
+import '@syncfusion/ej2-inputs/styles/material.css'
 import '@syncfusion/ej2-buttons/styles/material.css'
 import '@syncfusion/ej2-calendars/styles/material.css'
 import '@syncfusion/ej2-dropdowns/styles/material.css'
-import '@syncfusion/ej2-inputs/styles/material.css'
-import '@syncfusion/ej2-lists/styles/material.css'
 import '@syncfusion/ej2-navigations/styles/material.css'
-import '@syncfusion/ej2-popups/styles/material.css'
 import '@syncfusion/ej2-splitbuttons/styles/material.css'
 import '@syncfusion/ej2-react-schedule/styles/material.css'
 
-import Box from '@mui/material/Box'
-import InputLabel from '@mui/material/InputLabel'
-import MenuItem from '@mui/material/MenuItem'
-import FormControl from '@mui/material/FormControl'
-import Select from '@mui/material/Select'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { getUserIssue } from '@/app/lib/fetchApi'
 
-// Component for user selection
-const UserSelection = ({ userName, handleChange, dataAllUser }) => {
-  const selectFieldStyles = {
-    '.MuiOutlinedInput-notchedOutline': {
-      borderColor: '#E34824'
-    },
-    '&:hover .MuiOutlinedInput-notchedOutline': {
-      borderColor: '#E34824',
-      borderWidth: 'thin'
-    },
-    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-      borderColor: '#E34824',
-      borderWidth: 'thin'
-    }
-  };
-  return (
-    <Box sx={{ marginBottom: 4, marginTop: 4, display: 'flex', justifyContent: 'end' }}>
-      <FormControl>
-        <InputLabel style={{ color: '#FFFFFF' }} id="demo-simple-select-label">Name</InputLabel>
-        <Select
-          variant="outlined"
-          sx={{
-            width: 200,
-            marginRight: 0,
-            color: '#fff',
-            '& .MuiSvgIcon-root': {
-              color: 'white'
-            },
-            ...selectFieldStyles
-          }}
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={userName}
-          label="Name"
-          onChange={handleChange}
-        >
-          {dataAllUser.map((item) => (
-            <MenuItem key={item.user_name} value={item.user_name}>{item.display_name}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </Box>
-  )
-};
 
 // Component for schedule
 const Schedule = ({ logWork }) => {
@@ -85,8 +33,8 @@ const Schedule = ({ logWork }) => {
     id: 'issueid',
     subject: { name: 'SUMMARY' },
     description: { name: 'timeworked' },
-    startTime: { name: 'CREATED' },
-    endTime: { name: 'UPDATED' }
+    startTime: { name: 'STARTDATE' },
+    endTime: { name: 'STARTDATE' }
   };
   const eventSettings = { dataSource: logWork, fields: fieldsData };
 
@@ -121,7 +69,7 @@ const LogWorksUi = (props) => {
   
   // Remove the div that contains the Syncfusion license message
   const removeLicenseMessage = () => {
-    const divs = document.querySelectorAll('div span'); 
+    const divs = document.querySelectorAll('div span');
     divs.forEach((span) => {
       if (
         span.textContent.includes("This application was built using a trial version of Syncfusion Essential Studio. To remove the license validation message permanently, a valid license key must be included.")
@@ -148,11 +96,11 @@ const LogWorksUi = (props) => {
 
     const newLogWork = dataIssue.map((item) => ({
       'issueid': item.issueid,
-      'SUMMARY': item.SUMMARY,
-      'timeworked': `Project: ${item.pkey}\n\n Key: ${item.key}\n\n Log Time: ${item.timeworked / 3600}h`,
-      'CREATED': item.CREATED,
-      'UPDATED': item.UPDATED,
-      'STARTDATE': item.STARTDATE
+      'SUMMARY': item.summary,
+      'timeworked': `Project Key: ${item.key}\n\n Log Time: ${item.timeworked / 3600}h`,
+      'CREATED': item.created,
+      'UPDATED': item.updated,
+      'STARTDATE': item.startdate
     }));
 
     setLogWork(newLogWork);
@@ -162,12 +110,11 @@ const LogWorksUi = (props) => {
     if (paramsUserName) {
       setUserName(paramsUserName);
     }
-    
+
     // Remove the div that contains the Syncfusion license message
     removeLicenseMessage();
 
   }, [dataIssue, searchParams]);
-
 
   const handleChange = async (event) => {
 
@@ -188,11 +135,11 @@ const LogWorksUi = (props) => {
         .then(data => {
           const newLWork = data.message.map((item) => ({
             'issueid': item.issueid,
-            'SUMMARY': item.SUMMARY,
-            'timeworked': `Project: ${item.pkey}\n\n Key: ${item.key}\n\n Log Time: ${item.timeworked / 3600}h`,
-            'CREATED': item.CREATED,
-            'UPDATED': item.UPDATED,
-            'STARTDATE': item.STARTDATE
+            'SUMMARY': item.summary,
+            'timeworked': `Project Key: ${item.key}\n\n Log Time: ${item.timeworked / 3600}h`,
+            'CREATED': item.created,
+            'UPDATED': item.updated,
+            'STARTDATE': item.startdate
           }));
           setLogWork(newLWork);
         });

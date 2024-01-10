@@ -1,18 +1,20 @@
+//Filter Issues Data by year and month
 export const processData = (data, year_url, month) => {
     var yearRequest = year_url || new Date().getFullYear().toString().substr(-2);
     return data && data.filter((el) => {
-        var createDate = el.STARTDATE && el.STARTDATE.substring(0, 10);
+        var createDate = el.startdate && el.startdate.substring(0, 10);
         var monthLog = new Date(createDate).getMonth() + 1;
         var yearLog = new Date(createDate).getFullYear().toString().substr(-2);
         return monthLog == month && yearLog == yearRequest;
     });
 };
 
+//Group data to map table report
 export const groupData = (data) => {
     var arr_group = [];
 
     data && data.forEach((value) => {
-        const logDay = new Date(value.STARTDATE).getDate().toString();
+        const logDay = new Date(value.startdate).getDate().toString();
 
         if (arr_group[value.key]) {
             if (arr_group[value.key].logs[logDay]) {
@@ -21,25 +23,24 @@ export const groupData = (data) => {
                 arr_group[value.key].logs[logDay] = {
                     comment: value.comment,
                     timeworked: Number(value.timeworked),
-                    created: value.STARTDATE
+                    created: value.startdate
                 };
             }
         } else {
             arr_group[value.key] = {
                 key: value.key,
                 pkey: value.pkey,
-                summary: value.SUMMARY,
+                summary: value.summary,
                 logs: {
                     [logDay]: {
                         comment: value.comment,
                         timeworked: Number(value.timeworked),
-                        created: value.STARTDATE
+                        created: value.startdate
                     }
                 }
             };
         }
     });
-
     return arr_group;
 };
 
@@ -57,7 +58,7 @@ export const logTimeElement = (arrLog = [], ind) => {
     {
         arrLog && arrLog.map((element) => {
 
-            var createDate = element['created'].substring(0, 10)
+            var createDate = element['created'] && element['created'].substring(0, 10)
             var createDate_arr = createDate.split('-')
             var get_day = createDate_arr[2]
             if (Number(ind) == get_day) {
@@ -89,7 +90,7 @@ export const logTimeTotalIssueByDay = (arrLog = [], numberDay) => {
 
     arrLog && arrLog.forEach((item) => {
         Object.values(item['logs']).forEach((item2) => {
-            const createDate = item2['created'].substring(0, 10);
+            const createDate = item2['created'] && item2['created'].substring(0, 10);
             const createDate_arr = createDate.split('-');
             const get_day = createDate_arr[2];
 

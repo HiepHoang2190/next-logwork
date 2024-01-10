@@ -22,6 +22,10 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'jira.lotustest.net'
+      },
+      {
+        protocol: 'https',
+        hostname: 'pm.lotustest.net'
       }
     ]
   },

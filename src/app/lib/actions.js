@@ -1,15 +1,10 @@
 'use server'
-
 import { revalidatePath } from 'next/cache'
 import { Product, User } from './models'
 import { connectToDB } from './utils'
 import { redirect } from 'next/navigation'
 import bcrypt from 'bcrypt'
 import { signIn } from '../auth'
-import { toast } from 'react-toastify'
-import { auth, signOut } from '@/app/auth'
-import { get } from 'mongoose'
-// import { useRouter } from 'next/navigation'
 
 export const addUser = async (formData) => {
   const { username, email, password, phone, address, isAdmin, isActive } =
