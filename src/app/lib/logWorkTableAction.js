@@ -110,3 +110,15 @@ export const getDatefromDay = (day, thismonth, thisyear) => {
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     return days[dt.getDay()].toUpperCase().slice(0, 2);
 };
+
+export const updateQueryParam = (key, value, searchParams, replace) => {
+    const params = new URLSearchParams(searchParams);
+    if (value) {
+      params.set(key, value);
+    } else {
+      params.delete(key);
+    }
+  
+    replace(`?${params}`);
+  };
+  

@@ -2,12 +2,20 @@
   margin-right: 10px;
   cursor: pointer;
 }
+
 :root {
+  --bg: white;
+  --bgSoft: #222357;
+  --text: #151c2c;
+  --textSoft: #f5f5f5;
+}
+
+/* :root {
   --bg: #151c2c;
   --bgSoft: #182237;
   --text: white;
   --textSoft: #b7bac1;
-}
+} */
 
 * {
   margin: 0;
@@ -36,25 +44,25 @@ table.log-work,table.log-work th, table.log-work td {
   border-collapse: collapse
 }
 table.log-work td, table.log-work th {
-  padding: 4px;
+  padding: 5px;
   text-align: center;
 }
 table.log-work {
-  font-size: 12px;
+  font-size: 0.8rem;
 }
 
 table.log-work tbody td.title-issue {
   text-align: left;
 }
 th.date {
-  width: 45px;
-  height: 45px;
+  width: 50px;
+  height: 55px;
 }
 #weekend {
   background-color: #a3a79a4d;
 }
 .last > td {
-  font-weight: 500;
+  font-weight: 600;
 }
 .current {
   background-color: #ee4f4cf5;
@@ -69,10 +77,10 @@ th.date {
 .wrapper-datetime .react-datepicker__input-container input {
   padding: 7px 8px;
   border-radius: 5px;
-  outline: white;
+  outline: var(--text);
   border: 1px solid;
   background: transparent;
-  color: white;
+  color: var(--text);
   margin-right: 20px;
 }
 
@@ -88,10 +96,10 @@ th.date {
 #table-export-xls-button {
   padding: 7px 8px;
   border-radius: 5px;
-  outline: white;
+  outline: var(--text);
   border: 1px solid;
   background: transparent;
-  color: white;
+  color: var(--text);
 }
 
 #table-export-xls-button:hover {
@@ -101,4 +109,12 @@ th.date {
   color: black;
   cursor: pointer;
   cursor: pointer;
+}
+
+.e-control.e-schedule .e-month-view .e-work-cells, .e-control.e-schedule .e-month-agenda-view .e-work-cells {
+  background: #D6D6D64C;
+}
+
+.e-control.e-schedule .e-month-view .e-work-days, .e-control.e-schedule .e-month-agenda-view .e-work-days {
+  background: #fff;
 }

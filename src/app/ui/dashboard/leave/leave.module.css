@@ -3,6 +3,7 @@
 }
 .table_margin_top {
   margin-top: 20px;
+  border: 1px solid var(--bgSoft);
 }
 .title_total {
   font-weight: bold;

@@ -2,7 +2,9 @@ import Image from 'next/image'
 import styles from './sidebar.module.css'
 import MenuLink from './menuLink/menuLink'
 import { auth, signOut } from '@/app/auth'
-import {MdDashboard, MdAttachMoney, MdLogout } from 'react-icons/md'
+import {MdDashboard, MdLogout } from 'react-icons/md'
+import { FaCalendar, FaUsers } from "react-icons/fa6";
+import { FaSignOutAlt } from "react-icons/fa";
 
 const menuItems = [
   {
@@ -16,17 +18,17 @@ const menuItems = [
       {
         title: 'Logwork Calendar',
         path: '/dashboard/calendar',
-        icon: <MdAttachMoney />
+        icon: <FaCalendar />
       },
       {
         title: 'Logwork Report',
         path: '/dashboard/report',
-        icon: <MdAttachMoney />
+        icon: <FaUsers />
       },
       {
         title: 'Leave',
         path: '/dashboard/leave',
-        icon: <MdAttachMoney />
+        icon: <FaSignOutAlt />
       }
 
     ]
