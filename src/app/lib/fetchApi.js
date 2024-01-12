@@ -84,3 +84,13 @@ export const getTimeLeave = async (username) => {
   ));
   return arr
 }
+
+export const getUserCurrentTask = async (username) => {
+  const url = `${process.env.API_PATH}/V1/task/${username}`;
+  const data = await fetchData(url);
+  const arr = []
+  data.map((item) => (
+    arr.push(item)
+  ));
+  return arr
+};

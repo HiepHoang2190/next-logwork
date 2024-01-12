@@ -73,19 +73,21 @@ const fetchData = async (username) => {
   return { arr_time_leave, arr_time_leave_total }
 }
 
-const Page = () => {
+const Page = ({ searchParams }) => {
   const fetchDataAndRender = async () => {
     const { user } = await auth()
 
     //Get data leave request for current User
-    const username = user.username
+    var username = searchParams?.username
+    username = (username !== undefined) ? username : user.username
+
     const dataAllUser = await getAllDataUser();
     const currentUserData = dataAllUser.find(data => data.user_name === username)
     const { arr_time_leave, arr_time_leave_total } = await fetchData(currentUserData.user_key)
 
     return (
       <div className="mt-3">
-        <LeavePage arr_time_leave={arr_time_leave} data_time_leave_total={arr_time_leave_total}></LeavePage>
+        <LeavePage arr_time_leave={arr_time_leave} data_time_leave_total={arr_time_leave_total} dataUserName={user.username} dataAllUser={dataAllUser} ></LeavePage>
       </div>
     )
   }

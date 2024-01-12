@@ -38,10 +38,10 @@ const LogWorkTablePage = (props) => {
       <table className="log-work" id="table-to-xls">
         <thead>
           <tr>
-            <th style={{ textAlign: 'left', width: 500, fontWeight: 700 }}>Issue</th>
-            <th style={{ width: 75, fontWeight: 700 }}>Key</th>
-            <th style={{ width: 75, fontWeight: 700 }}>Projects</th>
-            <th style={{ width: 75, fontWeight: 700 }}>Log Time</th>
+            <th style={{ textAlign: 'left', width: 500, fontWeight: 700, fontSize: '0.875rem' }}>Issue</th>
+            <th style={{ width: 75, fontWeight: 700, fontSize: '0.875rem' }}>Key</th>
+            <th style={{ width: 75, fontWeight: 700, fontSize: '0.875rem' }}>Projects</th>
+            <th style={{ width: 75, fontWeight: 700, fontSize: '0.875rem' }}>Log Time</th>
             {arr_days &&
               arr_days.map((item) => (
                 <th
@@ -113,7 +113,7 @@ const LogWorkTablePage = (props) => {
               return countWorkDay === 0 ? (
                 <td key={item}></td>
               ) : (
-                <td key={item}>{countWorkDay} h</td>
+                <td key={item}>{countWorkDay}h</td>
               );
             })}
           </tr>

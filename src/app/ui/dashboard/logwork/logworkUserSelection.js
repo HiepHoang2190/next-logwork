@@ -10,14 +10,14 @@ const UserSelection = (props) => {
 
   const selectFieldStyles = {
     '.MuiOutlinedInput-notchedOutline': {
-      borderColor: '#fff'
+      borderColor: '#151c2c'
     },
     '&:hover .MuiOutlinedInput-notchedOutline': {
-      borderColor: '#fff',
+      borderColor: '#151c2c',
       borderWidth: 'thin'
     },
     '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-      borderColor: '#fff',
+      borderColor: '#151c2c',
       borderWidth: 'thin'
     },
     '.MuiSelect-select': {
@@ -37,13 +37,13 @@ const UserSelection = (props) => {
   return (
     <Box sx={{ display: 'flex', justifyContent: 'end', marginLeft: '20px' }}>
       <FormControl>
-        <InputLabel style={{ color: '#FFFFFF' }} sx={{ ...selectLabelStyles }} id="user-select-label">Name</InputLabel>
+        <InputLabel style={{ color: '#151c2c' }} sx={{ ...selectLabelStyles }} id="user-select-label">Name</InputLabel>
         <Select
           variant="outlined"
           sx={{
             width: 200,
             marginRight: 0,
-            color: '#fff',
+            color: '#151c2c',
             '& .MuiSvgIcon-root': {
               color: 'white'
             },

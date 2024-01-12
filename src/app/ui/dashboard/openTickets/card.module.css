@@ -1,5 +1,5 @@
 .container {
-  background-color: var(--bgSoft);
+  background-color: var(--bg);
   padding: 20px 10px;
   border-radius: 10px;
   display: flex;
@@ -7,9 +7,9 @@
   width: 100%;
 }
 
-.container:hover{
-  background-color: #2e374a;
-}
+/* .container:hover{
+  background-color: var(--bgSoft);
+} */
 
 .texts {
   display: flex;
