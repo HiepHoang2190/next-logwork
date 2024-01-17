@@ -62,16 +62,17 @@ const LeavePage = (props) => {
       {isUserAdmin &&
         <div className='wrapper-datetime'>
           <UserSelection userName={userName} handleChange={handleChange} dataAllUser={dataAllUser} />
-        </div>}
+        </div>
+      }
 
       <div className="mt-3">
-        <TableContainer className={styles.table_margin_top} component={Paper} style={{ borderRadius: '10px' }}>
+        <TableContainer className={styles.table_margin_top} component={Paper} style={{ borderRadius: '5px' }}>
           <Table aria-label="simple table" stickyHeader>
             <TableHead>
               <TableRow>
                 <TableCell>Summary</TableCell>
                 <TableCell align="right">Comment</TableCell>
-                <TableCell align="right">Create Date</TableCell>
+                <TableCell align="right">Created Date</TableCell>
                 <TableCell align="right">Start Date</TableCell>
                 <TableCell align="right">Due Date</TableCell>
               </TableRow>

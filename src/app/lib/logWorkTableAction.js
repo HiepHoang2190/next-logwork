@@ -114,11 +114,26 @@ export const getDatefromDay = (day, thismonth, thisyear) => {
 export const updateQueryParam = (key, value, searchParams, replace) => {
     const params = new URLSearchParams(searchParams);
     if (value) {
-      params.set(key, value);
+        params.set(key, value);
     } else {
-      params.delete(key);
+        params.delete(key);
     }
-  
+
     replace(`?${params}`);
-  };
-  
+};
+
+export const formatTime = (timeString) => {
+    const originalDate = new Date(timeString);
+    const year = originalDate.getUTCFullYear();
+    const month = (originalDate.getUTCMonth() + 1).toString().padStart(2, '0');
+    const day = originalDate.getUTCDate().toString().padStart(2, '0');
+    const hours = originalDate.getUTCHours().toString().padStart(2, '0');
+    const minutes = originalDate.getUTCMinutes().toString().padStart(2, '0');
+    const seconds = originalDate.getUTCSeconds().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+};
+
+export const lastDayOfMonth = (year, month) => {
+    return new Date(year, month, 0).getDate();
+}

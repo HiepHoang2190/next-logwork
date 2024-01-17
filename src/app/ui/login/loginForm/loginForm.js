@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
 import styles from './loginForm.module.css'
 import 'react-toastify/dist/ReactToastify.css'
-import { authenticate } from '@/app/lib/actions'
+import { authenticate } from '@/app/lib/fetchApi'
 import React, { useState, useEffect } from 'react'
 
 // ** MUI Components
@@ -65,10 +65,8 @@ const LoginForm = () => {
   const sendValue = async () => {
     const data = await authenticate(values)
    
-    console.log('data', data)
-
     if (!data?.error) {
-      toast.success('Login succeed !')
+      toast.success(data?.success)
       router.push('/dashboard')
       router.refresh()
     } else {

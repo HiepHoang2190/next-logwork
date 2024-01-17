@@ -1,55 +1,54 @@
 'use client'
-import { userAdmin } from "@/app/lib/variable"
-import { updateQueryParam } from "@/app/lib/logWorkTableAction"
-import { useEffect, useState } from 'react'
+import { userAdmin } from '@/app/lib/variable'
+import FullCalendar from '@fullcalendar/react'
+import dayGridPlugin from '@fullcalendar/daygrid'
 import UserSelection from './logworkUserSelection'
-import {
-  Day,
-  Week,
-  Month,
-  Year,
-  Inject,
-  ViewDirective,
-  ViewsDirective,
-  ScheduleComponent,
-} from '@syncfusion/ej2-react-schedule'
-
-import '@syncfusion/ej2-base/styles/material.css'
-import '@syncfusion/ej2-lists/styles/material.css'
-import '@syncfusion/ej2-popups/styles/material.css'
-import '@syncfusion/ej2-inputs/styles/material.css'
-import '@syncfusion/ej2-buttons/styles/material.css'
-import '@syncfusion/ej2-calendars/styles/material.css'
-import '@syncfusion/ej2-dropdowns/styles/material.css'
-import '@syncfusion/ej2-navigations/styles/material.css'
-import '@syncfusion/ej2-splitbuttons/styles/material.css'
-import '@syncfusion/ej2-react-schedule/styles/material.css'
-
+import { useEffect, useState, useRef } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { updateQueryParam } from '@/app/lib/logWorkTableAction'
+import LogWorkDatePicker from '@/app/ui/dashboard/logwork/logworkDatePicker'
 
-// Component for schedule
-const Schedule = ({ logWork }) => {
-  const fieldsData = {
-    id: 'issueid',
-    subject: { name: 'SUMMARY' },
-    description: { name: 'timeworked' },
-    startTime: { name: 'STARTDATE' },
-    endTime: { name: 'STARTDATE' }
-  };
-  const eventSettings = { dataSource: logWork, fields: fieldsData };
+const Calendar = ({ logWork }) => {
+
+  const calendarRef = useRef(null);
+  const searchParams = useSearchParams();
+  const year = searchParams.get('year') || new Date().getFullYear();
+  const month = searchParams.get('month') || new Date().getMonth() + 1;
+
+  const events = logWork.map((item) => ({
+    id: item.issueid,
+    title: item.timeworked,
+    start: item.STARTDATE,
+    allDay: true,
+    editable: false,
+  }))
+
+  useEffect(() => {
+    if (calendarRef.current) {
+      const calendarApi = calendarRef.current.getApi();
+      const date = new Date(Date.UTC(year, month - 1))
+      calendarApi.gotoDate(date);
+    }
+  }, [year, month]);
 
   return (
-    <ScheduleComponent height='750px' currentView='Month' timeFormat="HH:mm" eventSettings={eventSettings}>
-      <ViewsDirective>
-        <ViewDirective option='Week' readonly={true} />
-        <ViewDirective option='Month' readonly={true} />
-        <ViewDirective option='Day' readonly={true} />
-        <ViewDirective option='Year' readonly={true} />
-      </ViewsDirective>
-      <Inject services={[Year, Week, Month, Day]} />
-    </ScheduleComponent>
-  );
-};
+    <>
+      <FullCalendar
+        ref={calendarRef}
+        defaultView="dayGridMonth"
+        plugins={[dayGridPlugin]}
+        themeSystem="Simplex"
+        events={events}
+        headerToolbar={{
+          left: "title",
+          center: "",
+          right: ""
+        }}
+      />
+    </>
+
+  )
+}
 
 // Main component
 const LogWorksUi = (props) => {
@@ -62,37 +61,12 @@ const LogWorksUi = (props) => {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
 
-  // Remove the div that contains the Syncfusion license message
-  const removeLicenseMessage = () => {
-    const divs = document.querySelectorAll('div span');
-    divs.forEach((span) => {
-      if (
-        span.textContent.includes("This application was built using a trial version of Syncfusion Essential Studio. To remove the license validation message permanently, a valid license key must be included.")
-      ) {
-        const parentDiv = span.closest('div');
-        if (parentDiv) {
-          parentDiv.parentNode.removeChild(parentDiv);
-        }
-      }
-    });
-
-    const modal = document.querySelectorAll('div');
-    modal.forEach((item) => {
-      if (item.textContent.includes("Claim your FREE account and get a key in less than a minute")) {
-        const parentDiv = item.closest('div');
-        if (parentDiv) {
-          parentDiv.parentNode.removeChild(parentDiv);
-        }
-      }
-    });
-  }
-
   useEffect(() => {
 
     const newLogWork = dataIssue.map((item) => ({
       'issueid': item.issueid,
       'SUMMARY': `${item.key}: ${item.summary}`,
-      'timeworked': `Project Key: ${item.key}\n\n Log Time: ${item.timeworked / 3600}h`,
+      'timeworked': `${item.key}: ${item.summary}.\n\n Log Time: ${item.timeworked / 3600}h`,
       'CREATED': item.created,
       'UPDATED': item.updated,
       'STARTDATE': item.startdate
@@ -106,9 +80,6 @@ const LogWorksUi = (props) => {
       setUserName(paramsUserName);
     }
 
-    // Remove the div that contains the Syncfusion license message
-    removeLicenseMessage();
-
   }, [dataIssue, searchParams]);
 
   const handleChange = async (event) => {
@@ -118,12 +89,13 @@ const LogWorksUi = (props) => {
 
   return (
     <div className="mt-3">
-      {isUserAdmin &&
-        <div className='wrapper-datetime'>
+      <div className='wrapper-datetime-calendar'>
+        <LogWorkDatePicker />
+        {isUserAdmin &&
           <UserSelection userName={userName} handleChange={handleChange} dataAllUser={dataAllUser} />
-        </div>}
-
-      <Schedule logWork={logWork} />
+        }
+      </div>
+      <Calendar logWork={logWork} />
     </div>
   );
 };

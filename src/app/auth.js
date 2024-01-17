@@ -1,14 +1,14 @@
 import NextAuth from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
 import { authConfig } from './authconfig';
-import {fetchWithCredentials} from '@/app/lib/fetchApi';
+import { fetchWithCredentials } from '@/app/lib/fetchApi';
+import CredentialsProvider from 'next-auth/providers/credentials';
 
 const login = async (credentials) => {
   try {
     const user = {};
   
     const sessionResponse = await fetchWithCredentials(
-      `${process.env.NEW_JIRA_PATH}/auth/1/session`,
+      `${process.env.JIRA_PATH}/auth/1/session`,
       {
         method: 'POST',
         body: JSON.stringify({ username: credentials.username, password: credentials.password }),
@@ -26,7 +26,7 @@ const login = async (credentials) => {
 
 
     const userDetailResponse = await fetchWithCredentials(
-      `${process.env.NEW_JIRA_PATH}/api/2/user/search?username=${credentials.username}`,
+      `${process.env.JIRA_PATH}/api/2/user/search?username=${credentials.username}`,
       {
         method: 'GET',
         headers: {
@@ -46,10 +46,9 @@ const login = async (credentials) => {
     user.displayName = userData.displayName;
     user.avatarUrls = Object.values(userData.avatarUrls);
 
-    console.log('user in login fetch', user);
     return user;
+
   } catch (err) {
-    console.error('Login error:', err);
     throw new Error('Failed to login!');
   }
 };
@@ -61,7 +60,6 @@ export const { signIn, signOut, auth } = NextAuth({
       async authorize(credentials) {
         try {
           const user = await login(credentials);
-          console.log('user await login', user);
           return user;
         } catch (err) {
           return null;
@@ -82,6 +80,8 @@ export const { signIn, signOut, auth } = NextAuth({
     },
     async session({ session, token }) {
       if (token) {
+        session.user.name = token.displayName
+        session.user.image = token.avatarUrls
         session.user.username = token.username
         session.user.session = token.session
         session.user.email = token.email

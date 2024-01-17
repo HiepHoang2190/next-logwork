@@ -53,6 +53,7 @@
   border: none;
   color: var(--textSoft);
   width: 100%;
+  font-size: 16px;
 }
 
 .logout:hover{

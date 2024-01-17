@@ -43,7 +43,9 @@ const LogWorkExcelPage = (props) => {
           buttonText="Download as XLS"
         />
       </div>
-      {isUserAdmin && <UserSelection userName={userName} handleChange={handleChange} dataAllUser={dataAllUser} />}
+      {isUserAdmin && 
+        <UserSelection userName={userName} handleChange={handleChange} dataAllUser={dataAllUser} />
+      }
     </>
   )
 }
