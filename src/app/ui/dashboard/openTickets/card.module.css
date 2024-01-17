@@ -21,11 +21,12 @@
   text-decoration: underline;
 }
 
-.issues{
+.container .issues{
   text-align: left;
   line-height: 3;
-  font-weight: 700;
+  font-weight: 600;
 }
+
 .issueInfo {
   text-align: left;
   line-height: 3;

@@ -1,10 +1,16 @@
 .row_incorrect_time_limit {
   background-color: #e79696;
 }
+
 .table_margin_top {
   margin-top: 20px;
   border: 1px solid var(--bgSoft);
 }
+
+.table_margin_top .issues {
+  font-weight: 600;
+}
+
 .title_total {
   font-weight: bold;
 }
