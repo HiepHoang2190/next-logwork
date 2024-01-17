@@ -160,6 +160,14 @@ th.date {
   z-index: 0;
 }
 
-.fc-daygrid-event {
+.fc .fc-daygrid-event {
   white-space: break-spaces;
+}
+.fc .fc-col-header .fc-col-header-cell {
+  font-weight: 600;
+}
+
+.fc .fc-day-sun,
+.fc .fc-day-sat {
+  background-color: #D6D6D64C;
 }

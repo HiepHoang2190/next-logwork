@@ -70,11 +70,11 @@ const LeavePage = (props) => {
           <Table aria-label="simple table" stickyHeader>
             <TableHead>
               <TableRow>
-                <TableCell>Summary</TableCell>
-                <TableCell align="right">Comment</TableCell>
-                <TableCell align="right">Created Date</TableCell>
-                <TableCell align="right">Start Date</TableCell>
-                <TableCell align="right">Due Date</TableCell>
+                <TableCell className={styles.issues}>Summary</TableCell>
+                <TableCell className={styles.issues} align="right">Comment</TableCell>
+                <TableCell className={styles.issues} align="right">Created Date</TableCell>
+                <TableCell className={styles.issues} align="right">Start Date</TableCell>
+                <TableCell className={styles.issues} align="right">Due Date</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
