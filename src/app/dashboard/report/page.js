@@ -1,6 +1,6 @@
 'use server'
 import { auth } from '@/app/auth'
-import { getAllDataUser, getUserIssues } from '@/app/lib/fetchApi'
+import { getAllDataUser, getUserIssues, getWorklogCurrentIssue } from '@/app/lib/fetchApi'
 import LogWorkTablePage from '@/app/ui/dashboard/logwork/logworkTable'
 import LogWorkExcelPage from '@/app/ui/dashboard/logwork/logworkExcel'
 import LogWorkDatePicker from '@/app/ui/dashboard/logwork/logworkDatePicker'
@@ -37,13 +37,32 @@ const LogWorksPage = async ({ searchParams }) => {
 
   const dataUsers = await getUserIssues(username, year, month, lastDayOfMonth(year, month))
 
-  const filterWorklogsByAuthor = (data, authorName) => {
-    return data
-      .map((item) => {
+  const filterWorklogsByAuthor = async (data, authorName) => {
+    
+    const newData = await Promise.all(
+      data.map(async (item) => {
+        // Check if worklog total is greater than 20
+        if (item.fields.worklog.total > 20) {
+          try {
+            // Call API getWorklogCurrentIssue(key) to get all worklogs
+            const additionalWorklogs = await getWorklogCurrentIssue(item.key);
+  
+            // Merge additional worklogs with existing worklogs
+            item.fields.worklog.worklogs = [
+              ...item.fields.worklog.worklogs,
+              ...additionalWorklogs.worklogs,
+            ];
+          } catch (error) {
+            console.error(`Error fetching additional worklogs for ${item.key}:`, error);
+          }
+        }
+  
+        // Filter worklogs by authorName
         const filteredWorklogs = item.fields.worklog.worklogs.filter(
           (worklog) => worklog.author.name === authorName
         );
-
+  
+        // Transform and return the filtered worklogs
         return filteredWorklogs.map((filteredWorklog) => ({
           author: filteredWorklog.author.key,
           comment: filteredWorklog.comment,
@@ -56,10 +75,13 @@ const LogWorksPage = async ({ searchParams }) => {
           pkey: item.key.split('-')[0],
         }));
       })
-      .flat();
+    );
+  
+    return newData.flat();
   };
 
-  const userLogwork = filterWorklogsByAuthor(dataUsers, username);
+  
+  const userLogwork = await filterWorklogsByAuthor(dataUsers, username);
 
   return (
     <>

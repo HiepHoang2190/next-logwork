@@ -1,6 +1,6 @@
 import { auth } from '@/app/auth'
 import LogWorksUi from '@/app/ui/dashboard/logwork/logwork'
-import { getAllDataUser, getUserIssues } from '@/app/lib/fetchApi'
+import { getAllDataUser, getUserIssues, getWorklogCurrentIssue } from '@/app/lib/fetchApi'
 import { formatTime, lastDayOfMonth } from '@/app/lib/logWorkTableAction'
 
 export async function generateMetadata({ searchParams }) {
@@ -42,15 +42,35 @@ const LogWorkCalendarPage = async ({ searchParams }) => {
     });
   }
 
-  const filterWorklogsByAuthor = (data, authorName) => {
-    return data
-      .map((item) => {
+  const filterWorklogsByAuthor = async (data, authorName, month, year) => {
+    
+    const newData = await Promise.all(
+      data.map(async (item) => {
+        // Check if worklog total is greater than 20
+        if (item.fields.worklog.total > 20) {
+          try {
+            // Call API getWorklogCurrentIssue(key) to get all worklogs
+            const additionalWorklogs = await getWorklogCurrentIssue(item.key);
+  
+            // Merge additional worklogs with existing worklogs
+            item.fields.worklog.worklogs = [
+              ...item.fields.worklog.worklogs,
+              ...additionalWorklogs.worklogs,
+            ];
+          } catch (error) {
+            console.error(`Error fetching additional worklogs for ${item.key}:`, error);
+          }
+        }
+
+        // Filter worklogs by authorName
         const filteredWorklogs = item.fields.worklog.worklogs.filter(
           (worklog) => worklog.author.name === authorName
         );
-
+  
+        // Filter worklogs by month and year
         const filterWorklogsByMonth = filterWorklogs(filteredWorklogs, month, year);
-        
+  
+        // Transform and return the filtered worklogs
         return filterWorklogsByMonth.map((filteredWorklog) => ({
           author: filteredWorklog.author.key,
           comment: filteredWorklog.comment,
@@ -61,13 +81,15 @@ const LogWorkCalendarPage = async ({ searchParams }) => {
           timeworked: filteredWorklog.timeSpentSeconds,
           key: item.key,
           pkey: item.key.split('-')[0],
-          issueid: item.id
+          issueid: item.id,
         }));
       })
-      .flat();
+    );
+  
+    return newData.flat();
   };
 
-  const userLogwork = filterWorklogsByAuthor(dataUsers, username);
+  const userLogwork = await filterWorklogsByAuthor(dataUsers, username, month, year);
 
   return (
     <>

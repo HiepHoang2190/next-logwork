@@ -66,7 +66,7 @@ const LogWorksUi = (props) => {
     const newLogWork = dataIssue.map((item) => ({
       'issueid': item.issueid,
       'SUMMARY': `${item.key}: ${item.summary}`,
-      'timeworked': `${item.key}: ${item.summary}.\n\n Log Time: ${item.timeworked / 3600}h`,
+      'timeworked': `${item.key}: ${item.summary}.\n\nLog Time: ${item.timeworked / 3600}h`,
       'CREATED': item.created,
       'UPDATED': item.updated,
       'STARTDATE': item.startdate

@@ -91,6 +91,21 @@ export const getUserCurrentIssues = async () => {
 
 }
 
+export const getWorklogCurrentIssue = async (issueKey) => {
+  const url = `${process.env.JIRA_API_PATH}/api/2/issue/${issueKey}/worklog?maxResults=5000`
+  
+  const { user } = await auth()
+
+  const headers = {
+    method: 'GET',
+    headers: {
+      'Cookie': `JSESSIONID=${user.session.value}`,
+    },
+  }
+  const data = await fetchWithCredentials(url, headers);
+  return data
+}
+
 export const getAllDataUser = async () => {
   const url = `${process.env.API_PATH}/V1/all-user`;
   const data = await fetchData(url);

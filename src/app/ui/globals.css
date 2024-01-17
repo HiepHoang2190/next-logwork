@@ -163,11 +163,41 @@ th.date {
 .fc .fc-daygrid-event {
   white-space: break-spaces;
 }
+
 .fc .fc-col-header .fc-col-header-cell {
   font-weight: 600;
+}
+
+.fc .fc-daygrid-day-number {
+  padding: 10px;
+  position: relative;
+  z-index: 4;
 }
 
 .fc .fc-day-sun,
 .fc .fc-day-sat {
   background-color: #D6D6D64C;
+}
+
+/* Scroll Bar */
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px #fff; 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #aaaaaa; 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #999999; 
 }
