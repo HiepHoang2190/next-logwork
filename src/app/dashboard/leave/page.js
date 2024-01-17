@@ -83,7 +83,7 @@ const Page = ({ searchParams }) => {
 
     const dataAllUser = await getAllDataUser();
     const currentUserData = dataAllUser.find(data => data.user_name === username)
-    const { arr_time_leave, arr_time_leave_total } = await fetchData(currentUserData.user_key)
+    const { arr_time_leave, arr_time_leave_total } = await fetchData(currentUserData?.user_key)
 
     return (
       <div className="mt-3">

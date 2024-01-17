@@ -1,15 +1,13 @@
 .container {
   background-color: var(--bg);
-  padding: 20px 10px;
-  border-radius: 10px;
   display: flex;
   gap: 20px;
   width: 100%;
 }
 
-/* .container:hover{
-  background-color: var(--bgSoft);
-} */
+.table_margin_top {
+  border: 1px solid var(--bgSoft);
+}
 
 .texts {
   display: flex;
@@ -50,4 +48,10 @@
 
 .negative {
   color: red;
+}
+
+.issueType {
+  margin-right: 5px;
+  position: relative;
+  top: 5px;
 }
