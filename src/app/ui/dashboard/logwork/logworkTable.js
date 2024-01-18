@@ -13,7 +13,7 @@ import {
 
 const LogWorkTablePage = (props) => {
   const { dataIssue, month, year } = props;
-  
+
   const [dataTable, setDataTable] = useState();
 
   useEffect(() => {
@@ -92,7 +92,11 @@ const LogWorkTablePage = (props) => {
                       return <td key={ind}>{logTimeTotal(Object.values(logs))}h</td>;
                     default:
                       return ['SA', 'SU'].includes(getDatefromDay(element - 4, month, thisyear)) ? (
-                        <td key={ind} id="weekend"></td>
+                        <td key={ind} id="weekend">
+                          {logTimeElement(Object.values(logs), element - 4) !== null
+                            ? `${logTimeElement(Object.values(logs), element - 4)}h`
+                            : ''}
+                        </td>
                       ) : (
                         <td key={ind}>
                           {logTimeElement(Object.values(logs), element - 4) !== null
