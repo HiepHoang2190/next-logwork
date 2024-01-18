@@ -1,6 +1,6 @@
 'use client'
 import { userAdmin } from "@/app/lib/variable"
-import { updateQueryParam } from "@/app/lib/logWorkTableAction"
+import { updateQueryParam } from "@/app/lib/logWorkAction"
 import { useEffect, useState } from 'react'
 import UserSelection from './logworkUserSelection'
 import ReactHTMLTableToExcel from 'react-html-table-to-excel'

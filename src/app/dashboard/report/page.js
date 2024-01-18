@@ -4,7 +4,7 @@ import { getAllDataUser, getUserIssues, getWorklogCurrentIssue } from '@/app/lib
 import LogWorkTablePage from '@/app/ui/dashboard/logwork/logworkTable'
 import LogWorkExcelPage from '@/app/ui/dashboard/logwork/logworkExcel'
 import LogWorkDatePicker from '@/app/ui/dashboard/logwork/logworkDatePicker'
-import { formatTime, lastDayOfMonth } from '@/app/lib/logWorkTableAction'
+import { lastDayOfMonth, filterWorklogsByAuthor } from '@/app/lib/logWorkAction'
 
 export async function generateMetadata({ searchParams }) {
   const { user } = await auth()
@@ -37,51 +37,8 @@ const LogWorksPage = async ({ searchParams }) => {
 
   const dataUsers = await getUserIssues(username, year, month, lastDayOfMonth(year, month))
 
-  const filterWorklogsByAuthor = async (data, authorName) => {
-    
-    const newData = await Promise.all(
-      data.map(async (item) => {
-        // Check if worklog total is greater than 20
-        if (item.fields.worklog.total > 20) {
-          try {
-            // Call API getWorklogCurrentIssue(key) to get all worklogs
-            const additionalWorklogs = await getWorklogCurrentIssue(item.key);
   
-            // Merge additional worklogs with existing worklogs
-            item.fields.worklog.worklogs = [
-              ...item.fields.worklog.worklogs,
-              ...additionalWorklogs.worklogs,
-            ];
-          } catch (error) {
-            console.error(`Error fetching additional worklogs for ${item.key}:`, error);
-          }
-        }
-  
-        // Filter worklogs by authorName
-        const filteredWorklogs = item.fields.worklog.worklogs.filter(
-          (worklog) => worklog.author.name === authorName
-        );
-  
-        // Transform and return the filtered worklogs
-        return filteredWorklogs.map((filteredWorklog) => ({
-          author: filteredWorklog.author.key,
-          comment: filteredWorklog.comment,
-          created: formatTime(filteredWorklog.created),
-          startdate: formatTime(filteredWorklog.started),
-          updated: formatTime(filteredWorklog.updated),
-          summary: item.fields.summary,
-          timeworked: filteredWorklog.timeSpentSeconds,
-          key: item.key,
-          pkey: item.key.split('-')[0],
-        }));
-      })
-    );
-  
-    return newData.flat();
-  };
-
-  
-  const userLogwork = await filterWorklogsByAuthor(dataUsers, username);
+  const userLogwork = await filterWorklogsByAuthor(dataUsers, username, month, year);
 
   return (
     <>

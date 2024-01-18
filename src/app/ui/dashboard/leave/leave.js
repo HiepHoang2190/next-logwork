@@ -1,7 +1,7 @@
 'use client'
 
 import { userAdmin } from "@/app/lib/variable"
-import { updateQueryParam } from "@/app/lib/logWorkTableAction"
+import { updateQueryParam } from "@/app/lib/logWorkAction"
 import styles from '@/app/ui/dashboard/leave/leave.module.css'
 import { useEffect, useState } from 'react'
 import Table from '@mui/material/Table'

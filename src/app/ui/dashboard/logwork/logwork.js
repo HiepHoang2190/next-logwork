@@ -5,7 +5,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import UserSelection from './logworkUserSelection'
 import { useEffect, useState, useRef } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { updateQueryParam } from '@/app/lib/logWorkTableAction'
+import { updateQueryParam } from '@/app/lib/logWorkAction'
 import LogWorkDatePicker from '@/app/ui/dashboard/logwork/logworkDatePicker'
 
 const Calendar = ({ logWork }) => {
