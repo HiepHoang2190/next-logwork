@@ -1,6 +1,6 @@
 import { auth } from '@/app/auth'
 import LogWorksUi from '@/app/ui/dashboard/logwork/logwork'
-import { getAllDataUser, getUserIssues, getWorklogCurrentIssue } from '@/app/lib/fetchApi'
+import { getAllDataUser, getUserIssues } from '@/app/lib/fetchApi'
 import { filterWorklogsByAuthor, lastDayOfMonth } from '@/app/lib/logWorkAction'
 
 export async function generateMetadata({ searchParams }) {
@@ -16,9 +16,9 @@ export async function generateMetadata({ searchParams }) {
   }
 }
 
-
 const LogWorkCalendarPage = async ({ searchParams }) => {
 
+  //Get User Info
   const { user } = await auth()
   var username = searchParams?.username
   username = (username !== undefined) ? username : user.username

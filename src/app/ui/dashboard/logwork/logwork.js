@@ -19,6 +19,7 @@ const Calendar = ({ logWork }) => {
 
   const calendarRef = useRef(null);
   const searchParams = useSearchParams();
+
   const year = searchParams.get('year') || new Date().getFullYear();
   const month = searchParams.get('month') || new Date().getMonth() + 1;
 
@@ -96,12 +97,12 @@ const Calendar = ({ logWork }) => {
       <FullCalendar {...setting} ref={calendarRef} />
       <CalendarModal open={isOpen} modalContent={modalContent} onClose={() => setIsOpen(false)}/>
     </>
-
   )
 }
 
 // Main component
 const LogWorksUi = (props) => {
+  
   const { dataIssue, dataUserName, dataAllUser } = props;
   const isUserAdmin = userAdmin.includes(dataUserName);
 

@@ -7,6 +7,7 @@ import { authenticate } from '@/app/lib/fetchApi'
 import React, { useState, useEffect } from 'react'
 
 // ** MUI Components
+import { styled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import MuiCard from '@mui/material/Card'
 import Button from '@mui/material/Button'
@@ -17,7 +18,6 @@ import IconButton from '@mui/material/IconButton'
 import CardContent from '@mui/material/CardContent'
 import FormControl from '@mui/material/FormControl'
 import OutlinedInput from '@mui/material/OutlinedInput'
-import { styled, useTheme } from '@mui/material/styles'
 import InputAdornment from '@mui/material/InputAdornment'
 
 // ** Icons Imports
@@ -30,13 +30,10 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }))
 
 const LoginForm = () => {
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   // ** State
+  const [err, setErr] = useState()
+  const [mounted, setMounted] = useState(false)
   const [values, setValues] = useState({
     username: '',
     password: '',
@@ -44,8 +41,11 @@ const LoginForm = () => {
   })
 
   // ** Hook
-  const theme = useTheme()
   const router = useRouter()
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
@@ -59,12 +59,9 @@ const LoginForm = () => {
     event.preventDefault()
   }
 
-
-  const [err, setErr] = useState()
-
   const sendValue = async () => {
     const data = await authenticate(values)
-   
+
     if (!data?.error) {
       toast.success(data?.success)
       router.push('/dashboard')
@@ -74,7 +71,6 @@ const LoginForm = () => {
     }
   }
   return (
-
     <>
       {mounted &&
         <Box className='content-center'>
@@ -104,7 +100,7 @@ const LoginForm = () => {
                   sx={{ marginBottom: 4 }}
                 />
 
-                <FormControl fullWidth  sx={{ mb: 4 }}>
+                <FormControl fullWidth sx={{ mb: 4 }}>
                   <InputLabel htmlFor='auth-login-password'>Password</InputLabel>
 
                   <OutlinedInput

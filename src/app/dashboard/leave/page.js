@@ -61,6 +61,7 @@ const processLeaveItem = (item) => {
 }
 
 const fetchData = async (username) => {
+
   const data_time_leave = await getTimeLeave(username)
   const data_time_leave_total = await getTimeLeaveTotal(username)
 
@@ -74,13 +75,15 @@ const fetchData = async (username) => {
 }
 
 const Page = ({ searchParams }) => {
+  
   const fetchDataAndRender = async () => {
-    const { user } = await auth()
 
-    //Get data leave request for current User
+    //Get User Info
+    const { user } = await auth()
     var username = searchParams?.username
     username = (username !== undefined) ? username : user.username
 
+    //Get data leave request for current User
     const dataAllUser = await getAllDataUser();
     const currentUserData = dataAllUser.find(data => data.user_name === username)
     const { arr_time_leave, arr_time_leave_total } = await fetchData(currentUserData?.user_key)

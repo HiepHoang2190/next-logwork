@@ -2,7 +2,9 @@ import { getWorklogCurrentIssue } from '@/app/lib/fetchApi'
 
 //Filter Issues Data by year and month
 export const processData = (data, year_url, month) => {
+    
     var yearRequest = year_url || new Date().getFullYear().toString().substr(-2);
+    
     return data && data.filter((el) => {
         var createDate = el.startdate && el.startdate.substring(0, 10);
         var monthLog = new Date(createDate).getMonth() + 1;
@@ -63,6 +65,7 @@ export const logTimeElement = (arrLog = [], ind) => {
             var createDate = element['created'] && element['created'].substring(0, 10)
             var createDate_arr = createDate.split('-')
             var get_day = createDate_arr[2]
+            
             if (Number(ind) == get_day) {
                 timeworked = Number((element['timeworked'] / 3600).toFixed(2))
                 day_worked = get_day
@@ -87,6 +90,7 @@ export const logTimeTotalIssue = (arrLog = []) => {
 };
 
 export const logTimeTotalIssueByDay = (arrLog = [], numberDay) => {
+   
     let final = 0;
     let t2 = 0;
 
@@ -120,7 +124,6 @@ export const updateQueryParam = (key, value, searchParams, replace) => {
     } else {
         params.delete(key);
     }
-
     replace(`?${params}`);
 };
 
@@ -143,6 +146,7 @@ const formatTime = (timeString) => {
 };
 
 const filterWorklogs = (worklogs, month, year) => {
+   
     return worklogs.filter(worklog => {
         const startedDate = new Date(worklog.started);
         const worklogMonth = startedDate.getMonth() + 1; // Month is zero-based
@@ -160,6 +164,7 @@ export const filterWorklogsByAuthor = async (data, authorName, month, year) => {
             // Check if worklog total is greater than 20
             if (item.fields.worklog.total > 20) {
                 try {
+
                     // Call API getWorklogCurrentIssue(key) to get all worklogs
                     const additionalWorklogs = await getWorklogCurrentIssue(item.key);
 

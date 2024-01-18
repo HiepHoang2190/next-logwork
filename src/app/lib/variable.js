@@ -1,1 +1,1 @@
-export const userAdmin = ['phuong', 'minh', 'admin', 'hieph', 'minht', 'chin']
+export const userAdmin = ['phuong', 'minh', 'bich', 'admin']
