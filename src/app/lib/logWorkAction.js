@@ -130,12 +130,14 @@ export const lastDayOfMonth = (year, month) => {
 
 const formatTime = (timeString) => {
     const originalDate = new Date(timeString);
-    const year = originalDate.getUTCFullYear();
-    const month = (originalDate.getUTCMonth() + 1).toString().padStart(2, '0');
-    const day = originalDate.getUTCDate().toString().padStart(2, '0');
-    const hours = originalDate.getUTCHours().toString().padStart(2, '0');
-    const minutes = originalDate.getUTCMinutes().toString().padStart(2, '0');
-    const seconds = originalDate.getUTCSeconds().toString().padStart(2, '0');
+    const utcPlus7Date = new Date(originalDate.getTime() + (7 * 60 * 60 * 1000)); // Add 7 hours for UTC+7
+
+    const year = utcPlus7Date.getUTCFullYear();
+    const month = (utcPlus7Date.getUTCMonth() + 1).toString().padStart(2, '0');
+    const day = utcPlus7Date.getUTCDate().toString().padStart(2, '0');
+    const hours = utcPlus7Date.getUTCHours().toString().padStart(2, '0');
+    const minutes = utcPlus7Date.getUTCMinutes().toString().padStart(2, '0');
+    const seconds = utcPlus7Date.getUTCSeconds().toString().padStart(2, '0');
 
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 };
