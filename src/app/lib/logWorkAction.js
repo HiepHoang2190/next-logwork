@@ -19,34 +19,27 @@ export const groupData = (data) => {
         const logDay = new Date(value.startdate).getDate().toString();
 
         if (arr_group[value.key]) {
-
-            // Check if there is already an entry for the current day
-            const existingLogIndex = arr_group[value.key].logs.findIndex(log => new Date(log.created).getDate().toString() === logDay);
-
-            if (existingLogIndex !== -1) {
-                // If the entry for the day exists, remove it
-                arr_group[value.key].logs.splice(existingLogIndex, 1);
+            if (arr_group[value.key].logs[logDay]) {
+                arr_group[value.key].logs[logDay].timeworked += Number(value.timeworked);
+            } else {
+                arr_group[value.key].logs[logDay] = {
+                    comment: value.comment,
+                    timeworked: Number(value.timeworked),
+                    created: value.startdate
+                };
             }
-            // Add a new entry for the current day
-            arr_group[value.key].logs.push({
-                comment: value.comment,
-                timeworked: Number(value.timeworked),
-                created: value.startdate
-            });
-
         } else {
-            // If the key doesn't exist, create a new entry
             arr_group[value.key] = {
                 key: value.key,
                 pkey: value.pkey,
                 summary: value.summary,
-                logs: [
-                    {
+                logs: {
+                    [logDay]: {
                         comment: value.comment,
                         timeworked: Number(value.timeworked),
                         created: value.startdate
                     }
-                ]
+                }
             };
         }
     });
@@ -160,7 +153,7 @@ const filterWorklogs = (worklogs, month, year) => {
 export const filterWorklogsByAuthor = async (data, authorName, month, year) => {
 
     const newData = await Promise.all(
-        
+
         data.map(async (item) => {
             // Check if worklog total is greater than 20
             if (item.fields.worklog.total > 20) {
@@ -186,8 +179,17 @@ export const filterWorklogsByAuthor = async (data, authorName, month, year) => {
             // Filter worklogs by month and year
             const filterWorklogsByMonth = filterWorklogs(filteredWorklogs, month, year);
 
+            // Remove children with the same 'created' value
+            const uniqueWorklogs = filterWorklogsByMonth.reduce((unique, worklog) => {
+                const existingIndex = unique.findIndex((w) => w.created === worklog.created);
+                if (existingIndex === -1) {
+                    unique.push(worklog);
+                }
+                return unique;
+            }, []);
+
             // Transform and return the filtered worklogs
-            return filterWorklogsByMonth.map((filteredWorklog) => ({
+            return uniqueWorklogs.map((filteredWorklog) => ({
                 author: filteredWorklog.author.key,
                 comment: filteredWorklog.comment,
                 created: formatTime(filteredWorklog.created),
