@@ -13,9 +13,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={roboto.className}>
-
-        {/* <CssBaseLine /> */}
-        {children}
         <ToastContainer
           position="top-right"
           autoClose={5000}
@@ -28,6 +25,7 @@ export default function RootLayout({ children }) {
           pauseOnHover
           theme="light"
         />
+        {children}
       </body>
     </html>
   )
