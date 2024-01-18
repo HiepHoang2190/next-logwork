@@ -9,7 +9,7 @@ import {
   logTimeTotalIssue,
   logTimeTotalIssueByDay,
   getDatefromDay
-} from '@/app/lib/logWorkTableAction'
+} from '@/app/lib/logWorkAction'
 
 const LogWorkTablePage = (props) => {
   const { dataIssue, month, year } = props;

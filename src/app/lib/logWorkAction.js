@@ -1,3 +1,5 @@
+import { getWorklogCurrentIssue } from '@/app/lib/fetchApi'
+
 //Filter Issues Data by year and month
 export const processData = (data, year_url, month) => {
     var yearRequest = year_url || new Date().getFullYear().toString().substr(-2);
@@ -17,27 +19,34 @@ export const groupData = (data) => {
         const logDay = new Date(value.startdate).getDate().toString();
 
         if (arr_group[value.key]) {
-            if (arr_group[value.key].logs[logDay]) {
-                arr_group[value.key].logs[logDay].timeworked += Number(value.timeworked);
-            } else {
-                arr_group[value.key].logs[logDay] = {
-                    comment: value.comment,
-                    timeworked: Number(value.timeworked),
-                    created: value.startdate
-                };
+
+            // Check if there is already an entry for the current day
+            const existingLogIndex = arr_group[value.key].logs.findIndex(log => new Date(log.created).getDate().toString() === logDay);
+
+            if (existingLogIndex !== -1) {
+                // If the entry for the day exists, remove it
+                arr_group[value.key].logs.splice(existingLogIndex, 1);
             }
+            // Add a new entry for the current day
+            arr_group[value.key].logs.push({
+                comment: value.comment,
+                timeworked: Number(value.timeworked),
+                created: value.startdate
+            });
+
         } else {
+            // If the key doesn't exist, create a new entry
             arr_group[value.key] = {
                 key: value.key,
                 pkey: value.pkey,
                 summary: value.summary,
-                logs: {
-                    [logDay]: {
+                logs: [
+                    {
                         comment: value.comment,
                         timeworked: Number(value.timeworked),
                         created: value.startdate
                     }
-                }
+                ]
             };
         }
     });
@@ -122,7 +131,11 @@ export const updateQueryParam = (key, value, searchParams, replace) => {
     replace(`?${params}`);
 };
 
-export const formatTime = (timeString) => {
+export const lastDayOfMonth = (year, month) => {
+    return new Date(year, month, 0).getDate();
+}
+
+const formatTime = (timeString) => {
     const originalDate = new Date(timeString);
     const year = originalDate.getUTCFullYear();
     const month = (originalDate.getUTCMonth() + 1).toString().padStart(2, '0');
@@ -134,6 +147,60 @@ export const formatTime = (timeString) => {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 };
 
-export const lastDayOfMonth = (year, month) => {
-    return new Date(year, month, 0).getDate();
+const filterWorklogs = (worklogs, month, year) => {
+    return worklogs.filter(worklog => {
+        const startedDate = new Date(worklog.started);
+        const worklogMonth = startedDate.getMonth() + 1; // Month is zero-based
+        const worklogYear = startedDate.getFullYear();
+
+        return (worklogMonth == month && worklogYear == year);
+    });
 }
+
+export const filterWorklogsByAuthor = async (data, authorName, month, year) => {
+
+    const newData = await Promise.all(
+        
+        data.map(async (item) => {
+            // Check if worklog total is greater than 20
+            if (item.fields.worklog.total > 20) {
+                try {
+                    // Call API getWorklogCurrentIssue(key) to get all worklogs
+                    const additionalWorklogs = await getWorklogCurrentIssue(item.key);
+
+                    // Merge additional worklogs with existing worklogs
+                    item.fields.worklog.worklogs = [
+                        ...item.fields.worklog.worklogs,
+                        ...additionalWorklogs.worklogs,
+                    ];
+                } catch (error) {
+                    console.error(`Error fetching additional worklogs for ${item.key}:`, error);
+                }
+            }
+
+            // Filter worklogs by authorName
+            const filteredWorklogs = item.fields.worklog.worklogs.filter(
+                (worklog) => worklog.author.name === authorName
+            );
+
+            // Filter worklogs by month and year
+            const filterWorklogsByMonth = filterWorklogs(filteredWorklogs, month, year);
+
+            // Transform and return the filtered worklogs
+            return filterWorklogsByMonth.map((filteredWorklog) => ({
+                author: filteredWorklog.author.key,
+                comment: filteredWorklog.comment,
+                created: formatTime(filteredWorklog.created),
+                startdate: formatTime(filteredWorklog.started),
+                updated: formatTime(filteredWorklog.updated),
+                summary: item.fields.summary,
+                timeworked: filteredWorklog.timeSpentSeconds,
+                key: item.key,
+                pkey: item.key.split('-')[0],
+                issueid: item.id,
+            }));
+        })
+    );
+
+    return newData.flat();
+};
