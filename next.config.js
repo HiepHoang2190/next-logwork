@@ -27,7 +27,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'pm.lotustest.net'
       }
-    ]
+    ],
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   async headers() {
     return [
