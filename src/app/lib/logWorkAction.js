@@ -179,9 +179,11 @@ export const filterWorklogsByAuthor = async (data, authorName, month, year) => {
             // Filter worklogs by month and year
             const filterWorklogsByMonth = filterWorklogs(filteredWorklogs, month, year);
 
-            // Remove children with the same 'created' value
+            // Remove children with the same 'created' and 'key' values
             const uniqueWorklogs = filterWorklogsByMonth.reduce((unique, worklog) => {
-                const existingIndex = unique.findIndex((w) => w.created === worklog.created);
+                const existingIndex = unique.findIndex(
+                    (w) => w.created === worklog.created && w.key === worklog.key
+                );
                 if (existingIndex === -1) {
                     unique.push(worklog);
                 }
