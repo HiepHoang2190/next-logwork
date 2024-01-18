@@ -4,7 +4,7 @@ import { updateQueryParam } from "@/app/lib/logWorkAction"
 import { useEffect, useState } from 'react'
 import UserSelection from './logworkUserSelection'
 import ReactHTMLTableToExcel from 'react-html-table-to-excel'
-import { useSearchParams, useRouter, usePathname } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 
 
 const LogWorkExcelPage = (props) => {
@@ -15,14 +15,15 @@ const LogWorkExcelPage = (props) => {
 
   const searchParams = useSearchParams();
   const { replace } = useRouter();
-  const pathname = usePathname();
 
   useEffect(() => {
     const paramsUserName = searchParams.get('username');
+
     // If searchParams has a username value, set userName accordingly
     if (paramsUserName) {
       setUserName(paramsUserName);
     }
+
   }, [searchParams])
 
   const handleChange = async (event) => {

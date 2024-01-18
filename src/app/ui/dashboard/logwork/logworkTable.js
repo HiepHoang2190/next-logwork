@@ -23,6 +23,7 @@ const LogWorkTablePage = (props) => {
   const year_url = year.toString().substr(-2);
   const issue_list = processData(dataTable, year_url, month);
   const arr_group = groupData(issue_list);
+  
   const current = new Date().getDate();
   const thisyear = year;
   const days = new Date(thisyear, month, 0).getDate();

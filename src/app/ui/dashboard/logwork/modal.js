@@ -6,7 +6,6 @@ import styles from "./logwork.module.css";
 
 export default function CalendarModal({ open, modalContent, onClose }) {
   
-  
   if (!open) return null;
 
   return ReactDom.createPortal(

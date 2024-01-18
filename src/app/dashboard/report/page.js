@@ -1,6 +1,6 @@
 'use server'
 import { auth } from '@/app/auth'
-import { getAllDataUser, getUserIssues, getWorklogCurrentIssue } from '@/app/lib/fetchApi'
+import { getAllDataUser, getUserIssues } from '@/app/lib/fetchApi'
 import LogWorkTablePage from '@/app/ui/dashboard/logwork/logworkTable'
 import LogWorkExcelPage from '@/app/ui/dashboard/logwork/logworkExcel'
 import LogWorkDatePicker from '@/app/ui/dashboard/logwork/logworkDatePicker'
@@ -24,20 +24,20 @@ export async function generateMetadata({ searchParams }) {
 
 const LogWorksPage = async ({ searchParams }) => {
 
+  //Get User Info
   const { user } = await auth()
-  const dataAllUser = await getAllDataUser()
-
   var username = searchParams?.username
   username = (username !== undefined) ? username : user.username
+
+  //Get data Issues for current User
+  const dataAllUser = await getAllDataUser();
 
   const year = searchParams?.year || new Date().getFullYear();
   const month = searchParams?.month || new Date().getMonth() + 1;
 
   //Fetch Data issues log work of user
-
   const dataUsers = await getUserIssues(username, year, month, lastDayOfMonth(year, month))
 
-  
   const userLogwork = await filterWorklogsByAuthor(dataUsers, username, month, year);
 
   return (
