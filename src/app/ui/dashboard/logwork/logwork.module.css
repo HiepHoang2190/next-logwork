@@ -63,15 +63,15 @@
 }
 
 .fcContent {
-  white-space: normal;
+  white-space: nowrap;
 }
 
 .eventTitle,
 .eventTime {
   font-size: 13px;
-  max-width: 100%;
-  padding: 5px;
+  margin-left: 0;
+  padding: 6px;
+  display: block;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-left: 0;
 }
