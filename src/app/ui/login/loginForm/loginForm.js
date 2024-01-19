@@ -60,7 +60,14 @@ const LoginForm = () => {
   }
 
   const sendValue = async () => {
-    const data = await authenticate(values)
+    
+    const newValues = {
+      username: values.username.toLowerCase(),
+      password: values.password,
+      showPassword: values.showPassword
+    }
+
+    const data = await authenticate(newValues)
 
     if (!data?.error) {
       toast.success(data?.success)
