@@ -8,7 +8,7 @@ const login = async (credentials) => {
     const user = {};
   
     const sessionResponse = await fetchWithCredentials(
-      `${process.env.JIRA_PATH}/auth/1/session`,
+      `${process.env.JIRA_API_PATH}/auth/1/session`,
       {
         method: 'POST',
         body: JSON.stringify({ username: credentials.username, password: credentials.password }),
@@ -26,7 +26,7 @@ const login = async (credentials) => {
 
 
     const userDetailResponse = await fetchWithCredentials(
-      `${process.env.JIRA_PATH}/api/2/user/search?username=${credentials.username}`,
+      `${process.env.JIRA_API_PATH}/api/2/user/search?username=${credentials.username}`,
       {
         method: 'GET',
         headers: {
