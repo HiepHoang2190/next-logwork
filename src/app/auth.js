@@ -26,7 +26,7 @@ const login = async (credentials) => {
 
 
     const userDetailResponse = await fetchWithCredentials(
-      `${process.env.JIRA_API_PATH}/api/2/user/search?username=${credentials.username}`,
+      `${process.env.JIRA_API_PATH}/api/2/user?username=${credentials.username}`,
       {
         method: 'GET',
         headers: {
@@ -35,16 +35,14 @@ const login = async (credentials) => {
       }
     );
 
-    if (!userDetailResponse || userDetailResponse.errorMessages || userDetailResponse.length === 0) {
-      console.error('User details not found:', userDetailResponse);
-      throw new Error('User details not found.');
+    if (!userDetailResponse || userDetailResponse.errors || userDetailResponse.length === 0) {
+      console.error('Failed to fetch user details:', userDetailResponse);
+      throw new Error('Failed to fetch user details.');
     }
 
-    const userData = userDetailResponse[0];
-
-    user.email = userData.emailAddress;
-    user.displayName = userData.displayName;
-    user.avatarUrls = Object.values(userData.avatarUrls);
+    user.email = userDetailResponse.emailAddress;
+    user.displayName = userDetailResponse.displayName;
+    user.avatarUrls = Object.values(userDetailResponse.avatarUrls);
 
     return user;
 
