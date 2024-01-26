@@ -19,6 +19,5 @@ export const authConfig = {
   },
   session: {
     strategy: 'jwt',
-    maxAge: 1 * 60 * 60, // 1 hour
   },
 } 

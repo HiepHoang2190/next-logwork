@@ -1,6 +1,8 @@
+import Error from '@/app/error'
 import { auth } from '@/app/auth'
 import LogWorksUi from '@/app/ui/dashboard/logwork/logwork'
 import { getAllDataUser, getUserIssues } from '@/app/lib/fetchApi'
+import Unauthorized from '@/app/ui/dashboard/unauthorized/unauthorized'
 import { filterWorklogsByAuthor, lastDayOfMonth } from '@/app/lib/logWorkAction'
 
 export async function generateMetadata({ searchParams }) {
@@ -31,6 +33,12 @@ const LogWorkCalendarPage = async ({ searchParams }) => {
 
   //Fetch Data issues log work of user
   const dataUsers = await getUserIssues(username, year, month, lastDayOfMonth(year, month))
+  if (dataUsers === "Unauthorized!") {
+    return <Unauthorized/>
+  }
+  if (dataUsers === "fetch failed") {
+    return <Error />
+  }
 
   const userLogwork = await filterWorklogsByAuthor(dataUsers, username, month, year);
 

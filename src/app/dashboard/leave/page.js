@@ -1,7 +1,9 @@
 'use server'
+import Error from '@/app/error'
 import { auth } from '@/app/auth'
 import LeavePage from '../../ui/dashboard/leave/leave'
-import { getTimeLeaveTotal, getTimeLeave, getAllDataUser } from '@/app/lib/fetchApi'
+import Unauthorized from '@/app/ui/dashboard/unauthorized/unauthorized'
+import { getTimeLeaveTotal, getTimeLeave, getAllDataUser, getUserCurrentIssues } from '@/app/lib/fetchApi'
 
 export async function generateMetadata({ searchParams }) {
   const { user } = await auth()
@@ -83,6 +85,13 @@ const Page = ({ searchParams }) => {
     var username = searchParams?.username
     username = (username !== undefined) ? username : user.username
 
+    const currentData = await getUserCurrentIssues();
+    if (currentData === "Unauthorized!") {
+      return <Unauthorized />
+    }
+    if (currentData === "fetch failed") {
+      return <Error />
+    }
     //Get data leave request for current User
     const dataAllUser = await getAllDataUser();
     const currentUserData = dataAllUser.find(data => data.user_name === username)

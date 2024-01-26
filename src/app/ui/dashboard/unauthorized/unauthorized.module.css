@@ -1,0 +1,55 @@
+.h1 {
+  color: var(--text);
+  margin: 0;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 300;
+  font-size: 6rem;
+  line-height: 1.167;
+  letter-spacing: -0.01562em;
+}
+
+.h3 {
+  color: var(--text);
+  margin: 0;
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
+  font-weight: 500;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  letter-spacing: 0.0075em;
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.text {
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.logout {
+  padding: 10px 20px;
+  margin: 20px 0px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  border-radius: 10px;
+  background: var(--bgSoft);
+  border: 1px solid var(--bgSoft);
+  color: var(--textSoft);
+  font-size: 16px;
+}
+
+.logout:hover {
+  background: var(--bgHover);
+  border: 1px solid var(--bgHover);
+}
+
+.containerText {
+  margin-right: 25px;
+  padding: 20px;
+}
+
+.containerImg {
+  padding: 20px 0;
+}

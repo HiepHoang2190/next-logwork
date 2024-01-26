@@ -7,9 +7,28 @@
 :root {
   --bg: white;
   --bgSoft: #222357;
+  --bgHover: #353687;
   --text: #151c2c;
   --textSoft: #f5f5f5;
 }
+
+/* JIRA THEME */
+/* :root {
+  --bg: white;
+  --bgSoft: #0747a6;
+  --bgHover: #0b54c2;
+  --text: #151c2c;
+  --textSoft: #f5f5f5;
+} */
+
+/* LOTUS THEME */
+/* :root {
+  --bg: white;
+  --bgSoft: #d11388;
+  --bgHover: #ea1599;
+  --text: #151c2c;
+  --textSoft: #f5f5f5;
+} */
 
 /* DARK THEME */
 /* :root {
