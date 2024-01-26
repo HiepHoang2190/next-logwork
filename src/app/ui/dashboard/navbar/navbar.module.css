@@ -1,6 +1,6 @@
 .container {
-  padding: 20px;
-  border-radius: 10px;
+  padding: 16px 20px;
+  border-radius: 0px;
   background-color: var(--bgSoft);
   display: flex;
   align-items: center;
@@ -8,9 +8,14 @@
 }
 
 .title {
-  color: var(--textSoft);
+  color: var(--colorLotus);
   font-weight: bold;
   text-transform: capitalize;
+  font-family: var(--fontFamily);
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
 }
 
 .menu {

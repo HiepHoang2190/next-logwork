@@ -1,20 +1,19 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { userAdmin } from "@/app/lib/variable"
 import { updateQueryParam } from "@/app/lib/logWorkAction"
 import styles from '@/app/ui/dashboard/leave/leave.module.css'
-import { useEffect, useState } from 'react'
-import Table from '@mui/material/Table'
-import TableBody from '@mui/material/TableBody'
-import TableCell from '@mui/material/TableCell'
-import TableContainer from '@mui/material/TableContainer'
-import TableHead from '@mui/material/TableHead'
-import TableRow from '@mui/material/TableRow'
-import Paper from '@mui/material/Paper'
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
 import UserSelection from '../logwork/logworkUserSelection'
 import { useRouter, useSearchParams } from 'next/navigation'
+import TableContainer from '@mui/material/TableContainer'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
+import Table from '@mui/material/Table'
+import Paper from '@mui/material/Paper'
+import Box from '@mui/material/Box'
 
 const LeavePage = (props) => {
 
@@ -22,7 +21,7 @@ const LeavePage = (props) => {
 
   const [userName, setUserName] = useState('');
   const [timeLeave, setTimeLeave] = useState([])
-  const [totalTimeLeave, setTotalTimeLeave] = useState([])
+  const [totalTimeLeave, setTotalTimeLeave] = useState()
 
   const isUserAdmin = userAdmin.includes(dataUserName);
 
@@ -51,7 +50,7 @@ const LeavePage = (props) => {
   }
 
   useEffect(() => {
-    const currentYearData = data_time_leave_total.filter((item) => (processLeaveItem(item)))
+    const currentYearData = data_time_leave_total.find((item) => (processLeaveItem(item)))
     setTimeLeave(arr_time_leave)
     setTotalTimeLeave(currentYearData)
 
@@ -64,47 +63,45 @@ const LeavePage = (props) => {
           <UserSelection userName={userName} handleChange={handleChange} dataAllUser={dataAllUser} />
         </div>
       }
+      <div className={styles.container}>
+        {totalTimeLeave &&
+          <Box sx={{ width: '100%', display: 'flex', margin: '0 0 20px' }}>
+            <div className={styles.cardContainer}>
+              <span className={styles.title_total}>Time Estimated (days):</span> {((totalTimeLeave.time_estimate / 3600 / 8))}
+            </div>
+            <div className={styles.cardContainerMiddle}>
+              <span className={styles.title_total}>Time Spent (days):</span> {((totalTimeLeave.time_spent / 3600 / 8))}
+            </div>
+            <div className={styles.cardContainer}>
+              <span className={styles.title_total}>Time Remaining (days):</span> {((totalTimeLeave.time_remain / 3600 / 8))}
+            </div>
+          </Box>
+        }
 
-      <div className="mt-3">
-        <TableContainer className={styles.table_margin_top} component={Paper} style={{ borderRadius: '5px' }}>
+        <TableContainer className={styles.table_margin_top} component={Paper}>
           <Table aria-label="simple table" stickyHeader>
             <TableHead>
               <TableRow>
                 <TableCell className={styles.issues}>Summary</TableCell>
-                <TableCell className={styles.issues} align="right">Comment</TableCell>
-                <TableCell className={styles.issues} align="right">Created Date</TableCell>
-                <TableCell className={styles.issues} align="right">Start Date</TableCell>
-                <TableCell className={styles.issues} align="right">Due Date</TableCell>
+                <TableCell className={styles.issues}>Comment</TableCell>
+                <TableCell className={styles.issues}>Created Date</TableCell>
+                <TableCell className={styles.issues}>Start Date</TableCell>
+                <TableCell className={styles.issues}>Due Date</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {timeLeave.map((row) => (
                 <TableRow key={row.id} className={row.difference_in_days < 2 ? styles.row_incorrect_time_limit : ''}>
-                  <TableCell component="th" scope="row">
-                    {row.summary}
-                  </TableCell>
-                  <TableCell align="right">{row.desc}</TableCell>
-                  <TableCell align="right">{row.create_date}</TableCell>
-                  <TableCell align="right">{row.start_date}</TableCell>
-                  <TableCell align="right">{row.due_date}</TableCell>
+                  <TableCell className={styles.issueInfo} component="th" scope="row">{row.summary}</TableCell>
+                  <TableCell className={styles.issueInfo} component="th" scope="row">{row.desc}</TableCell>
+                  <TableCell className={styles.issueInfo} component="th" scope="row">{row.create_date}</TableCell>
+                  <TableCell className={styles.issueInfo} component="th" scope="row">{row.start_date}</TableCell>
+                  <TableCell className={styles.issueInfo} component="th" scope="row">{row.due_date}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
-        <Box sx={{ width: '100%', maxWidth: 500, marginTop: 2 }}>
-          {totalTimeLeave && totalTimeLeave.map((item, key) => (
-            <div key={key}>
-              <Typography variant="subtitle1" gutterBottom>
-                <span className={styles.title_total}>Time Estimated:</span> {(((item.time_estimate) / 3600 / 8)) + ' days'}
-              </Typography><Typography variant="subtitle1" gutterBottom>
-                <span className={styles.title_total}>Time Spent:</span> {((item.time_spent / 3600 / 8)) + ' days'}
-              </Typography><Typography variant="subtitle1" gutterBottom>
-                <span className={styles.title_total}>Time Remaining:</span> {((item.time_remain / 3600 / 8)) + ' days'}
-              </Typography>
-            </div>
-          ))}
-        </Box>
       </div>
     </>
   )

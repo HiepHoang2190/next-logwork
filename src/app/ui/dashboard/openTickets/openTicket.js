@@ -34,7 +34,7 @@ const OpenTickets = (props) => {
     return (
         <div className={styles.container}>
             <div className={styles.texts}>
-                <TableContainer className={styles.table_margin_top} component={Paper} style={{ borderRadius: '5px' }}>
+                <TableContainer className={styles.table_margin_top} component={Paper}>
                     <Table aria-label="simple table" stickyHeader>
                         <TableHead>
                             <TableRow>

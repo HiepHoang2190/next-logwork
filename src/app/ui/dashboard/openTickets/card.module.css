@@ -5,8 +5,10 @@
   width: 100%;
 }
 
-.table_margin_top {
-  border: 1px solid var(--bgSoft);
+.container .table_margin_top {
+  border: 1px solid #180110;
+  border-radius: 12px;
+  box-shadow: none;
 }
 
 .texts {
@@ -17,20 +19,32 @@
 }
 
 .title:hover {
+  color: var(--colorLotus);
   cursor: pointer;
   text-decoration: underline;
 }
 
-.container .issues{
-  text-align: left;
-  line-height: 3;
+.container .issues {
+  color: var(--text);
+  background: #fdf2f8;
+  font-family: var(--fontFamily);
+  font-size: 14px;
+  font-style: normal;
   font-weight: 600;
+  line-height: normal;
+  text-transform: capitalize;
+  padding: 20px;
 }
 
 .issueInfo {
-  text-align: left;
-  line-height: 3;
+  color: var(--text);
+  font-family: var(--fontFamily);
+  font-size: 14px;
+  font-style: normal;
   font-weight: 400;
+  line-height: normal;
+  text-transform: capitalize;
+  padding: 20px;
 }
 
 .number {
@@ -52,7 +66,7 @@
 }
 
 .issueType {
-  margin-right: 5px;
+  margin-right: 8px;
   position: relative;
   top: 5px;
 }

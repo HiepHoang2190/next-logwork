@@ -2,15 +2,65 @@
   background-color: #e79696;
 }
 
-.table_margin_top {
-  margin-top: 20px;
-  border: 1px solid var(--bgSoft);
+.container .table_margin_top {
+  border: 1px solid #180110;
+  border-radius: 12px;
+  box-shadow: none;
 }
 
-.table_margin_top .issues {
+.container .table_margin_top .issues {
+  color: var(--text);
+  background: #fdf2f8;
+  font-family: var(--fontFamily);
+  font-size: 14px;
+  font-style: normal;
   font-weight: 600;
+  line-height: normal;
+  text-transform: capitalize;
+  padding: 20px;
 }
 
-.title_total {
-  font-weight: bold;
+ .container .table_margin_top .issueInfo {
+  color: var(--text);
+  font-family: var(--fontFamily);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-transform: capitalize;
+  padding: 16px 20px;
+}
+
+.cardContainer,
+.cardContainerMiddle {
+  background-color: white;
+  padding: 20px;
+  justify-content: space-between;
+  border-radius: 12px;
+  border: 1px solid var(--text);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  color: var(--colorLotus);
+  font-family:  var(--fontFamily);
+  font-size: 26px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.cardContainerMiddle {
+  margin: 0 20px;
+}
+
+.cardContainer .title_total,
+.cardContainerMiddle .title_total {
+  color: var(--text);
+  font-family: var(--fontFamily);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 26px;
+  text-transform: capitalize;
 }

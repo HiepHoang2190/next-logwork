@@ -29,7 +29,7 @@ const UserSelection = (props) => {
     '&.MuiFormLabel-root.MuiInputLabel-root': {
       top: '-13px'
     },
-    '&.MuiFormLabel-filled.MuiInputLabel-shrink': {
+    '&.MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-shrink': {
       top: '0px'
     }
   }

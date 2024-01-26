@@ -1,7 +1,7 @@
 .h1 {
   color: var(--text);
   margin: 0;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-family: var(--fontFamily);
   font-weight: 300;
   font-size: 6rem;
   line-height: 1.167;
@@ -11,7 +11,7 @@
 .h3 {
   color: var(--text);
   margin: 0;
-  font-family: "Roboto","Helvetica","Arial",sans-serif;
+  font-family: var(--fontFamily);
   font-weight: 500;
   font-size: 1.25rem;
   line-height: 1.6;
@@ -41,8 +41,8 @@
 }
 
 .logout:hover {
-  background: var(--bgHover);
-  border: 1px solid var(--bgHover);
+  background-color: #360224;
+  border: 1px solid #360224;
 }
 
 .containerText {

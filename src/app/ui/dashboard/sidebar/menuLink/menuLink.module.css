@@ -1,14 +1,31 @@
 .container {
-  padding: 20px;
+  padding: 16px 40px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin: 5px 0px;
-  border-radius: 10px;
+  margin: 16px 0px;
+  border-radius: 0px;
   color: var(--textSoft);
+  font-family: var(--fontFamily);
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  text-transform: capitalize;
+  border-left: 6px solid transparent;
 }
 
-.container:hover,
+.container svg {
+  margin-right: 24px;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.container:hover {
+  background-color: var(--bgHover);
+}
+
 .active {
+  border-left: 6px solid var(--colorLotus);
   background-color: var(--bgHover);
 }

@@ -11,11 +11,15 @@ const Layout = ({ children }) => {
   return (
     <div className={styles.container}>
       <div className={styles.menu}>
-        <Sidebar/>
+        <Sidebar />
       </div>
       <div className={styles.content}>
-        <Navbar/>
-        {children}
+        <Navbar />
+        <div className={styles.contentDashboard}>
+          <div className={styles.wrapper}>
+            {children}
+          </div>
+        </div>
       </div>
     </div>
   )
