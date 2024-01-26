@@ -9,19 +9,22 @@ const Error = () => {
   return (
     <Box
       sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh'
+        minHeight: '865px'
       }}
     >
-      <Container maxWidth="md">
+      <Container maxWidth="md" sx={{
+        minHeight: 'inherit'
+      }}>
         <Grid container spacing={2} sx={{
+          marginTop:'0',
           justifyContent: 'center',
           alignItems: 'center',
-          minHeight: '100vh'
+          minHeight: 'inherit'
+
         }}>
-          <Grid xs={6}>
+          <Grid sx={{
+            margin: '0 10px',
+          }}>
             <Typography variant="h1">
               Woops!
             </Typography>
@@ -32,7 +35,10 @@ const Error = () => {
               Please try again later
             </Typography>
           </Grid>
-          <Grid xs={6}>
+          <Grid sx={{
+            margin: '0px 10px',
+            textAlign: 'center'
+          }}>
             <Image
               src={errorPic}
               alt="Error Picture"

@@ -1,7 +1,9 @@
 'use server'
+import Error from '@/app/error'
 import { auth } from '@/app/auth'
 import styles from '../ui/dashboard/dashboard.module.css'
 import OpenTickets from '../ui/dashboard/openTickets/openTicket'
+import Unauthorized from '@/app/ui/dashboard/unauthorized/unauthorized'
 import { getAllDataUser, getUserCurrentIssues } from '@/app/lib/fetchApi'
 
 export async function generateMetadata({ searchParams }) {
@@ -21,6 +23,13 @@ const Dashboard = async () => {
 
   //Get data Issues for current User
   const currentData = await getUserCurrentIssues();
+
+  if (currentData === "Unauthorized!") {
+    return <Unauthorized />
+  }
+  if (currentData === "fetch failed") {
+    return <Error />
+  }
 
   const mappedArray = currentData.map((obj) => {
     

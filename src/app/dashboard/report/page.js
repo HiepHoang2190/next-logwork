@@ -1,8 +1,10 @@
 'use server'
+import Error from '@/app/error'
 import { auth } from '@/app/auth'
 import { getAllDataUser, getUserIssues } from '@/app/lib/fetchApi'
 import LogWorkTablePage from '@/app/ui/dashboard/logwork/logworkTable'
 import LogWorkExcelPage from '@/app/ui/dashboard/logwork/logworkExcel'
+import Unauthorized from '@/app/ui/dashboard/unauthorized/unauthorized'
 import LogWorkDatePicker from '@/app/ui/dashboard/logwork/logworkDatePicker'
 import { lastDayOfMonth, filterWorklogsByAuthor } from '@/app/lib/logWorkAction'
 
@@ -37,6 +39,12 @@ const LogWorksPage = async ({ searchParams }) => {
 
   //Fetch Data issues log work of user
   const dataUsers = await getUserIssues(username, year, month, lastDayOfMonth(year, month))
+  if (dataUsers === "Unauthorized!") {
+    return <Unauthorized/>
+  }
+  if (dataUsers === "fetch failed") {
+    return <Error />
+  }
 
   const userLogwork = await filterWorklogsByAuthor(dataUsers, username, month, year);
 

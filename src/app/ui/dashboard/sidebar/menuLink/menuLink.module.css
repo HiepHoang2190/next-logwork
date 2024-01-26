@@ -10,5 +10,5 @@
 
 .container:hover,
 .active {
-  background-color: #353687;
+  background-color: var(--bgHover);
 }
