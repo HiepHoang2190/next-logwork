@@ -92,6 +92,7 @@ const Page = ({ searchParams }) => {
     if (currentData === "fetch failed") {
       return <Error />
     }
+
     //Get data leave request for current User
     const dataAllUser = await getAllDataUser();
     const currentUserData = dataAllUser.find(data => data.user_name === username)

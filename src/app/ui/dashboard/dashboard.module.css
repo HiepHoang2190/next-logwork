@@ -43,3 +43,13 @@
 .side {
   flex: 1;
 }
+
+.titleNoIssues {
+  text-align: center;
+}
+
+.imgNoIssues {
+  margin: 0 auto;
+  width: 70%;
+  display: flex;
+}

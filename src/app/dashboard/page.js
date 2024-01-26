@@ -31,29 +31,39 @@ const Dashboard = async () => {
     return <Error />
   }
 
-  const mappedArray = currentData.map((obj) => {
-    
-    const { fields: { created, issuetype, summary, reporter, status, priority }, key } = obj;
-   
-    return {
-      created,
-      issuetype: issuetype.name,
-      issuetypeicon: issuetype.iconUrl,
-      prioritytype: priority.name,
-      priorityicon: priority.iconUrl,
-      issuestatus: status.name,
-      summary: summary,
-      key: key,
-      reporter: reporter.displayName,
-    };
-  });
+  if (currentData) {
 
-  return (
+    const mappedArray = currentData.map((obj) => {
+
+      const { fields: { created, issuetype, summary, reporter, status, priority }, key } = obj;
+
+      return {
+        created,
+        issuetype: issuetype.name,
+        issuetypeicon: issuetype.iconUrl,
+        prioritytype: priority.name,
+        priorityicon: priority.iconUrl,
+        issuestatus: status.name,
+        summary: summary,
+        key: key,
+        reporter: reporter.displayName,
+      };
+    });
+
+    return (
       <div className={styles.main}>
         <h1 className={styles.title}>Open Issues</h1>
         <OpenTickets dataIssue={mappedArray} />
       </div>
-  )
+    )
+  } else {
+    return (
+      <div className={styles.main}>
+        <h1 className={styles.titleNoIssues}>No Issues Found</h1>
+        <img className={styles.imgNoIssues} alt="no-issues-img" src="/no-issues.jpg" width={900}/>
+      </div>
+    )
+  }
 }
 
 export default Dashboard
