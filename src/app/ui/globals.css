@@ -4,31 +4,24 @@
 }
 
 /* LIGHT THEME */
-:root {
+/* :root {
   --bg: white;
   --bgSoft: #222357;
   --bgHover: #353687;
   --text: #151c2c;
   --textSoft: #f5f5f5;
-}
-
-/* JIRA THEME */
-/* :root {
-  --bg: white;
-  --bgSoft: #0747a6;
-  --bgHover: #0b54c2;
-  --text: #151c2c;
-  --textSoft: #f5f5f5;
 } */
 
 /* LOTUS THEME */
-/* :root {
+:root {
   --bg: white;
-  --bgSoft: #d11388;
-  --bgHover: #ea1599;
-  --text: #151c2c;
-  --textSoft: #f5f5f5;
-} */
+  --bgSoft: #180110;
+  --bgHover: #d41e8e21;
+  --text: #180110;
+  --textSoft: #fff;
+  --colorLotus: #D41E8E;
+  --fontFamily: "Roboto", "Helvetica", "Arial", sans-serif;
+}
 
 /* DARK THEME */
 /* :root {
@@ -107,7 +100,7 @@ th.date {
   justify-content: flex-end;
   position: absolute;
   right: 20px;
-  margin: 20px 0px;
+  margin: 0px;
 }
 
 .wrapper-datetime-calendar .react-datepicker__month-container {
@@ -117,7 +110,7 @@ th.date {
 .wrapper-datetime {
   display: flex;
   justify-content: flex-end;
-  margin: 20px 0px;
+  margin: 0 0 20px;
 }
 
 .wrapper-datetime .react-datepicker-ignore-onclickoutside input,
@@ -173,7 +166,7 @@ th.date {
 }
 
 .fc .fc-toolbar.fc-header-toolbar {
-  margin: 20px 0;
+  margin: 0 0 20px;
 }
 
 .fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events {

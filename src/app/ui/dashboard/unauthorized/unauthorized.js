@@ -1,9 +1,9 @@
 import React from 'react';
 import Image from 'next/image';
-import errorPic from '../../../../../public/error.png'
 import { signOut } from '@/app/auth'
 import { MdLogout } from 'react-icons/md'
 import styles from './unauthorized.module.css'
+import errorPic from '../../../../../public/error.png'
 
 const Unauthorized = () => {
     return (
