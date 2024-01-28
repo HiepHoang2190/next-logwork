@@ -1,5 +1,4 @@
 'use server'
-import Error from '@/app/error'
 import { auth } from '@/app/auth'
 import styles from '../ui/dashboard/dashboard.module.css'
 import OpenTickets from '../ui/dashboard/openTickets/openTicket'
@@ -25,10 +24,10 @@ const Dashboard = async () => {
   const currentData = await getUserCurrentIssues();
 
   if (currentData === "Unauthorized!") {
-    return <Unauthorized />
+    return <Unauthorized status={"Unauthorized!"}/>
   }
   if (currentData === "fetch failed") {
-    return <Error />
+    return <Unauthorized status={"fetch failed"}/>
   }
 
   if (currentData) {

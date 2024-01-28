@@ -1,5 +1,4 @@
 'use server'
-import Error from '@/app/error'
 import { auth } from '@/app/auth'
 import LeavePage from '../../ui/dashboard/leave/leave'
 import Unauthorized from '@/app/ui/dashboard/unauthorized/unauthorized'
@@ -87,10 +86,10 @@ const Page = ({ searchParams }) => {
 
     const currentData = await getUserCurrentIssues();
     if (currentData === "Unauthorized!") {
-      return <Unauthorized />
+      return <Unauthorized status={"Unauthorized!"}/>
     }
     if (currentData === "fetch failed") {
-      return <Error />
+      return <Unauthorized status={"fetch failed"}/>
     }
 
     //Get data leave request for current User
