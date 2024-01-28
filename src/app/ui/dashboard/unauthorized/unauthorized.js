@@ -5,7 +5,10 @@ import { MdLogout } from 'react-icons/md'
 import styles from './unauthorized.module.css'
 import errorPic from '../../../../../public/error.png'
 
-const Unauthorized = () => {
+const Unauthorized = (props) => {
+
+    const { status } = props;
+
     return (
         <div
             style={{
@@ -23,15 +26,18 @@ const Unauthorized = () => {
                 }}>
                     <div className={styles.containerText}>
                         <h1 className={styles.h1}>
-                            Woops!
+                            {status === 'Unauthorized!' && "401"}
+                            {status === 'fetch failed' && "502"}
                         </h1>
                         <h3 className={styles.h3} style={{ marginTop: "10px", marginBottom: "15px" }}>
-                            Unauthorized!
+                            {status === 'Unauthorized!' && "Unauthorized!"}
+                            {status === 'fetch failed' && "Something when wrong!"}
                         </h3>
                         <span className={styles.text}>
-                            Please Logout and try again
+                            {status === 'Unauthorized!' && "Please Logout and try again"}
+                            {status === 'fetch failed' && "Please try again later"}
                         </span>
-                        <form
+                        {status === 'Unauthorized!' && <form
                             action={async () => {
                                 'use server'
                                 await signOut()
@@ -42,6 +48,7 @@ const Unauthorized = () => {
                                 Logout
                             </button>
                         </form>
+                        }
                     </div>
                     <div className={styles.containerImg}>
                         <Image
