@@ -38,10 +38,10 @@ const LogWorksPage = async ({ searchParams }) => {
 
   //Fetch Data issues log work of user
   const dataUsers = await getUserIssues(username, year, month, lastDayOfMonth(year, month))
-  if (currentData === "Unauthorized!") {
+  if (dataUsers === "Unauthorized!") {
     return <Unauthorized status={"Unauthorized!"}/>
   }
-  if (currentData === "fetch failed") {
+  if (dataUsers === "fetch failed") {
     return <Unauthorized status={"fetch failed"}/>
   }
 
