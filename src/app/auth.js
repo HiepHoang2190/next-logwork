@@ -1,4 +1,7 @@
+'use server'
+
 import NextAuth from 'next-auth';
+import { cookies } from 'next/headers'
 import { authConfig } from './authconfig';
 import { fetchWithCredentials } from '@/app/lib/fetchApi';
 import CredentialsProvider from 'next-auth/providers/credentials';
@@ -43,6 +46,8 @@ const login = async (credentials) => {
     user.email = userDetailResponse.emailAddress;
     user.displayName = userDetailResponse.displayName;
     user.avatarUrls = Object.values(userDetailResponse.avatarUrls);
+
+    cookies().set('JSESSIONID', user.session.value)
 
     return user;
 
