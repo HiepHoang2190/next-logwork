@@ -96,7 +96,9 @@ export const logTimeTotalIssueByDay = (arrLog = [], numberDay) => {
     let final = 0;
     let t2 = 0;
 
-    arrLog && arrLog.forEach((item) => {
+    const filteredArr = arrLog.filter(item => item.pkey !== 'LRM');
+
+    filteredArr && filteredArr.forEach((item) => {
         Object.values(item['logs']).forEach((item2) => {
             const createDate = item2['created'] && item2['created'].substring(0, 10);
             const createDate_arr = createDate.split('-');

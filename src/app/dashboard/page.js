@@ -32,7 +32,7 @@ const Dashboard = async () => {
 
   if (currentData) {
 
-    const mappedArray = currentData.map((obj) => {
+    const mappedArray = currentData.issues.map((obj) => {
 
       const { fields: { created, issuetype, summary, reporter, status, priority }, key } = obj;
 
