@@ -77,6 +77,10 @@ table.log-work tbody td.title-issue {
   text-align: left;
 }
 
+table.log-work tbody td.leave-date {
+  background-color: #e79696;
+}
+
 th.date {
   width: 50px;
   height: 55px;

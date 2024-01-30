@@ -74,7 +74,7 @@ const LogWorkTablePage = (props) => {
                   switch (element) {
                     case 1:
                       return (
-                        <td key={ind} className="title-issue">
+                        <td key={ind} className={pkey === "LRM" ? "title-issue leave-date": "title-issue"}>
                           <a
                             target="_blank"
                             rel="noreferrer"
@@ -86,20 +86,20 @@ const LogWorkTablePage = (props) => {
                         </td>
                       );
                     case 2:
-                      return <td key={ind}>{key}</td>;
+                      return <td className={pkey === "LRM" ? "leave-date": ""} key={ind}>{key}</td>;
                     case 3:
-                      return <td key={ind}>{pkey}</td>;
+                      return <td className={pkey === "LRM" ? "leave-date": ""} key={ind}>{pkey}</td>;
                     case 4:
-                      return <td key={ind}>{logTimeTotal(Object.values(logs))}h</td>;
+                      return <td className={pkey === "LRM" ? "leave-date": ""} key={ind}>{logTimeTotal(Object.values(logs))}h</td>;
                     default:
                       return ['SA', 'SU'].includes(getDatefromDay(element - 4, month, thisyear)) ? (
-                        <td key={ind} id="weekend">
+                        <td className={pkey === "LRM" ? "leave-date": ""} key={ind} id="weekend">
                           {logTimeElement(Object.values(logs), element - 4) !== null
                             ? `${logTimeElement(Object.values(logs), element - 4)}h`
                             : ''}
                         </td>
                       ) : (
-                        <td key={ind}>
+                        <td className={pkey === "LRM" ? "leave-date": ""} key={ind}>
                           {logTimeElement(Object.values(logs), element - 4) !== null
                             ? `${logTimeElement(Object.values(logs), element - 4)}h`
                             : ''}
