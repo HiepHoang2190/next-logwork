@@ -45,7 +45,7 @@ const LogWorksPage = async ({ searchParams }) => {
     return <Unauthorized status={"fetch failed"}/>
   }
 
-  const userLogwork = await filterWorklogsByAuthor(dataUsers, username, month, year);
+  const userLogwork = await filterWorklogsByAuthor(dataUsers.issues, username, month, year);
 
   return (
     <>

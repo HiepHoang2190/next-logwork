@@ -90,7 +90,7 @@ const LogWorkTablePage = (props) => {
                     case 3:
                       return <td className={pkey === "LRM" ? "leave-date": ""} key={ind}>{pkey}</td>;
                     case 4:
-                      return <td className={pkey === "LRM" ? "leave-date": ""} key={ind}>{logTimeTotal(Object.values(logs))}h</td>;
+                      return <td className={pkey === "LRM" ? "leave-date": ""} key={ind}>{pkey === "LRM" ? "": `${logTimeTotal(Object.values(logs))}h`}</td>;
                     default:
                       return ['SA', 'SU'].includes(getDatefromDay(element - 4, month, thisyear)) ? (
                         <td className={pkey === "LRM" ? "leave-date": ""} key={ind} id="weekend">

@@ -2,14 +2,14 @@
 import { auth, signIn } from '@/app/auth'
 
 export const authenticate = async (formData) => {
-  const { username, password } = formData
+  const { username, password } = formData;
   try {
-    await signIn('credentials', { username, password, redirect: false })
-    return { success: "Login Success!" }
+    await signIn('credentials', { username, password, redirect: false });
+    return { success: "Login Success!" };
   } catch (err) {
-    return { error: 'Incorrect Password!' }
+    return { error: 'Incorrect Password!' };
   }
-}
+};
 
 export const fetchWithCredentials = async (url, options = {}) => {
   try {
@@ -28,133 +28,52 @@ export const fetchWithCredentials = async (url, options = {}) => {
 
     if (!response.ok) {
       if ([400, 401, 403].includes(response.status)) {
-        throw new Error('Unauthorized!')
+        throw new Error('Unauthorized!');
       } else {
         throw new Error(`Failed to fetch: ${response.status}`);
       }
     }
     return response.json();
   } catch (error) {
-    throw new Error(error.message);
+    return (error.message);
   }
+};
+
+const fetchWithAuth = async (url, options = {}) => {
+  const { user } = await auth();
+  const headers = {
+    ...options.headers,
+    'Cookie': `JSESSIONID=${user.session.value}`,
+  };
+  return fetchWithCredentials(url, { ...options, headers });
 };
 
 export const getUserIssues = async (username, year, month, lastDayOfMonth) => {
   const url = `${process.env.JIRA_API_PATH}/api/2/search?jql=(worklogAuthor%20in%20(%22${username}%22))%20AND%20(worklogDate%20%3E%3D%20%27${year}-${month}-01%27%20and%20worklogDate%20%3C%20%27${year}-${month}-${lastDayOfMonth}%27)%20&fields=summary%2Cworklog%2Ccreated%2Cupdated%2Cissuetype%2Cparent%2Cproject%2Cstatus%2Cassignee%2Creporter%2Caggregatetimespent%2Ctimeoriginalestimate%2Ctimeestimate&maxResults=1000`;
-  const { user } = await auth();
-  const header = {
-    method: 'GET',
-    headers: {
-      'Cookie': `JSESSIONID=${user.session.value}`,
-    },
-  };
-  try {
-    const data = await fetchWithCredentials(url, header);
-    const arr = []
-
-    data.issues.map((item) => (
-      arr.push(item)
-    ));
-    return arr
-
-  } catch (error) {
-    return (error.message);
-  }
+  return fetchWithAuth(url, { method: 'GET' });
 };
 
 export const getUserCurrentIssues = async () => {
-  const url = `${process.env.JIRA_API_PATH}/api/2/search?jql=assignee%3DcurrentUser()%20AND%20resolution%3DUnresolved%20and%20status%20!%3D%20Closed&fields=issuetype%2Csummary%2Creporter%2Cpriority%2Cstatus%2Cresolution%2Ccreated%2Cupdated&maxResults=1000`
-  const { user } = await auth();
-  const header = {
-    method: 'GET',
-    headers: {
-      'Cookie': `JSESSIONID=${user.session.value}`,
-    },
-  };
-  try {
-    const data = await fetchWithCredentials(url, header);
-    const arr = []
-
-    data.issues.map((item) => (
-      arr.push(item)
-    ));
-    return arr
-
-  } catch (error) {
-    return (error.message);
-  }
-}
+  const url = `${process.env.JIRA_API_PATH}/api/2/search?jql=assignee%3DcurrentUser()%20AND%20resolution%3DUnresolved%20and%20status%20!%3D%20Closed&fields=issuetype%2Csummary%2Creporter%2Cpriority%2Cstatus%2Cresolution%2Ccreated%2Cupdated&maxResults=1000`;
+  return fetchWithAuth(url, { method: 'GET' });
+};
 
 export const getWorklogCurrentIssue = async (issueKey) => {
-  const url = `${process.env.JIRA_API_PATH}/api/2/issue/${issueKey}/worklog?maxResults=5000`
-  const { user } = await auth();
-  const header = {
-    method: 'GET',
-    headers: {
-      'Cookie': `JSESSIONID=${user.session.value}`,
-    },
-  };
-  try {
-    const data = await fetchWithCredentials(url, header);
-    return data
-  } catch (error) {
-    return (error.message);
-  }
-}
+  const url = `${process.env.JIRA_API_PATH}/api/2/issue/${issueKey}/worklog?maxResults=5000`;
+  return fetchWithAuth(url, { method: 'GET' });
+};
 
 export const getAllDataUser = async () => {
   const url = `${process.env.API_PATH}/V1/all-user`;
-  const { user } = await auth();
-  const header = {
-    method: 'GET',
-    headers: {
-      'Cookie': `JSESSIONID=${user.session.value}`,
-    },
-  };
-  const data = await fetchWithCredentials(url, header);
-  const arr = []
-
-  data.map((item) => (
-    arr.push(item)
-  ));
-
-  return arr
+  return fetchWithAuth(url, { method: 'GET' });
 };
 
 export const getTimeLeaveTotal = async (username) => {
-  const url = `${process.env.API_PATH}/V1/timeleave/${username}`
-  const { user } = await auth();
-  const header = {
-    method: 'GET',
-    headers: {
-      'Cookie': `JSESSIONID=${user.session.value}`,
-    },
-  };
-  const data = await fetchWithCredentials(url, header);
-  const arr = []
-
-  data.map((item) => (
-    arr.push(item)
-  ));
-
-  return arr
-}
+  const url = `${process.env.API_PATH}/V1/timeleave/${username}`;
+  return fetchWithAuth(url, { method: 'GET' });
+};
 
 export const getTimeLeave = async (username) => {
-  const url = `${process.env.API_PATH}/V1/leave/${username}`
-  const { user } = await auth();
-  const header = {
-    method: 'GET',
-    headers: {
-      'Cookie': `JSESSIONID=${user.session.value}`,
-    },
-  };
-  const data = await fetchWithCredentials(url, header);
-  const arr = []
-
-  data.map((item) => (
-    arr.push(item)
-  ));
-
-  return arr
-}
+  const url = `${process.env.API_PATH}/V1/leave/${username}`;
+  return fetchWithAuth(url, { method: 'GET' });
+};
