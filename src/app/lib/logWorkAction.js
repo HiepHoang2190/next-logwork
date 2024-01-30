@@ -205,7 +205,7 @@ export const filterWorklogsByAuthor = async (data, authorName, month, year) => {
                 startdate: formatTime(filteredWorklog.started),
                 updated: formatTime(filteredWorklog.updated),
                 summary: item.fields.summary,
-                timeworked: filteredWorklog.timeSpentSeconds,
+                timeworked: item.fields.project.key === "LRM" ? (-filteredWorklog.timeSpentSeconds) : (filteredWorklog.timeSpentSeconds),
                 key: item.key,
                 pkey: item.key.split('-')[0],
                 issueid: item.id,
