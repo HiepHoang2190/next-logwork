@@ -80,7 +80,9 @@ export const logTimeElement = (arrLog = [], ind) => {
 }
 
 export const logTimeTotalIssue = (arrLog = []) => {
-    const final = arrLog && arrLog
+    const filteredArr = arrLog.filter(item => item.pkey !== 'LRM');
+
+    const final = filteredArr && filteredArr
         .map((item) =>
             Object.values(item['logs']).reduce((a, b) => Number(a) + Number((b['timeworked'] / 3600).toFixed(2)), 0)
         )
