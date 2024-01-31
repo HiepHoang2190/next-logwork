@@ -20,7 +20,7 @@
   padding: 20px;
 }
 
- .container .table_margin_top .issueInfo {
+.container .table_margin_top .issueInfo {
   color: var(--text);
   font-family: var(--fontFamily);
   font-size: 14px;
@@ -43,7 +43,7 @@
   gap: 20px;
   width: 100%;
   color: var(--colorLotus);
-  font-family:  var(--fontFamily);
+  font-family: var(--fontFamily);
   font-size: 26px;
   font-style: normal;
   font-weight: 600;
