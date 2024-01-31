@@ -1,5 +1,7 @@
+"use server";
 import { auth } from "@/app/auth";
-import LogWorksUi from "@/app/ui/dashboard/logwork/logwork";
+import dynamic from "next/dynamic";
+import { BarLoader } from "react-spinner-animated";
 import { getAllDataUser, getUserIssues } from "@/app/lib/fetchApi";
 import Unauthorized from "@/app/ui/dashboard/unauthorized/unauthorized";
 import {
@@ -53,9 +55,14 @@ const LogWorkCalendarPage = async ({ searchParams }) => {
     year
   );
 
+  const ComponentCalendar = dynamic(
+    () => import("@/app/ui/dashboard/logwork/logwork"),
+    { ssr: false, loading: () => <BarLoader /> }
+  );
+
   return (
     <>
-      <LogWorksUi
+      <ComponentCalendar
         dataUsers={dataUsers}
         dataIssue={userLogwork}
         dataAllUser={dataAllUser}
