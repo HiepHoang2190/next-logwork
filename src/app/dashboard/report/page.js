@@ -1,7 +1,9 @@
 "use server";
+
 import { auth } from "@/app/auth";
+import dynamic from "next/dynamic";
+import { BarLoader } from "react-spinner-animated";
 import { getAllDataUser, getUserIssues } from "@/app/lib/fetchApi";
-import LogWorkTablePage from "@/app/ui/dashboard/logwork/logworkTable";
 import LogWorkExcelPage from "@/app/ui/dashboard/logwork/logworkExcel";
 import Unauthorized from "@/app/ui/dashboard/unauthorized/unauthorized";
 import LogWorkDatePicker from "@/app/ui/dashboard/logwork/logworkDatePicker";
@@ -72,6 +74,11 @@ const LogWorksPage = async ({ searchParams }) => {
     year
   );
 
+  const ComponentLogWorkTablePage = dynamic(
+    () => import("@/app/ui/dashboard/logwork/logworkTable"),
+    { ssr: false, loading: () => <BarLoader />}
+  );
+
   return (
     <>
       <div className="wrapper-datetime">
@@ -85,7 +92,7 @@ const LogWorksPage = async ({ searchParams }) => {
         />
       </div>
 
-      <LogWorkTablePage dataIssue={userLogwork} month={month} year={year} />
+      <ComponentLogWorkTablePage dataIssue={userLogwork} month={month} year={year} />
     </>
   );
 };

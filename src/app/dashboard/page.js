@@ -1,7 +1,8 @@
 "use server";
 import { auth } from "@/app/auth";
-import styles from "../ui/dashboard/dashboard.module.css";
-import OpenTickets from "../ui/dashboard/openTickets/openTicket";
+import dynamic from "next/dynamic";
+import { BarLoader } from "react-spinner-animated";
+import styles from "@/app/ui/dashboard/dashboard.module.css";
 import Unauthorized from "@/app/ui/dashboard/unauthorized/unauthorized";
 import { getUserCurrentIssues } from "@/app/lib/fetchApi";
 
@@ -43,10 +44,15 @@ const Dashboard = async () => {
       };
     });
 
+    const ComponentOpenTickets = dynamic(
+      () => import("@/app/ui/dashboard/openTickets/openTicket"),
+      { ssr: false, loading: () => <BarLoader />}
+    );
+
     return (
       <div className={styles.main}>
         <h1 className={styles.title}>Open Issues</h1>
-        <OpenTickets dataIssue={mappedArray} />
+        <ComponentOpenTickets dataIssue={mappedArray} />
       </div>
     );
   } else {

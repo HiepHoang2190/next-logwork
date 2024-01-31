@@ -1,6 +1,8 @@
 "use server";
+
 import { auth } from "@/app/auth";
-import LeavePage from "../../ui/dashboard/leave/leave";
+import dynamic from "next/dynamic";
+import { BarLoader } from "react-spinner-animated";
 import Unauthorized from "@/app/ui/dashboard/unauthorized/unauthorized";
 import {
   fetchDataLeave,
@@ -45,10 +47,15 @@ const Page = async ({ searchParams }) => {
   const { arr_time_leave, arr_time_leave_total } = await fetchDataLeave(
     currentUserData?.user_key
   );
+  
+  const ComponentLeavePage = dynamic(
+    () => import("@/app/ui/dashboard/leave/leave"),
+    { ssr: false, loading: () => <BarLoader />}
+  );
 
   return (
     <div className="mt-3">
-      <LeavePage
+      <ComponentLeavePage
         arr_time_leave={arr_time_leave}
         data_time_leave_total={arr_time_leave_total}
         dataUserName={user.username}
