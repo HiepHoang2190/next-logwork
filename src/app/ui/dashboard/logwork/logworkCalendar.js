@@ -1,13 +1,13 @@
-'use client'
+"use client";
 
-import { useEffect, useState, useRef } from 'react';
-import { useSearchParams } from 'next/navigation';
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction'; // needed for dayClick
-import listPlugin from '@fullcalendar/list';
-import CalendarModal from '@/app/ui/dashboard/logwork/modal';
-import styles from './logwork.module.css';
+import { useEffect, useState, useRef } from "react";
+import { useSearchParams } from "next/navigation";
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction"; // needed for dayClick
+import listPlugin from "@fullcalendar/list";
+import CalendarModal from "@/app/ui/dashboard/logwork/modal";
+import styles from "./logwork.module.css";
 
 const Calendar = ({ logWork }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,8 +15,8 @@ const Calendar = ({ logWork }) => {
   const calendarRef = useRef(null);
   const searchParams = useSearchParams();
 
-  const year = searchParams.get('year') || new Date().getFullYear();
-  const month = searchParams.get('month') || new Date().getMonth() + 1;
+  const year = searchParams.get("year") || new Date().getFullYear();
+  const month = searchParams.get("month") || new Date().getMonth() + 1;
 
   const renderEventContent = (eventInfo) => (
     <div className={styles.fcContent}>
@@ -52,16 +52,16 @@ const Calendar = ({ logWork }) => {
       },
     ],
     eventClick: handleDateClick,
-    initialView: 'dayGridMonth',
+    initialView: "dayGridMonth",
     headerToolbar: {
-      left: 'title',
-      center: '',
-      right: '',
+      left: "title",
+      center: "",
+      right: "",
     },
     eventTimeFormat: {
-      hour: 'numeric',
-      minute: '2-digit',
-      meridiem: 'short',
+      hour: "numeric",
+      minute: "2-digit",
+      meridiem: "short",
     },
     eventContent: renderEventContent,
   };
@@ -77,7 +77,11 @@ const Calendar = ({ logWork }) => {
   return (
     <>
       <FullCalendar {...settings} ref={calendarRef} />
-      <CalendarModal open={isOpen} modalContent={modalContent} onClose={() => setIsOpen(false)} />
+      <CalendarModal
+        open={isOpen}
+        modalContent={modalContent}
+        onClose={() => setIsOpen(false)}
+      />
     </>
   );
 };
