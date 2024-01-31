@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
+import LogWorkExcelPage from "@/app/ui/dashboard/logwork/logworkExcel";
+import LogWorkDatePicker from "@/app/ui/dashboard/logwork/logworkDatePicker";
 import {
   processData,
   groupData,
@@ -13,7 +15,7 @@ import {
 } from "@/app/lib/logWorkAction";
 
 const LogWorkTablePage = (props) => {
-  const { dataIssue, month, year } = props;
+  const { user, username, dataAllUser, dataIssue, month, year } = props;
 
   const [dataTable, setDataTable] = useState();
 
@@ -42,6 +44,17 @@ const LogWorkTablePage = (props) => {
 
   return (
     <>
+      <div className="wrapper-datetime">
+        <LogWorkDatePicker />
+        <LogWorkExcelPage
+          username={username}
+          month={month}
+          year={year}
+          dataAllUser={dataAllUser}
+          dataUserName={user.username}
+        />
+      </div>
+
       <table className="log-work" id="table-to-xls">
         <thead>
           <tr>

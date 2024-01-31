@@ -241,7 +241,7 @@ export const filterWorklogsByAuthor = async (data, authorName, month, year) => {
 
 const padTo2Digits = (num) => num.toString().padStart(2, "0");
 
-const formatDate = (date) =>
+export const formatDate = (date) =>
   [
     padTo2Digits(date.getDate()),
     padTo2Digits(date.getMonth() + 1),

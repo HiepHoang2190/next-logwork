@@ -4,9 +4,7 @@ import { auth } from "@/app/auth";
 import dynamic from "next/dynamic";
 import { BarLoader } from "react-spinner-animated";
 import { getAllDataUser, getUserIssues } from "@/app/lib/fetchApi";
-import LogWorkExcelPage from "@/app/ui/dashboard/logwork/logworkExcel";
 import Unauthorized from "@/app/ui/dashboard/unauthorized/unauthorized";
-import LogWorkDatePicker from "@/app/ui/dashboard/logwork/logworkDatePicker";
 import {
   lastDayOfMonth,
   filterWorklogsByAuthor,
@@ -76,23 +74,19 @@ const LogWorksPage = async ({ searchParams }) => {
 
   const ComponentLogWorkTablePage = dynamic(
     () => import("@/app/ui/dashboard/logwork/logworkTable"),
-    { ssr: false, loading: () => <BarLoader />}
+    { ssr: false, loading: () => <BarLoader /> }
   );
 
   return (
     <>
-      <div className="wrapper-datetime">
-        <LogWorkDatePicker />
-        <LogWorkExcelPage
-          username={username}
-          month={month}
-          year={year}
-          dataAllUser={dataAllUser}
-          dataUserName={user.username}
-        />
-      </div>
-
-      <ComponentLogWorkTablePage dataIssue={userLogwork} month={month} year={year} />
+      <ComponentLogWorkTablePage
+        user={user}
+        username={username}
+        dataAllUser={dataAllUser}
+        dataIssue={userLogwork}
+        month={month}
+        year={year}
+      />
     </>
   );
 };
