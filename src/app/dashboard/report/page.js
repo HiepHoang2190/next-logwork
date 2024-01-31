@@ -2,7 +2,7 @@
 
 import { auth } from "@/app/auth";
 import dynamic from "next/dynamic";
-import { BarLoader } from "react-spinner-animated";
+import Loading from "@/app/ui/dashboard/loading/loading";
 import { getAllDataUser, getUserIssues } from "@/app/lib/fetchApi";
 import Unauthorized from "@/app/ui/dashboard/unauthorized/unauthorized";
 import {
@@ -74,7 +74,7 @@ const LogWorksPage = async ({ searchParams }) => {
 
   const ComponentLogWorkTablePage = dynamic(
     () => import("@/app/ui/dashboard/logwork/logworkTable"),
-    { ssr: false, loading: () => <BarLoader /> }
+    { ssr: false, loading: () => <Loading /> }
   );
 
   return (

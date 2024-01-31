@@ -2,7 +2,7 @@
 
 import { auth } from "@/app/auth";
 import dynamic from "next/dynamic";
-import { BarLoader } from "react-spinner-animated";
+import Loading from "@/app/ui/dashboard/loading/loading";
 import Unauthorized from "@/app/ui/dashboard/unauthorized/unauthorized";
 import {
   fetchDataLeave,
@@ -50,7 +50,7 @@ const Page = async ({ searchParams }) => {
   
   const ComponentLeavePage = dynamic(
     () => import("@/app/ui/dashboard/leave/leave"),
-    { ssr: false, loading: () => <BarLoader />}
+    { ssr: false, loading: () => <Loading />}
   );
 
   return (
