@@ -1,7 +1,7 @@
 "use server";
 import { auth } from "@/app/auth";
 import dynamic from "next/dynamic";
-import { BarLoader } from "react-spinner-animated";
+import Loading from "@/app/ui/dashboard/loading/loading";
 import styles from "@/app/ui/dashboard/dashboard.module.css";
 import Unauthorized from "@/app/ui/dashboard/unauthorized/unauthorized";
 import { getUserCurrentIssues } from "@/app/lib/fetchApi";
@@ -46,7 +46,7 @@ const Dashboard = async () => {
 
     const ComponentOpenTickets = dynamic(
       () => import("@/app/ui/dashboard/openTickets/openTicket"),
-      { ssr: false, loading: () => <BarLoader />}
+      { ssr: false, loading: () => <Loading />}
     );
 
     return (
