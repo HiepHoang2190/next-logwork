@@ -12,6 +12,7 @@
   line-height: normal;
   text-transform: capitalize;
   border-left: 6px solid transparent;
+  text-wrap: nowrap;
 }
 
 .container svg {

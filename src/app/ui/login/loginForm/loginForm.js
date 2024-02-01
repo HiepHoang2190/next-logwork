@@ -126,7 +126,7 @@ const LoginForm = () => {
 
                   <OutlinedInput
                     label="Password"
-                    value={values.password}
+                    value={values.password || undefined}
                     id="auth-login-password"
                     onChange={handleChange("password")}
                     type={values.showPassword ? "text" : "password"}
