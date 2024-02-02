@@ -9,7 +9,10 @@ export const authenticate = async (formData) => {
     await signIn("credentials", { username, password, redirect: false });
     return { success: "Login Success!" };
   } catch (err) {
-    return { error: "Incorrect Password!" };
+    const errObj = err.cause;
+    const innerErr = errObj.err;
+    const message = innerErr.message.replace(/Error: /g, '');
+    return { error: message };
   }
 };
 
@@ -31,8 +34,10 @@ export const fetchWithCredentials = async (url, options = {}) => {
     if (!response.ok) {
       if ([400, 401, 403].includes(response.status)) {
         throw new Error("Unauthorized!");
+      } else if ([500, 501, 502, 503].includes(response.status)) {
+        throw new Error("fetch failed");
       } else {
-        throw new Error(`Failed to fetch: ${response.status}`);
+        throw new Error(`Failed to fetch: ${response}`);
       }
     }
     return response.json();

@@ -20,10 +20,13 @@ const login = async (credentials) => {
         }),
       }
     );
-
-    if (sessionResponse.errorMessages) {
-      console.error("Incorrect password!");
+    
+    if (sessionResponse === "Unauthorized!") {
       throw new Error("Incorrect password!");
+    }
+
+    if (sessionResponse === "fetch failed") {
+      throw new Error("Something when wrongs, please try again later!");
     }
 
     user.session = sessionResponse.session;
@@ -57,7 +60,7 @@ const login = async (credentials) => {
 
     return user;
   } catch (err) {
-    throw new Error("Failed to login!");
+    throw new Error(err.message);
   }
 };
 
@@ -70,7 +73,7 @@ export const { signIn, signOut, auth } = NextAuth({
           const user = await login(credentials);
           return user;
         } catch (err) {
-          return null;
+          throw new Error(err.message);
         }
       },
     }),
