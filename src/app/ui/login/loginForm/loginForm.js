@@ -12,7 +12,6 @@ import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiCard from "@mui/material/Card";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
@@ -27,7 +26,7 @@ import EyeOffOutline from "mdi-material-ui/EyeOffOutline";
 
 // ** Styled Components
 const Card = styled(MuiCard)(({ theme }) => ({
-  [theme.breakpoints.up("sm")]: { width: "28rem" },
+  [theme.breakpoints.up("sm")]: { width: "500px" },
 }));
 
 const LoginForm = () => {
@@ -76,15 +75,18 @@ const LoginForm = () => {
       toast.error(data?.error);
     }
   };
+
   return (
     <>
       {mounted && (
         <Box className="content-center">
-          <Card sx={{ zIndex: 1 }}>
-            <CardContent>
+          <Card sx={{ zIndex: 1, borderRadius: "24px" }}>
+            <CardContent
+              sx={{ padding: "36px", paddingBottom: "36px !important" }}
+            >
               <Box
                 sx={{
-                  mb: 2,
+                  marginBottom: "20px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -95,13 +97,18 @@ const LoginForm = () => {
                   src="/jira-logo.png"
                 />
               </Box>
-              <Box sx={{ mb: 6 }}>
+              <Box>
                 <Typography
                   variant="h5"
                   className={styles.text_center}
-                  sx={{ fontWeight: 600, marginBottom: 1.5 }}
+                  sx={{
+                    fontWeight: 600,
+                    fontSize: "32px",
+                    lineHeight: "37.5px",
+                    marginBottom: "32px",
+                  }}
                 >
-                  Welcome to Lotus! 👋🏻
+                  Welcome to Lotus!
                 </Typography>
               </Box>
 
@@ -110,21 +117,44 @@ const LoginForm = () => {
                 autoComplete="off"
                 onSubmit={(e) => e.preventDefault()}
               >
-                <TextField
-                  onChange={handleChange("username")}
-                  autoFocus
-                  fullWidth
-                  id="username"
-                  label="Username"
-                  sx={{ marginBottom: 4 }}
-                />
+                <FormControl fullWidth sx={{ mb: 4 }}>
+                  <InputLabel
+                    htmlFor="username"
+                    sx={{
+                      padding: "4px 5px",
+                      fontSize: "20px",
+                      fontWeight: "400",
+                      lineHeight: "23.45px",
+                      color: "#848484",
+                    }}
+                  >
+                    Username
+                  </InputLabel>
+
+                  <OutlinedInput
+                    sx={{ borderRadius: "16px" }}
+                    label="Username"
+                    id="username"
+                    onChange={handleChange("username")}
+                  />
+                </FormControl>
 
                 <FormControl fullWidth sx={{ mb: 4 }}>
-                  <InputLabel htmlFor="auth-login-password">
+                  <InputLabel
+                    htmlFor="auth-login-password"
+                    sx={{
+                      padding: "4px 5px",
+                      fontSize: "20px",
+                      fontWeight: "400",
+                      lineHeight: "23.45px",
+                      color: "#848484",
+                    }}
+                  >
                     Password
                   </InputLabel>
 
                   <OutlinedInput
+                    sx={{ borderRadius: "16px", paddingRight: "20px" }}
                     label="Password"
                     value={values.password || undefined}
                     id="auth-login-password"
@@ -150,10 +180,19 @@ const LoginForm = () => {
                 </FormControl>
 
                 <Button
+                  id="login-button"
                   fullWidth
                   size="large"
                   variant="contained"
-                  sx={{ marginBottom: 7 }}
+                  sx={{
+                    padding: "20px",
+                    borderRadius: "16px",
+                    background:
+                      "linear-gradient(90deg, #180110 0%, #D41E8E 201.53%)",
+                    fontWeight: "500",
+                    fontSize: "20px",
+                    lineHeight: "23.45px",
+                  }}
                   onClick={sendValue}
                 >
                   Login
