@@ -29,9 +29,54 @@ const Card = styled(MuiCard)(({ theme }) => ({
   [theme.breakpoints.up("sm")]: { width: "500px" },
 }));
 
+const labelStyles = {
+  "&.MuiFormLabel-root.MuiInputLabel-root": {
+    color: "#848484",
+    fontSize: "20px",
+    fontWeight: "400",
+    lineHeight: "23.45px",
+    top: "4px",
+    left: "5px",
+  },
+  "&.MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-shrink": {
+    top: "0px",
+    left: "-3px",
+  },
+  "~.MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary fieldset > legend > span": {
+    paddingRight: "13px",
+  }
+};
+
+const inputStyles = {
+  "&.MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl": {
+    borderRadius: "16px",
+  },
+  "&.MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl input#username": {
+    padding: "20px",
+  },
+  "&.MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl input#auth-login-password": {
+    padding: "20px 0px 20px 20px",
+  },
+};
+
+const buttonStyles = {
+  "&.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary":
+    {
+      padding: "20px",
+      borderRadius: "16px",
+      background: "linear-gradient(90deg, #180110 0%, #D41E8E 201.53%)",
+      fontSize: "20px",
+      fontWeight: "500",
+      lineHeight: "23.45px",
+    },
+  "&.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary:hover":
+    {
+      boxShadow:" 0px 0px 0px 2px var( --colorLotus)"
+    },
+};
+
 const LoginForm = () => {
   // ** State
-  const [err, setErr] = useState();
   const [mounted, setMounted] = useState(false);
   const [values, setValues] = useState({
     username: "",
@@ -118,21 +163,12 @@ const LoginForm = () => {
                 onSubmit={(e) => e.preventDefault()}
               >
                 <FormControl fullWidth sx={{ mb: 4 }}>
-                  <InputLabel
-                    htmlFor="username"
-                    sx={{
-                      padding: "4px 5px",
-                      fontSize: "20px",
-                      fontWeight: "400",
-                      lineHeight: "23.45px",
-                      color: "#848484",
-                    }}
-                  >
+                  <InputLabel htmlFor="username" sx={{ ...labelStyles }}>
                     Username
                   </InputLabel>
 
                   <OutlinedInput
-                    sx={{ borderRadius: "16px" }}
+                    sx={{ ...inputStyles }}
                     label="Username"
                     id="username"
                     onChange={handleChange("username")}
@@ -142,19 +178,13 @@ const LoginForm = () => {
                 <FormControl fullWidth sx={{ mb: 4 }}>
                   <InputLabel
                     htmlFor="auth-login-password"
-                    sx={{
-                      padding: "4px 5px",
-                      fontSize: "20px",
-                      fontWeight: "400",
-                      lineHeight: "23.45px",
-                      color: "#848484",
-                    }}
+                    sx={{ ...labelStyles }}
                   >
                     Password
                   </InputLabel>
 
                   <OutlinedInput
-                    sx={{ borderRadius: "16px", paddingRight: "20px" }}
+                    sx={{ ...inputStyles, paddingRight: "20px" }}
                     label="Password"
                     value={values.password || undefined}
                     id="auth-login-password"
@@ -180,34 +210,14 @@ const LoginForm = () => {
                 </FormControl>
 
                 <Button
-                  id="login-button"
                   fullWidth
                   size="large"
                   variant="contained"
-                  sx={{
-                    padding: "20px",
-                    borderRadius: "16px",
-                    background:
-                      "linear-gradient(90deg, #180110 0%, #D41E8E 201.53%)",
-                    fontWeight: "500",
-                    fontSize: "20px",
-                    lineHeight: "23.45px",
-                  }}
+                  sx={{ ...buttonStyles }}
                   onClick={sendValue}
                 >
                   Login
                 </Button>
-
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    flexWrap: "wrap",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Typography variant="body2">{err && err}</Typography>
-                </Box>
               </form>
             </CardContent>
           </Card>

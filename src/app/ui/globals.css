@@ -253,22 +253,3 @@ th.date {
 ::-webkit-scrollbar-thumb:hover {
   background: #999999;
 }
-
-/* Login Form */
-
-button#login-button:hover {
-  box-shadow: 0px 0px 0px 2px var( --colorLotus);
-}
-
-input#auth-login-password {
-  padding: 20px 0px 20px 20px;
-}
-
-input#username {
-  padding: 20px;
-}
-
-input#auth-login-password ~ fieldset > legend > span,
-input#username ~ fieldset > legend > span {
-  padding-right: 25px !important;
-}
