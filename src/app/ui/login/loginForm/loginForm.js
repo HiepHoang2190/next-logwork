@@ -19,6 +19,7 @@ import CardContent from "@mui/material/CardContent";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
+import CircularProgress from "@mui/material/CircularProgress";
 
 // ** Icons Imports
 import EyeOutline from "mdi-material-ui/EyeOutline";
@@ -42,21 +43,25 @@ const labelStyles = {
     top: "0px",
     left: "-3px",
   },
-  "~.MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary fieldset > legend > span": {
-    paddingRight: "13px",
-  }
+  "~.MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary fieldset > legend > span":
+    {
+      paddingRight: "13px",
+    },
 };
 
 const inputStyles = {
-  "&.MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl": {
-    borderRadius: "16px",
-  },
-  "&.MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl input#username": {
-    padding: "20px",
-  },
-  "&.MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl input#auth-login-password": {
-    padding: "20px 0px 20px 20px",
-  },
+  "&.MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl":
+    {
+      borderRadius: "16px",
+    },
+  "&.MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl input#username":
+    {
+      padding: "20px",
+    },
+  "&.MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl input#auth-login-password":
+    {
+      padding: "20px 0px 20px 20px",
+    },
 };
 
 const buttonStyles = {
@@ -69,15 +74,21 @@ const buttonStyles = {
       fontWeight: "500",
       lineHeight: "23.45px",
     },
+  "&.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.disabled":
+    {
+      background: "linear-gradient(90deg, #18011082 0%, #d41e8ebf 201.53%)",
+      pointerEvents: "none",
+    },
   "&.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary:hover":
     {
-      boxShadow:" 0px 0px 0px 2px var( --colorLotus)"
+      boxShadow: " 0px 0px 0px 2px var( --colorLotus)",
     },
 };
 
 const LoginForm = () => {
   // ** State
   const [mounted, setMounted] = useState(false);
+  const [isFetch, setIsFetch] = useState(false);
   const [values, setValues] = useState({
     username: "",
     password: "",
@@ -110,6 +121,7 @@ const LoginForm = () => {
       showPassword: values.showPassword,
     };
 
+    setIsFetch(true);
     const data = await authenticate(newValues);
 
     if (!data?.error) {
@@ -118,6 +130,7 @@ const LoginForm = () => {
       router.refresh();
     } else {
       toast.error(data?.error);
+      setIsFetch(false);
     }
   };
 
@@ -210,13 +223,28 @@ const LoginForm = () => {
                 </FormControl>
 
                 <Button
+                  className={isFetch ? "disabled" : ""}
                   fullWidth
                   size="large"
                   variant="contained"
                   sx={{ ...buttonStyles }}
                   onClick={sendValue}
                 >
-                  Login
+                  {isFetch ? (
+                    <>
+                      <CircularProgress
+                        size={20}
+                        sx={{
+                          color: "white",
+                          marginRight: "10px",
+                          marginBottom: "2px",
+                        }}
+                      />
+                      Login
+                    </>
+                  ) : (
+                    "Login"
+                  )}
                 </Button>
               </form>
             </CardContent>
