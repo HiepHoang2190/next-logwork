@@ -9,9 +9,7 @@ export const authenticate = async (formData) => {
     await signIn("credentials", { username, password, redirect: false });
     return { success: "Login Success!" };
   } catch (err) {
-    const errObj = err.cause;
-    const innerErr = errObj.err;
-    const message = innerErr.message.replace(/Error: /g, '');
+    const message = err?.cause?.err?.message.replace(/Error: /g, '');
     return { error: message };
   }
 };
@@ -24,21 +22,16 @@ export const fetchWithCredentials = async (url, options = {}) => {
         Accept: "application/json, text/plain, */*",
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
         "Access-Control-Allow-Credentials": "true",
-        "Access-Control-Allow-Headers": "X-CSRF-Token",
+        "Access-Control-Allow-Headers": "X-CSRF-Token, Content-Type",
         ...options.headers,
       },
     });
-
     if (!response.ok) {
-      if ([400, 401, 403].includes(response.status)) {
-        throw new Error("Unauthorized!");
-      } else if ([500, 501, 502, 503].includes(response.status)) {
-        throw new Error("fetch failed");
-      } else {
-        throw new Error(`Failed to fetch: ${response}`);
-      }
+      if ([400, 401, 403].includes(response.status)) throw new Error("Unauthorized!");
+      else if ([500, 501, 502, 503].includes(response.status)) throw new Error("fetch failed");
+      else throw new Error(`Failed to fetch: ${response}`);
     }
     return response.json();
   } catch (error) {
@@ -86,8 +79,10 @@ const getTimeLeave = async (username) => {
 };
 
 export const fetchDataLeave = async (username) => {
-  const data_time_leave = await getTimeLeave(username);
-  const data_time_leave_total = await getTimeLeaveTotal(username);
+  const [data_time_leave, data_time_leave_total] = await Promise.all([
+    getTimeLeave(username),
+    getTimeLeaveTotal(username),
+  ]);
 
   const arr_time_leave = data_time_leave
     .map(processLeaveItem)
