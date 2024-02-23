@@ -36,7 +36,7 @@ const labelStyles = {
     fontSize: "20px",
     fontWeight: "400",
     lineHeight: "23.45px",
-    top: "4px",
+    top: "6px",
     left: "5px",
   },
   "&.MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-shrink": {
@@ -45,7 +45,7 @@ const labelStyles = {
   },
   "~.MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary fieldset > legend > span":
     {
-      paddingRight: "13px",
+      paddingRight: "0px",
     },
 };
 
@@ -53,14 +53,17 @@ const inputStyles = {
   "&.MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl":
     {
       borderRadius: "16px",
+      fontSize: "20px"
     },
   "&.MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl input#username":
     {
       padding: "20px",
+      fontSize: "20px"
     },
   "&.MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl input#auth-login-password":
     {
       padding: "20px 0px 20px 20px",
+      fontSize: "20px"
     },
 };
 
@@ -73,6 +76,7 @@ const buttonStyles = {
       fontSize: "20px",
       fontWeight: "500",
       lineHeight: "23.45px",
+      height: "63px"
     },
   "&.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.disabled":
     {
@@ -175,7 +179,7 @@ const LoginForm = () => {
                 autoComplete="off"
                 onSubmit={(e) => e.preventDefault()}
               >
-                <FormControl fullWidth sx={{ mb: 4 }}>
+                <FormControl fullWidth sx={{ mb: 4, fontSize:"20px" }}>
                   <InputLabel htmlFor="username" sx={{ ...labelStyles }}>
                     Username
                   </InputLabel>
@@ -188,7 +192,7 @@ const LoginForm = () => {
                   />
                 </FormControl>
 
-                <FormControl fullWidth sx={{ mb: 4 }}>
+                <FormControl fullWidth sx={{ mb: 4, fontSize:"20px" }}>
                   <InputLabel
                     htmlFor="auth-login-password"
                     sx={{ ...labelStyles }}
