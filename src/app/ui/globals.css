@@ -94,6 +94,12 @@ table.log-work tbody td.title-issue {
   text-align: left;
 }
 
+table.log-work tbody td.title-issue a:hover{
+  color: var(--colorLotus);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 table.log-work tbody td.leave-date {
   background-color: #e79696;
 }
