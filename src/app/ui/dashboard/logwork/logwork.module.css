@@ -17,10 +17,12 @@
   color: inherit;
   margin-bottom: 16px;
 }
+
 .modalTable {
   width: 600px;
   height: 270px;
 }
+
 .modalSubTitle {
   width: 100px;
   text-align: left;
@@ -29,6 +31,7 @@
 .modalSubContents {
   text-align: left;
 }
+
 .modal {
   position: fixed;
   top: 0;
@@ -50,15 +53,16 @@
 }
 
 .calEvents {
-  background-color: var(--fc-event-bg-color);
-  border: 1px solid var(--fc-event-border-color);
+  background-color: var(--colorLotus);
+  border: 1px solid var(--colorLotus);
   border-radius: 3px;
   min-height: 30px;
   color: #fff;
 }
 
 .calEvents:hover {
-  background: #44a2ff !important;
+  background-color: var(--colorLotus);
+  opacity: 0.8;
   cursor: pointer;
 }
 
@@ -75,3 +79,63 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* tooltip css */
+.tooltip {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.tooltip:hover {
+  cursor: pointer;
+}
+
+/* make our tooltip show up on hover */
+.tooltip:hover .tooltip_container {
+  width: 300px;
+  display: block;
+  /* this is used to place the tooltip bubble above the button, edit to value that fits you*/
+  /* also you can change top to bottom, right or left for different tooltip location */
+  position: absolute;
+  top: -77px;
+  right: -5px;
+
+}
+
+/* make the tooltip hidden */
+.tooltip_container {
+  display: none;
+}
+
+/* top part of tooltip container */
+.tooltip_text {
+  background: var(--colorLotus);
+  vertical-align: middle;
+  height: 60px;
+  border-radius: 3px;
+  padding: 7px;
+}
+
+.tooltip_text p {
+  text-align: center;
+  color: white;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+/* the botton part of the tooltip container */
+.tooltip_text_bottom {
+  width: 0;
+  height: 0;
+  border-left: 2em solid transparent;
+  border-right: 2em solid transparent;
+  border-top: 0.9em solid var(--colorLotus);
+  position: absolute;
+  right: 0;
+}
+
+/* end of tooltip css */

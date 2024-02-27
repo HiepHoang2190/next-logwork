@@ -46,6 +46,23 @@ export const logTimeTotal = (arrLog = []) => {
   return t;
 };
 
+export const logCommentElement = (arrLog = [], ind) => {
+  let comment = null;
+  let day_worked;
+
+  arrLog?.forEach((element) => {
+    const createDate = element["created"]?.substring(0, 10);
+    const get_day = createDate?.split("-")[2];
+
+    if (Number(ind) === Number(get_day)) {
+      comment = element["comment"];
+      day_worked = get_day;
+    }
+  });
+
+  return comment;
+};
+
 export const logTimeElement = (arrLog = [], ind) => {
   let timeworked = null;
   let day_worked;

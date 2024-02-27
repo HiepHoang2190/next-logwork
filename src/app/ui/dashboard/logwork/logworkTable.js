@@ -9,10 +9,12 @@ import {
   groupData,
   logTimeTotal,
   logTimeElement,
+  logCommentElement,
   logTimeTotalIssue,
   logTimeTotalIssueByDay,
   getDatefromDay,
 } from "@/app/lib/logWorkAction";
+import styles from "./logwork.module.css";
 
 const LogWorkTablePage = (props) => {
   const { user, username, dataAllUser, dataIssue, month, year } = props;
@@ -167,13 +169,20 @@ const LogWorkTablePage = (props) => {
                           key={ind}
                           id="weekend"
                         >
-                          {logTimeElement(Object.values(logs), element - 4) !==
-                          null
-                            ? `${logTimeElement(
-                                Object.values(logs),
-                                element - 4
-                              )}h`
-                            : ""}
+                         {logTimeElement(Object.values(logs), element - 4) !==
+                            null && (
+                              <div className={`${styles.tooltip}`}>
+                              {logTimeElement(Object.values(logs), element - 4)}h
+                              <div className={`${styles.tooltip_container}`}>
+                                <div className={`${styles.tooltip_text}`}>
+                                  <p>{logCommentElement((Object.values(logs)), element -4)}</p>
+                                </div>
+                                <div
+                                  className={`${styles.tooltip_text_bottom}`}
+                                ></div>
+                              </div>
+                            </div>
+                          )}
                         </td>
                       ) : (
                         <td
@@ -181,12 +190,21 @@ const LogWorkTablePage = (props) => {
                           key={ind}
                         >
                           {logTimeElement(Object.values(logs), element - 4) !==
-                          null
-                            ? `${logTimeElement(
-                                Object.values(logs),
-                                element - 4
-                              )}h`
-                            : ""}
+                          null ? (
+                            <div className={`${styles.tooltip}`}>
+                              {logTimeElement(Object.values(logs), element - 4)}h
+                              <div className={`${styles.tooltip_container}`}>
+                                <div className={`${styles.tooltip_text}`}>
+                                  <p>{logCommentElement((Object.values(logs)), element -4)}</p>
+                                </div>
+                                <div
+                                  className={`${styles.tooltip_text_bottom}`}
+                                ></div>
+                              </div>
+                            </div>
+                          ) : (
+                            ""
+                          )}
                         </td>
                       );
                   }
