@@ -5,10 +5,7 @@ import dynamic from "next/dynamic";
 import Loading from "@/app/ui/dashboard/loading/loading";
 import { getAllDataUser, getUserIssues } from "@/app/lib/fetchApi";
 import Unauthorized from "@/app/ui/dashboard/unauthorized/unauthorized";
-import {
-  filterWorklogsByAuthor,
-  lastDayOfMonth,
-} from "@/app/lib/logWorkAction";
+import { filterWorklogsByAuthor } from "@/app/lib/logWorkAction";
 
 export async function generateMetadata({ searchParams }) {
   const { user } = await auth();
@@ -35,12 +32,7 @@ const LogWorkCalendarPage = async ({ searchParams }) => {
   username = username !== undefined ? username : user.username;
 
   const dataAllUser = await getAllDataUser();
-  const dataUsers = await getUserIssues(
-    username,
-    year,
-    month,
-    lastDayOfMonth(year, month)
-  );
+  const dataUsers = await getUserIssues(username, year, month);
 
   if (dataUsers === "Unauthorized!") {
     return <Unauthorized status={"Unauthorized!"} />;

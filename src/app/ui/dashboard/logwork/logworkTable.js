@@ -15,6 +15,7 @@ import {
   getDatefromDay,
 } from "@/app/lib/logWorkAction";
 import styles from "./logwork.module.css";
+import { PiWarningBold } from "react-icons/pi";
 
 const LogWorkTablePage = (props) => {
   const { user, username, dataAllUser, dataIssue, month, year } = props;
@@ -169,13 +170,29 @@ const LogWorkTablePage = (props) => {
                           key={ind}
                           id="weekend"
                         >
-                         {logTimeElement(Object.values(logs), element - 4) !==
+                          {logTimeElement(Object.values(logs), element - 4) !==
                             null && (
-                              <div className={`${styles.tooltip}`}>
-                              {logTimeElement(Object.values(logs), element - 4)}h
+                            <div className={`${styles.tooltip}`}>
+                              {logTimeElement(Object.values(logs), element - 4)}
+                              h
                               <div className={`${styles.tooltip_container}`}>
                                 <div className={`${styles.tooltip_text}`}>
-                                  <p>{logCommentElement((Object.values(logs)), element -4)}</p>
+                                  <p>
+                                    {logCommentElement(
+                                      Object.values(logs),
+                                      element - 4
+                                    ) ? (
+                                      logCommentElement(
+                                        Object.values(logs),
+                                        element - 4
+                                      )
+                                    ) : (
+                                      <>
+                                        <PiWarningBold /> This logwork doesn't
+                                        have a comment!
+                                      </>
+                                    )}
+                                  </p>
                                 </div>
                                 <div
                                   className={`${styles.tooltip_text_bottom}`}
@@ -192,10 +209,26 @@ const LogWorkTablePage = (props) => {
                           {logTimeElement(Object.values(logs), element - 4) !==
                           null ? (
                             <div className={`${styles.tooltip}`}>
-                              {logTimeElement(Object.values(logs), element - 4)}h
+                              {logTimeElement(Object.values(logs), element - 4)}
+                              h
                               <div className={`${styles.tooltip_container}`}>
                                 <div className={`${styles.tooltip_text}`}>
-                                  <p>{logCommentElement((Object.values(logs)), element -4)}</p>
+                                  <p>
+                                    {logCommentElement(
+                                      Object.values(logs),
+                                      element - 4
+                                    ) ? (
+                                      logCommentElement(
+                                        Object.values(logs),
+                                        element - 4
+                                      )
+                                    ) : (
+                                      <>
+                                        <PiWarningBold /> This logwork doesn't
+                                        have a comment!
+                                      </>
+                                    )}
+                                  </p>
                                 </div>
                                 <div
                                   className={`${styles.tooltip_text_bottom}`}

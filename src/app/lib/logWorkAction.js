@@ -13,28 +13,43 @@ export const processData = (data, year_url, month) => {
 
 //Group data to map table report
 export const groupData = (data) => {
-  return (data || []).reduce((groupedData, entry) => {
-    const logDay = new Date(entry.startdate).getDate().toString();
-    const { key, comment, startdate, pkey, summary, timeworked } = entry;
+  var arr_group = [];
 
-    if (!groupedData[key]) {
-      groupedData[key] = {
-        key,
-        pkey,
-        summary,
-        logs: {},
-        timeworked: 0,
-      };
-    }
-    groupedData[key].logs[logDay] = {
-      comment,
-      timeworked: Number(timeworked),
-      created: startdate,
-    };
-    groupedData[key].timeworked += Number(timeworked);
+  data &&
+    data.forEach((value) => {
+      // console.log(value)
+      const logDay = new Date(value.startdate).getDate().toString();
 
-    return groupedData;
-  }, {});
+      if (arr_group[value.key]) {
+        if (arr_group[value.key].logs[logDay]) {
+          console.log();
+          arr_group[value.key].logs[logDay].comment += ` ${value.comment}`;
+          arr_group[value.key].logs[logDay].timeworked += Number(
+            value.timeworked
+          );
+        } else {
+          arr_group[value.key].logs[logDay] = {
+            comment: value.comment,
+            timeworked: Number(value.timeworked),
+            created: value.startdate,
+          };
+        }
+      } else {
+        arr_group[value.key] = {
+          key: value.key,
+          pkey: value.pkey,
+          summary: value.summary,
+          logs: {
+            [logDay]: {
+              comment: value.comment,
+              timeworked: Number(value.timeworked),
+              created: value.startdate,
+            },
+          },
+        };
+      }
+    });
+  return arr_group;
 };
 
 export const logTimeTotal = (arrLog = []) => {
@@ -48,7 +63,6 @@ export const logTimeTotal = (arrLog = []) => {
 
 export const logCommentElement = (arrLog = [], ind) => {
   let comment = null;
-  let day_worked;
 
   arrLog?.forEach((element) => {
     const createDate = element["created"]?.substring(0, 10);
@@ -56,7 +70,6 @@ export const logCommentElement = (arrLog = [], ind) => {
 
     if (Number(ind) === Number(get_day)) {
       comment = element["comment"];
-      day_worked = get_day;
     }
   });
 
@@ -65,7 +78,6 @@ export const logCommentElement = (arrLog = [], ind) => {
 
 export const logTimeElement = (arrLog = [], ind) => {
   let timeworked = null;
-  let day_worked;
 
   arrLog?.forEach((element) => {
     const createDate = element["created"]?.substring(0, 10);
@@ -73,7 +85,6 @@ export const logTimeElement = (arrLog = [], ind) => {
 
     if (Number(ind) === Number(get_day)) {
       timeworked = Number((element["timeworked"] / 3600).toFixed(2));
-      day_worked = get_day;
     }
   });
 
@@ -124,10 +135,6 @@ export const updateQueryParam = (key, value, searchParams, replace) => {
   const params = new URLSearchParams(searchParams);
   value ? params.set(key, value) : params.delete(key);
   replace(`?${params}`);
-};
-
-export const lastDayOfMonth = (year, month) => {
-  return new Date(year, month, 0).getDate();
 };
 
 const formatTime = (timeString) => {
@@ -182,9 +189,7 @@ export const filterWorklogsByAuthor = async (data, authorName, month, year) => {
     );
     const filterWorklogsByMonth = filterWorklogs(filteredWorklogs, month, year);
     const uniqueWorklogs = filterWorklogsByMonth.reduce((unique, worklog) => {
-      const existingIndex = unique.findIndex(
-        (w) => w.created === worklog.created && w.key === worklog.key
-      );
+      const existingIndex = unique.findIndex((w) => w.id === worklog.id);
       if (existingIndex === -1) {
         unique.push(worklog);
       }
@@ -196,6 +201,7 @@ export const filterWorklogsByAuthor = async (data, authorName, month, year) => {
       created: formatTime(filteredWorklog.created),
       startdate: formatTime(filteredWorklog.started),
       updated: formatTime(filteredWorklog.updated),
+      logworkId: filteredWorklog.id,
       summary: item.fields.summary,
       timeworked:
         item.fields.project.key === "LRM"
