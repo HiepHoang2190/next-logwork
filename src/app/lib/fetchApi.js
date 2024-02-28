@@ -48,8 +48,8 @@ const fetchWithAuth = async (url, options = {}) => {
   return fetchWithCredentials(url, { ...options, headers });
 };
 
-export const getUserIssues = async (username, year, month, lastDayOfMonth) => {
-  const url = `${process.env.JIRA_API_PATH}/api/2/search?jql=(worklogAuthor%20in%20(%22${username}%22))%20AND%20(worklogDate%20%3E%3D%20%27${year}-${month}-01%27%20and%20worklogDate%20%3C%20%27${year}-${month}-${lastDayOfMonth}%27)%20ORDER%20BY%20key%20ASC%20&fields=summary%2Cworklog%2Ccreated%2Cupdated%2Cissuetype%2Cparent%2Cproject%2Cstatus%2Cassignee%2Creporter%2Caggregatetimespent%2Ctimeoriginalestimate%2Ctimeestimate&maxResults=1000`;
+export const getUserIssues = async (username, year, month) => {
+  const url = `${process.env.JIRA_API_PATH}/api/2/search?jql=(worklogAuthor%20in%20(%22${username}%22))%20AND%20(worklogDate%20%3E%3D%20%27${year}-${month}-01%27%20and%20worklogDate%20%3C%20%27${Number(month)+1>12 ? Number(year)+1 : year}-${Number(month)+1>12 ? 1 : Number(month)+1}-01%27)%20ORDER%20BY%20key%20ASC%20&fields=summary%2Cworklog%2Ccreated%2Cupdated%2Cissuetype%2Cparent%2Cproject%2Cstatus%2Cassignee%2Creporter%2Caggregatetimespent%2Ctimeoriginalestimate%2Ctimeestimate&maxResults=1000`;
   return fetchWithAuth(url, { method: "GET" });
 };
 

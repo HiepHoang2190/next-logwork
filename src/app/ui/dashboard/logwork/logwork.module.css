@@ -110,6 +110,8 @@
 
 /* top part of tooltip container */
 .tooltip_text {
+  display: flex;
+  align-items: center;
   background: var(--colorLotus);
   vertical-align: middle;
   height: 60px;
@@ -118,13 +120,19 @@
 }
 
 .tooltip_text p {
-  text-align: center;
+  text-align: left;
   color: white;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+  white-space: break-spaces;
+}
+
+.tooltip_text p svg {
+  font-size: 15px;
+  vertical-align: bottom;
 }
 
 /* the botton part of the tooltip container */
