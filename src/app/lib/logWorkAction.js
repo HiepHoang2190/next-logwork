@@ -137,10 +137,6 @@ export const updateQueryParam = (key, value, searchParams, replace) => {
   replace(`?${params}`);
 };
 
-export const lastDayOfMonth = (year, month) => {
-  return new Date(year, month, 0).getDate();
-};
-
 const formatTime = (timeString) => {
   const originalDate = new Date(timeString);
   const options = {
