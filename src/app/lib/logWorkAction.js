@@ -17,7 +17,7 @@ export const groupData = (data) => {
 
   data &&
     data.forEach((value) => {
-      // console.log(value)
+
       const logDay = new Date(value.startdate).getDate().toString();
 
       if (arr_group[value.key]) {
