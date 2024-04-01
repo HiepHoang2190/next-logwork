@@ -17,12 +17,12 @@ export const groupData = (data) => {
 
   data &&
     data.forEach((value) => {
-      // console.log(value)
+
       const logDay = new Date(value.startdate).getDate().toString();
 
       if (arr_group[value.key]) {
         if (arr_group[value.key].logs[logDay]) {
-          console.log();
+
           arr_group[value.key].logs[logDay].comment += ` ${value.comment}`;
           arr_group[value.key].logs[logDay].timeworked += Number(
             value.timeworked
