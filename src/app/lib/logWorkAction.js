@@ -17,12 +17,9 @@ export const groupData = (data) => {
 
   data &&
     data.forEach((value) => {
-
       const logDay = new Date(value.startdate).getDate().toString();
-
       if (arr_group[value.key]) {
         if (arr_group[value.key].logs[logDay]) {
-
           arr_group[value.key].logs[logDay].comment += ` ${value.comment}`;
           arr_group[value.key].logs[logDay].timeworked += Number(
             value.timeworked
@@ -56,9 +53,9 @@ export const logTimeTotal = (arrLog = []) => {
   const t =
     arrLog &&
     arrLog.reduce(function (a, b) {
-      return Number(a) + Number((b["timeworked"] / 3600).toFixed(2));
+      return Number(a) + Number((b["timeworked"] / 3600));
     }, 0);
-  return t;
+  return parseFloat(t.toFixed(1));
 };
 
 export const logCommentElement = (arrLog = [], ind) => {
@@ -84,7 +81,8 @@ export const logTimeElement = (arrLog = [], ind) => {
     const get_day = createDate?.split("-")[2];
 
     if (Number(ind) === Number(get_day)) {
-      timeworked = Number((element["timeworked"] / 3600).toFixed(2));
+      timeworked = Number((element["timeworked"] / 3600));
+      timeworked = parseFloat(timeworked.toFixed(1));
     }
   });
 
@@ -92,16 +90,16 @@ export const logTimeElement = (arrLog = [], ind) => {
 };
 
 export const logTimeTotalIssue = (arrLog = []) => {
-  return arrLog
+  const totalTime = arrLog
     .filter(({ pkey }) => pkey !== "LRM")
     .reduce((total, item) => {
       const logTime = Object.values(item["logs"]).reduce(
-        (a, b) => a + Number((b["timeworked"] / 3600).toFixed(2)),
+        (a, b) => a + Number((b["timeworked"] / 3600)),
         0
       );
-
       return total + logTime;
     }, 0);
+  return parseFloat(totalTime.toFixed(1));
 };
 
 export const logTimeTotalIssueByDay = (arrLog = [], numberDay) => {
@@ -114,13 +112,13 @@ export const logTimeTotalIssueByDay = (arrLog = [], numberDay) => {
       const createDate_arr = createDate.split("-");
       const get_day = createDate_arr[2];
       if (Number(numberDay) === Number(get_day)) {
-        const ts = Number((item2["timeworked"] / 3600).toFixed(2));
+        const ts = Number((item2["timeworked"] / 3600));
         t2 += ts;
       }
     });
     final += t2;
   });
-  return final;
+  return parseFloat(final.toFixed(1));
 };
 
 export const getDatefromDay = (day, month, year) => {
