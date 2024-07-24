@@ -73,15 +73,15 @@ const LeavePage = (props) => {
           <Box sx={{ width: "100%", display: "flex", margin: "0 0 20px" }}>
             <div className={styles.cardContainer}>
               <span className={styles.title_total}>Time Estimated (days):</span>{" "}
-              {totalTimeLeave.time_estimate / 3600 / 8}
+              {parseFloat((totalTimeLeave.time_estimate / 3600 / 8).toFixed(2))}
             </div>
             <div className={styles.cardContainerMiddle}>
               <span className={styles.title_total}>Time Spent (days):</span>{" "}
-              {totalTimeLeave.time_spent / 3600 / 8}
+              {parseFloat((totalTimeLeave.time_spent / 3600 / 8).toFixed(2))}
             </div>
             <div className={styles.cardContainer}>
               <span className={styles.title_total}>Time Remaining (days):</span>{" "}
-              {totalTimeLeave.time_remain / 3600 / 8}
+              {parseFloat((totalTimeLeave.time_remain / 3600 / 8).toFixed(2))}
             </div>
           </Box>
         )}
