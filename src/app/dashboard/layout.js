@@ -1,6 +1,7 @@
 import Navbar from "@/app/ui/dashboard/navbar/navbar";
 import Sidebar from "@/app/ui/dashboard/sidebar/sidebar";
 import styles from "@/app/ui/dashboard/dashboard.module.css";
+import Loading from "./loading";
 
 export const metadata = {
   title: "Lotus's Logwork Dashboard",
@@ -15,7 +16,7 @@ const Layout = ({ children }) => {
       </div>
       <div className={styles.content}>
         <Navbar />
-        <div className={styles.contentDashboard}>
+        <div className={styles.contentDashboard} fallback={<Loading />}>
           <div className={styles.wrapper}>{children}</div>
         </div>
       </div>
