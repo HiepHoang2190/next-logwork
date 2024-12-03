@@ -138,6 +138,12 @@ const LoginForm = () => {
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      sendValue();
+    }
+  };
+
   return (
     <>
       {mounted && (
@@ -189,6 +195,7 @@ const LoginForm = () => {
                     label="Username"
                     id="username"
                     onChange={handleChange("username")}
+                    onKeyDown={handleKeyDown}
                   />
                 </FormControl>
 
@@ -206,6 +213,7 @@ const LoginForm = () => {
                     value={values.password || undefined}
                     id="auth-login-password"
                     onChange={handleChange("password")}
+                    onKeyDown={handleKeyDown}
                     type={values.showPassword ? "text" : "password"}
                     endAdornment={
                       <InputAdornment position="end">

@@ -1,15 +1,14 @@
 "use server";
 
 import { auth } from "@/app/auth";
-import dynamic from "next/dynamic";
-import Loading from "@/app/ui/dashboard/loading/loading";
-import { getAllDataUser, getUserIssues } from "@/app/lib/fetchApi";
-import Unauthorized from "@/app/ui/dashboard/unauthorized/unauthorized";
-import { filterWorklogsByAuthor } from "@/app/lib/logWorkAction";
+import { getAllDataUser } from "@/app/lib/fetchApi";
+import LogWorkTablePage from "@/app/ui/dashboard/logwork/logworkTable";
 
 export async function generateMetadata({ searchParams }) {
   const { user } = await auth();
+  
   const dataAllUser = await getAllDataUser();
+  
   const monthTitles = [
     "January",
     "February",
@@ -39,47 +38,9 @@ export async function generateMetadata({ searchParams }) {
 }
 
 const LogWorksPage = async ({ searchParams }) => {
-  const year = searchParams?.year || new Date().getFullYear();
-  const month = searchParams?.month || new Date().getMonth() + 1;
-
-  //Fetch Data
-  const { user } = await auth();
-  var username = searchParams?.username;
-  username = username !== undefined ? username : user.username;
-
-  const dataAllUser = await getAllDataUser();
-  const dataUsers = await getUserIssues(username, year, month);
-
-  if (dataUsers === "Unauthorized!") {
-    return <Unauthorized status={"Unauthorized!"} />;
-  }
-  if (dataUsers === "fetch failed" || dataAllUser === "fetch failed") {
-    return <Unauthorized status={"fetch failed"} />;
-  }
-
-  const userLogwork = await filterWorklogsByAuthor(
-    dataUsers.issues,
-    username,
-    month,
-    year
-  );
-
-  const ComponentLogWorkTablePage = dynamic(
-    () => import("@/app/ui/dashboard/logwork/logworkTable"),
-    { ssr: false, loading: () => <Loading /> }
-  );
 
   return (
-    <>
-      <ComponentLogWorkTablePage
-        user={user}
-        username={username}
-        dataAllUser={dataAllUser}
-        dataIssue={userLogwork}
-        month={month}
-        year={year}
-      />
-    </>
+    <LogWorkTablePage searchParams={searchParams}/>
   );
 };
 
