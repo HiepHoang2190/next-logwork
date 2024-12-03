@@ -7,10 +7,13 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const LogWorkDatePicker = () => {
   const pathname = usePathname();
+  
   const { replace } = useRouter();
+  
   const searchParams = useSearchParams();
 
   const [mounted, setMounted] = useState(false);
+  
   const [startDate, setStartDate] = useState(new Date());
 
   useEffect(() => {
@@ -29,7 +32,9 @@ const LogWorkDatePicker = () => {
 
   const handleDateChange = (date) => {
     const params = new URLSearchParams(searchParams);
+    
     const month = date.getMonth() + 1;
+    
     const year = date.getFullYear();
 
     if (month) {
@@ -41,6 +46,7 @@ const LogWorkDatePicker = () => {
     }
 
     replace(`${pathname}?${params}`);
+    
     setStartDate(date);
   };
 

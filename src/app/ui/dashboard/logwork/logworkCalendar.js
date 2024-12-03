@@ -24,7 +24,7 @@ const Calendar = ({ logWork }) => {
     </div>
   );
 
-  const events = logWork.map((item) => ({
+  const events = logWork && logWork.map((item) => ({
     id: item.issueid,
     title: item.timeworked,
     start: item.STARTDATE,

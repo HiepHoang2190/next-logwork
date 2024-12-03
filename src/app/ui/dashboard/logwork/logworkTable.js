@@ -15,19 +15,78 @@ import {
   getDatefromDay,
 } from "@/app/lib/logWorkAction";
 import styles from "./logwork.module.css";
+import { auth } from "@/app/auth";
 import { PiWarningBold } from "react-icons/pi";
+import Loading from "@/app/ui/dashboard/loading/loading";
+import { getAllDataUser, getUserIssues } from "@/app/lib/fetchApi";
+import Unauthorized from "@/app/ui/dashboard/unauthorized/unauthorized";
+import { filterWorklogsByAuthor } from "@/app/lib/logWorkAction";
 
-const LogWorkTablePage = (props) => {
-  const { user, username, dataAllUser, dataIssue, month, year } = props;
+const LogWorkTablePage = ({searchParams}) => {
 
   const [dataTable, setDataTable] = useState();
+  
+  const [loading, setLoading] = useState(true);
+  
+  const [data, setData] = useState(null);
+  
+  const [error, setError] = useState(null);
+
+  const year = searchParams?.year || new Date().getFullYear();
+  
+  const month = searchParams?.month || new Date().getMonth() + 1;
 
   useEffect(() => {
-    setDataTable(dataIssue);
-  }, [dataIssue]);
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+
+        const { user } = await auth();
+
+        let username = searchParams?.username || user.username;
+
+        const dataAllUser = await getAllDataUser();
+        const dataUsers = await getUserIssues(username, year, month);
+
+        if (dataUsers === "Unauthorized!" || dataAllUser === "fetch failed") {
+          setError(dataUsers || "fetch failed");
+          return;
+        }
+
+        const userLogwork = await filterWorklogsByAuthor(
+          dataUsers.issues,
+          username,
+          month,
+          year
+        );
+
+        setData({
+          user,
+          username,
+          dataAllUser,
+          dataIssue: userLogwork,
+          month,
+          year,
+        });
+      } catch (err) {
+        setError("An unexpected error occurred.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [searchParams]);
+
+
+  useEffect(() => {
+    setDataTable(data?.dataIssue);
+  }, [data?.dataIssue]);
 
   const year_url = year.toString().substr(-2);
+  
   const issue_list = processData(dataTable, year_url, month);
+  
   const arr_group = groupData(issue_list);
 
   const current = new Date().getDate();
@@ -45,16 +104,24 @@ const LogWorkTablePage = (props) => {
     ? logTimeTotalIssue(Object.values(arr_group))
     : 0;
 
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (error) {
+    return <Unauthorized status={error} />;
+  }
+
   return (
     <>
       <div className="wrapper-datetime">
         <LogWorkDatePicker />
         <LogWorkExcelPage
-          username={username}
+          username={data?.username}
           month={month}
           year={year}
-          dataAllUser={dataAllUser}
-          dataUserName={user.username}
+          dataAllUser={data?.dataAllUser}
+          dataUserName={data?.user?.username}
         />
       </div>
 
@@ -84,13 +151,12 @@ const LogWorkTablePage = (props) => {
               arr_days.map((item) => (
                 <th
                   key={item}
-                  className={`${
-                    item == current &&
-                    new Date().getMonth() + 1 == month &&
-                    new Date().getFullYear() == year
+                  className={`${item == current &&
+                      new Date().getMonth() + 1 == month &&
+                      new Date().getFullYear() == year
                       ? "current date"
                       : "date"
-                  }`}
+                    }`}
                   id={
                     ["SA", "SU"].includes(getDatefromDay(item, month, thisyear))
                       ? "weekend"
@@ -172,34 +238,34 @@ const LogWorkTablePage = (props) => {
                         >
                           {logTimeElement(Object.values(logs), element - 4) !==
                             null && (
-                            <div className={`${styles.tooltip}`}>
-                              {logTimeElement(Object.values(logs), element - 4)}
-                              h
-                              <div className={`${styles.tooltip_container}`}>
-                                <div className={`${styles.tooltip_text}`}>
-                                  <p>
-                                    {logCommentElement(
-                                      Object.values(logs),
-                                      element - 4
-                                    ) ? (
-                                      logCommentElement(
+                              <div className={`${styles.tooltip}`}>
+                                {logTimeElement(Object.values(logs), element - 4)}
+                                h
+                                <div className={`${styles.tooltip_container}`}>
+                                  <div className={`${styles.tooltip_text}`}>
+                                    <p>
+                                      {logCommentElement(
                                         Object.values(logs),
                                         element - 4
-                                      )
-                                    ) : (
-                                      <>
-                                        <PiWarningBold /> This logwork doesn't
-                                        have a comment!
-                                      </>
-                                    )}
-                                  </p>
+                                      ) ? (
+                                        logCommentElement(
+                                          Object.values(logs),
+                                          element - 4
+                                        )
+                                      ) : (
+                                        <>
+                                          <PiWarningBold /> This logwork doesn't
+                                          have a comment!
+                                        </>
+                                      )}
+                                    </p>
+                                  </div>
+                                  <div
+                                    className={`${styles.tooltip_text_bottom}`}
+                                  ></div>
                                 </div>
-                                <div
-                                  className={`${styles.tooltip_text_bottom}`}
-                                ></div>
                               </div>
-                            </div>
-                          )}
+                            )}
                         </td>
                       ) : (
                         <td
@@ -207,7 +273,7 @@ const LogWorkTablePage = (props) => {
                           key={ind}
                         >
                           {logTimeElement(Object.values(logs), element - 4) !==
-                          null ? (
+                            null ? (
                             <div className={`${styles.tooltip}`}>
                               {logTimeElement(Object.values(logs), element - 4)}
                               h
