@@ -33,26 +33,17 @@ const LeavePage = (props) => {
     updateQueryParam("username", event.target.value, searchParams, replace);
   };
 
-  const processLeaveItem = (item) => {
-    const dd = item.create_date.split("-");
-    const yearLeave = dd[0].substr(2);
-
-    const date = new Date();
-    const currentYear = date.getFullYear().toString().substr(2);
-
-    if (yearLeave == currentYear) {
-      return {
-        time_estimate: item.time_estimate,
-        time_spent: item.time_spent,
-        time_remain: item.time_remain,
-      };
+  const processLeaveItem = (items) => {
+    if (!Array.isArray(items) || items.length === 0) {
+      throw new Error("Input must be a non-empty array.");
     }
+    return items.reduce((newest, current) => {
+      return new Date(current.create_date) > new Date(newest.create_date) ? current : newest;
+    });
   };
 
   useEffect(() => {
-    const currentYearData = data_time_leave_total.find((item) =>
-      processLeaveItem(item)
-    );
+    const currentYearData =  processLeaveItem(data_time_leave_total);
     setTimeLeave(arr_time_leave);
     setTotalTimeLeave(currentYearData);
   }, [data_time_leave_total, arr_time_leave]);
