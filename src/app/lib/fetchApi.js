@@ -2,6 +2,7 @@
 
 import { auth, signIn } from "@/app/auth";
 import { processLeaveItem } from "@/app/lib/logWorkAction";
+import { Buffer } from 'buffer';
 
 export const authenticate = async (formData) => {
   const { username, password } = formData;
@@ -48,8 +49,42 @@ const fetchWithAuth = async (url, options = {}) => {
   return fetchWithCredentials(url, { ...options, headers });
 };
 
+export const getAvatar = async () => {
+  try {
+    const { user } = await auth();
+    const url = user.avatarUrls[0];
+    
+    const headers = {
+      Cookie: `JSESSIONID=${user.session.value}`,
+    };
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers,
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch avatar: ${response.status} ${response.statusText}`);
+    }
+    
+    // Get the response as an ArrayBuffer for binary data
+    const arrayBuffer = await response.arrayBuffer();
+    
+    // Convert ArrayBuffer to Buffer
+    const buffer = Buffer.from(arrayBuffer);
+    
+    // Convert Buffer to base64 string
+    const base64Data = buffer.toString('base64');
+    
+    return base64Data;
+  } catch (error) {
+    console.error('Error fetching avatar:', error);
+    throw error;
+  }
+}
+
 export const getUserIssues = async (username, year, month) => {
-  const url = `${process.env.JIRA_API_PATH}/api/2/search?jql=(worklogAuthor%20in%20(%22${username}%22))%20AND%20(worklogDate%20%3E%3D%20%27${year}-${month}-01%27%20and%20worklogDate%20%3C%20%27${Number(month)+1>12 ? Number(year)+1 : year}-${Number(month)+1>12 ? 1 : Number(month)+1}-01%27)%20ORDER%20BY%20key%20ASC%20&fields=summary%2Cworklog%2Ccreated%2Cupdated%2Cissuetype%2Cparent%2Cproject%2Cstatus%2Cassignee%2Creporter%2Caggregatetimespent%2Ctimeoriginalestimate%2Ctimeestimate&maxResults=1000`;
+  const url = `${process.env.JIRA_API_PATH}/api/2/search?jql=(worklogAuthor%20in%20(%22${username}%22))%20AND%20(worklogDate%20%3E%3D%20%27${year}-${month}-01%27%20and%20worklogDate%20%3C%20%27${Number(month) + 1 > 12 ? Number(year) + 1 : year}-${Number(month) + 1 > 12 ? 1 : Number(month) + 1}-01%27)%20ORDER%20BY%20key%20ASC%20&fields=summary%2Cworklog%2Ccreated%2Cupdated%2Cissuetype%2Cparent%2Cproject%2Cstatus%2Cassignee%2Creporter%2Caggregatetimespent%2Ctimeoriginalestimate%2Ctimeestimate&maxResults=1000`;
   return fetchWithAuth(url, { method: "GET" });
 };
 
