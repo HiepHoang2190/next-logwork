@@ -1,9 +1,10 @@
-import Image from "next/image";
 import styles from "./sidebar.module.css";
 import MenuLink from "./menuLink/menuLink";
 import { auth, signOut } from "@/app/auth";
 import { MdDashboard, MdLogout } from "react-icons/md";
 import { LuCalendarCheck, LuCalendarX2 } from "react-icons/lu";
+import { getAvatar } from "@/app/lib/fetchApi";
+import Avatar from "./avatar";
 
 const menuItems = [
   {
@@ -51,6 +52,7 @@ const menuItems = [
 ];
 const Sidebar = async () => {
   const { user } = await auth();
+  const response = await getAvatar();
 
   return (
     <div className={styles.container}>
@@ -58,14 +60,8 @@ const Sidebar = async () => {
         <img alt="lotus-logo" src="/jira-logo.png" />
       </div>
       <div className={styles.user}>
-        <Image
-          className={styles.userImage}
-          src={
-            user.avatarUrls !== undefined ? user.avatarUrls[0] : "/noavatar.png"
-          }
-          alt="avatar"
-          width="50"
-          height="50"
+        <Avatar
+          src={ user.avatarUrls !== undefined ? `data:image;base64,${response}` : "/noavatar.png"  }
         />
         <div className={styles.userDetail}>
           <span className={styles.username}>{user.displayName}</span>
