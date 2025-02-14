@@ -7,7 +7,7 @@ export default NextAuth(authConfig).auth
 
 export async function middleware(request) {
   
-  const { user } = await auth();
+  const user = await auth();
 
   const url = request.nextUrl
 
@@ -18,7 +18,7 @@ export async function middleware(request) {
   )
   
   const jsessionCookie = request.cookies.get('JSESSIONID')
-  const tokenExpiry = user.tokenExp
+  const tokenExpiry = user?.user?.tokenExp
 
   // For demonstration, we assume that if JSESSIONID is missing, the session is invalid.
   // (In a real app, you might verify JSESSIONID against your server-side session store.)
