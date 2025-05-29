@@ -1,13 +1,8 @@
 "use server";
 
-import dynamic from "next/dynamic";
-import Loading from "@/app/ui/dashboard/loading/loading";
-import Unauthorized from "@/app/ui/dashboard/unauthorized/unauthorized";
 import {
-  fetchDataLeave,
   getAllDataUser,
-  getCurrentUserData,
-  getUserCurrentIssues,
+  getCurrentUserData
 } from "@/app/lib/fetchApi";
 import ComponentLeavePage from "@/app/ui/dashboard/leave/leave";
 
