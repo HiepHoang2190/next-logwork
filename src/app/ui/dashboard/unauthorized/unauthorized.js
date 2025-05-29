@@ -2,13 +2,15 @@
 
 import React from "react";
 import Image from "next/image";
-import { signOut } from "@/app/auth";
 import { MdLogout } from "react-icons/md";
 import styles from "./unauthorized.module.css";
 import errorPic from "../../../../../public/error.png";
+import { useAuth } from "@/app/lib/AuthContext";
 
 const Unauthorized = (props) => {
   const { status } = props;
+
+  const { logout } = useAuth();
 
   return (
     <div
@@ -44,12 +46,10 @@ const Unauthorized = (props) => {
               {status === "fetch failed" || status === "An unexpected error occurred." && "Please try again later"}
             </span>
             {status === "Unauthorized!" && (
-              <form action={signOut}>
-                <button className={styles.logout}>
-                  <MdLogout />
-                  Logout
-                </button>
-              </form>
+              <button className={styles.logout} onClick={() => logout()}>
+                <MdLogout />
+                Logout
+              </button>
             )}
           </div>
           <div className={styles.containerImg}>

@@ -1,11 +1,10 @@
 "use server";
 
-import { auth } from "@/app/auth";
-import { getAllDataUser } from "@/app/lib/fetchApi";
+import { getCurrentUserData, getAllDataUser } from "@/app/lib/fetchApi";
 import LogWorkTablePage from "@/app/ui/dashboard/logwork/logworkTable";
 
 export async function generateMetadata({ searchParams }) {
-  const { user } = await auth();
+  const currentUser = await getCurrentUserData();
   
   const dataAllUser = await getAllDataUser();
   
@@ -32,7 +31,7 @@ export async function generateMetadata({ searchParams }) {
         ? dataAllUser
             .filter((item) => item.user_name === searchParams?.username)
             .map((user) => user.display_name)
-        : user.displayName
+        : currentUser.displayName
     } - Logwork ${monthTitle}`,
   };
 }

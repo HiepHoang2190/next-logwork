@@ -1,17 +1,13 @@
 "use server";
 
-import NextAuth from "next-auth";
-import { cookies } from "next/headers";
-import { authConfig } from "./authconfig";
 import { fetchWithCredentials } from "@/app/lib/fetchApi";
-import CredentialsProvider from "next-auth/providers/credentials";
 
-const login = async (credentials) => {
+export const login = async (credentials) => {
   try {
     const user = {};
 
     const sessionResponse = await fetchWithCredentials(
-      `${process.env.JIRA_API_PATH}/auth/1/session`,
+      `${process.env.NEXT_PUBLIC_APP_JIRA_API_PATH}/auth/1/session`,
       {
         method: "POST",
         body: JSON.stringify({
@@ -34,7 +30,7 @@ const login = async (credentials) => {
     user.username = credentials.username;
 
     const userDetailResponse = await fetchWithCredentials(
-      `${process.env.JIRA_API_PATH}/api/2/user?username=${credentials.username}`,
+      `${process.env.NEXT_PUBLIC_APP_JIRA_API_PATH}/api/2/user?username=${credentials.username}`,
       {
         method: "GET",
         headers: {
@@ -55,53 +51,8 @@ const login = async (credentials) => {
     user.email = userDetailResponse.emailAddress;
     user.displayName = userDetailResponse.displayName;
     user.avatarUrls = Object.values(userDetailResponse.avatarUrls);
-
-    cookies().set("JSESSIONID", user.session.value);
-
     return user;
   } catch (err) {
     throw new Error(err.message);
   }
 };
-
-export const { signIn, signOut, auth } = NextAuth({
-  ...authConfig,
-  providers: [
-    CredentialsProvider({
-      async authorize(credentials) {
-        try {
-          const user = await login(credentials);
-          return user;
-        } catch (err) {
-          throw new Error(err.message);
-        }
-      },
-    }),
-  ],
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.username = user.username;
-        token.session = user.session;
-        token.email = user.email;
-        token.displayName = user.displayName;
-        token.avatarUrls = user.avatarUrls;
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      if (token) {
-        session.user.name = token.displayName;
-        session.user.image = token.avatarUrls;
-        session.user.username = token.username;
-        session.user.session = token.session;
-        session.user.tokenExp = token.exp;
-        session.user.tokenIat = token.iat;
-        session.user.email = token.email;
-        session.user.displayName = token.displayName;
-        session.user.avatarUrls = token.avatarUrls;
-      }
-      return session;
-    },
-  },
-});

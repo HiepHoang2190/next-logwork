@@ -1,29 +1,30 @@
 "use client";
 
-import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import styles from "./loginForm.module.css";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { authenticate } from "@/app/lib/fetchApi";
-import React, { useState, useEffect } from "react";
+import styles from "./loginForm.module.css";
 
 // ** MUI Components
-import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import MuiCard from "@mui/material/Card";
 import Button from "@mui/material/Button";
-import InputLabel from "@mui/material/InputLabel";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
+import MuiCard from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import FormControl from "@mui/material/FormControl";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputAdornment from "@mui/material/InputAdornment";
 import CircularProgress from "@mui/material/CircularProgress";
+import FormControl from "@mui/material/FormControl";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import InputLabel from "@mui/material/InputLabel";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import { styled } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 
 // ** Icons Imports
-import EyeOutline from "mdi-material-ui/EyeOutline";
+import { login } from "@/app/auth";
 import EyeOffOutline from "mdi-material-ui/EyeOffOutline";
+import EyeOutline from "mdi-material-ui/EyeOutline";
+import Cookies from "js-cookie";
 
 // ** Styled Components
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -126,12 +127,12 @@ const LoginForm = () => {
     };
 
     setIsFetch(true);
-    const data = await authenticate(newValues);
+    const data = await login(newValues);
 
-    if (!data?.error) {
+    if (data?.username !== "") {
+      Cookies.set("JSESSIONID", data.session.value);
       toast.success(data?.success);
       router.push("/dashboard");
-      router.refresh();
     } else {
       toast.error(data?.error);
       setIsFetch(false);
