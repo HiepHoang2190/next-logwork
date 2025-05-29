@@ -1,4 +1,4 @@
-import Loading from "./loading";
+import Loading from "@/app/(master-layout)/dashboard/calendar/loading";
 
 const Layout = ({ children }) => {
     return (

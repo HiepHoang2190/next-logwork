@@ -1,7 +1,5 @@
 import { Roboto } from "next/font/google";
-import { ToastContainer } from "react-toastify";
 import "./ui/globals.css";
-import { AuthProvider } from "@/app/lib/AuthContext";
 
 export const metadata = {
   title: "Create Next App",
@@ -19,21 +17,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={roboto.className}>
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        {children}
       </body>
     </html>
   );

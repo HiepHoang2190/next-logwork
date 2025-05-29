@@ -53,6 +53,6 @@ export const login = async (credentials) => {
     user.avatarUrls = Object.values(userDetailResponse.avatarUrls);
     return user;
   } catch (err) {
-    throw new Error(err.message);
+    return { error: err.message };
   }
 };

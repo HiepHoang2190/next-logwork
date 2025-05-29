@@ -10,8 +10,8 @@ import TableHead from "@mui/material/TableHead";
 import { useState, useEffect } from "react";
 import TableContainer from "@mui/material/TableContainer";
 import { formatDate } from "@/app/lib/logWorkAction";
-import Loading from "../loading/loading";
-import Unauthorized from "../unauthorized/unauthorized";
+import Loading from "@/app/ui/dashboard/loading/loading";
+import Unauthorized from "@/app/ui/dashboard/unauthorized/unauthorized";
 import { getUserCurrentIssues } from "@/app/lib/fetchApi";
 
 const OpenTickets = () => {

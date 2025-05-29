@@ -56,7 +56,7 @@ const menuItems = [
 const Sidebar = () => {
   const { currentUser, getUser, logout } = useAuth();
   
-  const [avatarUrl, setAvatarUrl] = useState(currentUser?.avatarUrls["48x48"]);
+  const [avatarUrl, setAvatarUrl] = useState();
   
   const [avatar, setAvatar] = useState();
 
@@ -71,7 +71,9 @@ const Sidebar = () => {
   }, []);
 
   useEffect(() => {
-    setAvatarUrl(currentUser?.avatarUrls["48x48"]);
+    if (currentUser) {
+      setAvatarUrl(currentUser?.avatarUrls?.["48x48"]);
+    }
   }, [currentUser, avatarUrl]);
   
   useEffect(() => {

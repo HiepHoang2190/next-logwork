@@ -2,8 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import Swal from 'sweetalert2';
 import styles from "./loginForm.module.css";
 
 // ** MUI Components
@@ -129,12 +128,38 @@ const LoginForm = () => {
     setIsFetch(true);
     const data = await login(newValues);
 
-    if (data?.username !== "") {
+    if (data?.error === undefined) {
       Cookies.set("JSESSIONID", data.session.value);
-      toast.success(data?.success);
+      Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 5000,
+        showCloseButton: true,
+        customClass: {
+          title: 'fs-4',
+          closeButton: 'order-5',
+        },
+      }).fire({
+        title: 'Login Successfully',
+        icon: 'success',
+      });
       router.push("/dashboard");
     } else {
-      toast.error(data?.error);
+      Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 5000,
+        showCloseButton: true,
+        customClass: {
+          title: 'fs-4',
+          closeButton: 'order-5',
+        },
+      }).fire({
+        title: data?.error,
+        icon: 'error',
+      });
       setIsFetch(false);
     }
   };

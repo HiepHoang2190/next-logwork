@@ -15,9 +15,9 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import Loading from "../loading/loading";
-import UserSelection from "../logwork/logworkUserSelection";
-import Unauthorized from "../unauthorized/unauthorized";
+import Loading from "@/app/ui/dashboard/loading/loading";
+import UserSelection from "@/app/ui/dashboard/logwork/logworkUserSelection";
+import Unauthorized from "@/app/ui/dashboard/unauthorized/unauthorized";
 
 const LeavePage = ({ searchParams }) => {
 
