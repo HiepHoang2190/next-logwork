@@ -7,11 +7,65 @@ import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
+import { useState, useEffect } from "react";
 import TableContainer from "@mui/material/TableContainer";
 import { formatDate } from "@/app/lib/logWorkAction";
+import Loading from "../loading/loading";
+import Unauthorized from "../unauthorized/unauthorized";
+import { getUserCurrentIssues } from "@/app/lib/fetchApi";
 
-const OpenTickets = (props) => {
-  const { dataIssue } = props;
+const OpenTickets = () => {
+
+  const [loading, setLoading] = useState(true);
+
+  const [currentData, setCurrentData] = useState(null);
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const data = await getUserCurrentIssues();
+      setCurrentData(data);
+    } catch (err) {
+      setCurrentData(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (currentData === "Unauthorized!") {
+    return <Unauthorized status={"Unauthorized!"} />;
+  }
+  if (currentData === "fetch failed") {
+    return <Unauthorized status={"fetch failed"} />;
+  }
+
+  const mappedArray = currentData.issues.map((obj) => {
+    const {
+      fields: { created, issuetype, summary, reporter, status, priority },
+      key,
+    } = obj;
+
+    return {
+      created,
+      issuetype: issuetype.name,
+      issuetypeicon: issuetype.iconUrl,
+      prioritytype: priority.name,
+      priorityicon: priority.iconUrl,
+      issuestatus: status.name,
+      summary: summary,
+      key: key,
+      reporter: reporter.displayName,
+    };
+  });
+
 
   const formatDateString = (dateString) => {
     if (dateString) {
@@ -55,7 +109,7 @@ const OpenTickets = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {dataIssue.map((row) => (
+              {mappedArray.map((row) => (
                 <TableRow key={row.key}>
                   <TableCell className={styles.issueInfo}>{row.key}</TableCell>
                   <TableCell className={styles.issueInfo}>

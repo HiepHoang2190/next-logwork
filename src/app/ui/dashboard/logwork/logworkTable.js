@@ -21,8 +21,11 @@ import Loading from "@/app/ui/dashboard/loading/loading";
 import { getAllDataUser, getUserIssues } from "@/app/lib/fetchApi";
 import Unauthorized from "@/app/ui/dashboard/unauthorized/unauthorized";
 import { filterWorklogsByAuthor } from "@/app/lib/logWorkAction";
+import { useAuth } from "@/app/lib/AuthContext";
 
 const LogWorkTablePage = ({searchParams}) => {
+
+  const { currentUser } = useAuth();
 
   const [dataTable, setDataTable] = useState();
   
@@ -41,9 +44,7 @@ const LogWorkTablePage = ({searchParams}) => {
       setLoading(true);
       try {
 
-        const { user } = await auth();
-
-        let username = searchParams?.username || user.username;
+        let username = searchParams?.username || currentUser.name;
 
         const dataAllUser = await getAllDataUser();
         const dataUsers = await getUserIssues(username, year, month);
@@ -61,7 +62,7 @@ const LogWorkTablePage = ({searchParams}) => {
         );
 
         setData({
-          user,
+          currentUser,
           username,
           dataAllUser,
           dataIssue: userLogwork,
@@ -121,7 +122,7 @@ const LogWorkTablePage = ({searchParams}) => {
           month={month}
           year={year}
           dataAllUser={data?.dataAllUser}
-          dataUserName={data?.user?.username}
+          dataUserName={currentUser?.name}
         />
       </div>
 

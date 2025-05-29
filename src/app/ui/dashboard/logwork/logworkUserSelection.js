@@ -60,7 +60,7 @@ const UserSelection = (props) => {
           label="Name"
           onChange={handleChange}
         >
-          {dataAllUser.map((item) => (
+          {dataAllUser?.map((item) => (
             <MenuItem
               key={item.user_name}
               value={item.user_name}

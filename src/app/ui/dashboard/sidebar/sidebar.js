@@ -1,10 +1,13 @@
-import styles from "./sidebar.module.css";
-import MenuLink from "./menuLink/menuLink";
-import { auth, signOut } from "@/app/auth";
-import { MdDashboard, MdLogout } from "react-icons/md";
-import { LuCalendarCheck, LuCalendarX2 } from "react-icons/lu";
+"use client";
+
+import { useAuth } from '@/app/lib/AuthContext';
 import { getAvatar } from "@/app/lib/fetchApi";
+import { useEffect, useState } from "react";
+import { LuCalendarCheck, LuCalendarX2 } from "react-icons/lu";
+import { MdDashboard, MdLogout } from "react-icons/md";
 import Avatar from "./avatar";
+import MenuLink from "./menuLink/menuLink";
+import styles from "./sidebar.module.css";
 
 const menuItems = [
   {
@@ -50,10 +53,30 @@ const menuItems = [
     list: [],
   },
 ];
-const Sidebar = async () => {
-  const { user } = await auth();
-  const response = await getAvatar();
+const Sidebar = () => {
+  const { currentUser, getUser, logout } = useAuth();
+  
+  const [avatarUrl, setAvatarUrl] = useState(currentUser?.avatarUrls["48x48"]);
+  
+  const [avatar, setAvatar] = useState();
 
+  async function getAvatarUser() {
+    if (avatarUrl) {
+      const avatarData = await getAvatar(avatarUrl);
+      setAvatar(avatarData);
+    }
+  }
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  useEffect(() => {
+    setAvatarUrl(currentUser?.avatarUrls["48x48"]);
+  }, [currentUser, avatarUrl]);
+  
+  useEffect(() => {
+    getAvatarUser();
+  }, [avatarUrl]);
   return (
     <div className={styles.container}>
       <div className={styles.logo}>
@@ -61,11 +84,11 @@ const Sidebar = async () => {
       </div>
       <div className={styles.user}>
         <Avatar
-          src={ user.avatarUrls !== undefined ? `data:image;base64,${response}` : "/noavatar.png"  }
+          src={avatar !== undefined ? `data:image;base64,${avatar}` : "/noavatar.png"}
         />
         <div className={styles.userDetail}>
-          <span className={styles.username}>{user.displayName}</span>
-          <span className={styles.userTitle}>{user.email}</span>
+          <span className={styles.username}>{currentUser?.displayName}</span>
+          <span className={styles.userTitle}>{currentUser?.email}</span>
         </div>
       </div>
       <ul className={styles.list}>
@@ -78,17 +101,10 @@ const Sidebar = async () => {
           </li>
         ))}
       </ul>
-      <form
-        action={async () => {
-          "use server";
-          await signOut();
-        }}
-      >
-        <button className={styles.logout}>
-          <MdLogout />
-          Logout
-        </button>
-      </form>
+      <button className={styles.logout} onClick={() => logout()}>
+        <MdLogout />
+        Logout
+      </button>
     </div>
   );
 };

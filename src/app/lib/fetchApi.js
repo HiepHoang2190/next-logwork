@@ -1,19 +1,9 @@
 "use server";
 
-import { auth, signIn } from "@/app/auth";
 import { processLeaveItem } from "@/app/lib/logWorkAction";
 import { Buffer } from 'buffer';
+import { cookies } from "next/headers";
 
-export const authenticate = async (formData) => {
-  const { username, password } = formData;
-  try {
-    await signIn("credentials", { username, password, redirect: false });
-    return { success: "Login Success!" };
-  } catch (err) {
-    const message = err?.cause?.err?.message.replace(/Error: /g, "");
-    return { error: message };
-  }
-};
 
 export const fetchWithCredentials = async (url, options = {}) => {
   try {
@@ -40,25 +30,50 @@ export const fetchWithCredentials = async (url, options = {}) => {
   }
 };
 
-const fetchWithAuth = async (url, options = {}) => {
-  const { user } = await auth();
+export const fetchWithAuth = async (url, options = {}) => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("JSESSIONID");
   const headers = {
     ...options.headers,
-    Cookie: `JSESSIONID=${user.session.value}`,
+    Cookie: `JSESSIONID=${token?.value}`,
   };
   return fetchWithCredentials(url, { ...options, headers });
 };
 
-export const getAvatar = async () => {
+export const getCurrentUserData = async () => {
   try {
-    const { user } = await auth();
-    const url = user.avatarUrls[0];
+    const cookieStore = await cookies();
+    const token = cookieStore.get("JSESSIONID");
     
     const headers = {
-      Cookie: `JSESSIONID=${user.session.value}`,
+      Cookie: `JSESSIONID=${token?.value}`,
     };
 
-    const response = await fetch(url, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_APP_JIRA_API_PATH}/api/2/myself`, {
+      method: "GET",
+      headers,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch current user: ${response.status} ${response.statusText}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error('Error fetching current user:', error);
+    throw error;
+  }
+};
+
+export const getAvatar = async (url) => {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("JSESSIONID");
+    const headers = {
+      Cookie: `JSESSIONID=${token?.value}`,
+    };
+
+    const response = await fetch(`${url}`, {
       method: "GET",
       headers,
     });
@@ -84,32 +99,32 @@ export const getAvatar = async () => {
 }
 
 export const getUserIssues = async (username, year, month) => {
-  const url = `${process.env.JIRA_API_PATH}/api/2/search?jql=(worklogAuthor%20in%20(%22${username}%22))%20AND%20(worklogDate%20%3E%3D%20%27${year}-${month}-01%27%20and%20worklogDate%20%3C%20%27${Number(month) + 1 > 12 ? Number(year) + 1 : year}-${Number(month) + 1 > 12 ? 1 : Number(month) + 1}-01%27)%20ORDER%20BY%20key%20ASC%20&fields=summary%2Cworklog%2Ccreated%2Cupdated%2Cissuetype%2Cparent%2Cproject%2Cstatus%2Cassignee%2Creporter%2Caggregatetimespent%2Ctimeoriginalestimate%2Ctimeestimate&maxResults=1000`;
+  const url = `${process.env.NEXT_PUBLIC_APP_JIRA_API_PATH}/api/2/search?jql=(worklogAuthor%20in%20(%22${username}%22))%20AND%20(worklogDate%20%3E%3D%20%27${year}-${month}-01%27%20and%20worklogDate%20%3C%20%27${Number(month) + 1 > 12 ? Number(year) + 1 : year}-${Number(month) + 1 > 12 ? 1 : Number(month) + 1}-01%27)%20ORDER%20BY%20key%20ASC%20&fields=summary%2Cworklog%2Ccreated%2Cupdated%2Cissuetype%2Cparent%2Cproject%2Cstatus%2Cassignee%2Creporter%2Caggregatetimespent%2Ctimeoriginalestimate%2Ctimeestimate&maxResults=1000`;
   return fetchWithAuth(url, { method: "GET" });
 };
 
 export const getUserCurrentIssues = async () => {
-  const url = `${process.env.JIRA_API_PATH}/api/2/search?jql=assignee%3DcurrentUser()%20AND%20resolution%3DUnresolved%20and%20status%20!%3D%20Closed%20ORDER%20BY%20created%20ASC&fields=issuetype%2Csummary%2Creporter%2Cpriority%2Cstatus%2Cresolution%2Ccreated%2Cupdated&maxResults=1000`;
+  const url = `${process.env.NEXT_PUBLIC_APP_JIRA_API_PATH}/api/2/search?jql=assignee%3DcurrentUser()%20AND%20resolution%3DUnresolved%20and%20status%20!%3D%20Closed%20ORDER%20BY%20created%20ASC&fields=issuetype%2Csummary%2Creporter%2Cpriority%2Cstatus%2Cresolution%2Ccreated%2Cupdated&maxResults=1000`;
   return fetchWithAuth(url, { method: "GET" });
 };
 
 export const getWorklogCurrentIssue = async (issueKey) => {
-  const url = `${process.env.JIRA_API_PATH}/api/2/issue/${issueKey}/worklog?maxResults=5000`;
+  const url = `${process.env.NEXT_PUBLIC_APP_JIRA_API_PATH}/api/2/issue/${issueKey}/worklog?maxResults=5000`;
   return fetchWithAuth(url, { method: "GET" });
 };
 
 export const getAllDataUser = async () => {
-  const url = `${process.env.API_PATH}/V1/all-user`;
+  const url = `${process.env.NEXT_PUBLIC_APP_API_PATH}/V1/all-user`;
   return fetchWithAuth(url, { method: "GET" });
 };
 
 const getTimeLeaveTotal = async (username) => {
-  const url = `${process.env.API_PATH}/V1/timeleave/${username}`;
+  const url = `${process.env.NEXT_PUBLIC_APP_API_PATH}/V1/timeleave/${username}`;
   return fetchWithAuth(url, { method: "GET" });
 };
 
 const getTimeLeave = async (username) => {
-  const url = `${process.env.API_PATH}/V1/leave/${username}`;
+  const url = `${process.env.NEXT_PUBLIC_APP_API_PATH}/V1/leave/${username}`;
   return fetchWithAuth(url, { method: "GET" });
 };
 

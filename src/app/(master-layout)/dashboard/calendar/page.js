@@ -1,12 +1,10 @@
 "use server";
 
-import { auth } from "@/app/auth";
-import dynamic from "next/dynamic";
-import Loading from "@/app/ui/dashboard/loading/loading";
-import { getAllDataUser } from "@/app/lib/fetchApi";
+import { getAllDataUser, getCurrentUserData } from "@/app/lib/fetchApi";
+import ComponentCalendar from "@/app/ui/dashboard/logwork/logwork";
 
 export async function generateMetadata({ searchParams }) {
-  const { user } = await auth();
+  const currentUser = await getCurrentUserData();
   const dataAllUser = await getAllDataUser();
 
   return {
@@ -15,17 +13,12 @@ export async function generateMetadata({ searchParams }) {
         ? dataAllUser
             .filter((item) => item.user_name === searchParams?.username)
             .map((user) => user.display_name)
-        : user.displayName
+        : currentUser.displayName
     } - Calendar`,
   };
 }
 
 const LogWorkCalendarPage = async ({ searchParams }) => {
-  
-  const ComponentCalendar = dynamic(
-    () => import("@/app/ui/dashboard/logwork/logwork"),
-    { ssr: false, loading: () => <Loading /> }
-  );
 
   return (
     <>

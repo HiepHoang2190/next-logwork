@@ -1,6 +1,7 @@
-import "./ui/globals.css";
 import { Roboto } from "next/font/google";
 import { ToastContainer } from "react-toastify";
+import "./ui/globals.css";
+import { AuthProvider } from "@/app/lib/AuthContext";
 
 export const metadata = {
   title: "Create Next App",
@@ -30,7 +31,9 @@ export default function RootLayout({ children }) {
           pauseOnHover
           theme="light"
         />
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

@@ -1,31 +1,38 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { userAdmin } from "@/app/lib/variable";
+import { useAuth } from "@/app/lib/AuthContext";
+import { fetchDataLeave, getAllDataUser } from "@/app/lib/fetchApi";
 import { updateQueryParam } from "@/app/lib/logWorkAction";
+import { userAdmin } from "@/app/lib/variable";
 import styles from "@/app/ui/dashboard/leave/leave.module.css";
-import UserSelection from "../logwork/logworkUserSelection";
-import { useRouter, useSearchParams } from "next/navigation";
-import TableContainer from "@mui/material/TableContainer";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Table from "@mui/material/Table";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import Loading from "../loading/loading";
+import UserSelection from "../logwork/logworkUserSelection";
+import Unauthorized from "../unauthorized/unauthorized";
 
-const LeavePage = (props) => {
-  const { arr_time_leave, data_time_leave_total, dataUserName, dataAllUser } =
-    props;
+const LeavePage = ({ searchParams }) => {
+
+  const { currentUser } = useAuth();
+
+  const [data, setData] = useState(null);
+
+  const [loading, setLoading] = useState(true);
 
   const [userName, setUserName] = useState("");
-  const [timeLeave, setTimeLeave] = useState([]);
-  const [totalTimeLeave, setTotalTimeLeave] = useState();
 
-  const isUserAdmin = userAdmin.includes(dataUserName);
+  const [error, setError] = useState(null);
 
-  const searchParams = useSearchParams();
+  const isUserAdmin = userAdmin.includes(currentUser?.name);
+
   const { replace } = useRouter();
 
   const handleChange = async (event) => {
@@ -35,7 +42,7 @@ const LeavePage = (props) => {
 
   const processLeaveItem = (items) => {
     if (!Array.isArray(items) || items.length === 0) {
-      throw new Error("Input must be a non-empty array.");
+      return null;
     }
     return items.reduce((newest, current) => {
       return new Date(current.create_date) > new Date(newest.create_date) ? current : newest;
@@ -43,10 +50,50 @@ const LeavePage = (props) => {
   };
 
   useEffect(() => {
-    const currentYearData =  processLeaveItem(data_time_leave_total);
-    setTimeLeave(arr_time_leave);
-    setTotalTimeLeave(currentYearData);
-  }, [data_time_leave_total, arr_time_leave]);
+    const fetchData = async () => {
+      setLoading(true);
+
+      try {
+        //Fetch Data
+        const dataAllUsers = await getAllDataUser();
+
+        var username = searchParams?.username;
+        username = username !== undefined ? username : currentUser?.name;
+
+        const currentUserData = dataAllUsers.find(
+          (data) => data.user_name === username
+        );
+
+        const { arr_time_leave, arr_time_leave_total } = await fetchDataLeave(
+          currentUserData?.user_key
+        );
+
+        const currentYearData = processLeaveItem(arr_time_leave_total);
+        
+        setData({
+          currentUser,
+          username,
+          dataAllUser: dataAllUsers,
+          timeLeave: arr_time_leave,
+          totalTimeLeave: currentYearData
+        });
+
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, [searchParams]);
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (error) {
+    return <Unauthorized status={error} />;
+  }
 
   return (
     <>
@@ -55,24 +102,24 @@ const LeavePage = (props) => {
           <UserSelection
             userName={userName}
             handleChange={handleChange}
-            dataAllUser={dataAllUser}
+            dataAllUser={data?.dataAllUser}
           />
         </div>
       )}
       <div className={styles.container}>
-        {totalTimeLeave && (
+        {data?.totalTimeLeave && (
           <Box sx={{ width: "100%", display: "flex", margin: "0 0 20px" }}>
             <div className={styles.cardContainer}>
               <span className={styles.title_total}>Time Estimated (days):</span>{" "}
-              {parseFloat((totalTimeLeave.time_estimate / 3600 / 8).toFixed(2))}
+              {parseFloat((data?.totalTimeLeave.time_estimate / 3600 / 8).toFixed(2))}
             </div>
             <div className={styles.cardContainerMiddle}>
               <span className={styles.title_total}>Time Spent (days):</span>{" "}
-              {parseFloat((totalTimeLeave.time_spent / 3600 / 8).toFixed(2))}
+              {parseFloat((data?.totalTimeLeave.time_spent / 3600 / 8).toFixed(2))}
             </div>
             <div className={styles.cardContainer}>
               <span className={styles.title_total}>Time Remaining (days):</span>{" "}
-              {parseFloat((totalTimeLeave.time_remain / 3600 / 8).toFixed(2))}
+              {parseFloat((data?.totalTimeLeave.time_remain / 3600 / 8).toFixed(2))}
             </div>
           </Box>
         )}
@@ -89,7 +136,7 @@ const LeavePage = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {timeLeave.map((row) => (
+              {data?.timeLeave.map((row) => (
                 <TableRow
                   key={row.id}
                   className={
