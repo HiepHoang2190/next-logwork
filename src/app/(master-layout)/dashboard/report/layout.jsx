@@ -1,6 +1,6 @@
 "use server";
 
-import Loading from "@/app/(master-layout)/dashboard/report/loading";
+import Loading from "@/app/ui/dashboard/loading/loading";
 
 const Layout = ({ children }) => {
 

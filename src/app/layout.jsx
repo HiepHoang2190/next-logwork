@@ -1,5 +1,6 @@
 import { Roboto } from "next/font/google";
 import "./ui/globals.css";
+import { AuthProvider } from "@/app/lib/AuthContext";
 
 export const metadata = {
   title: "Create Next App",
@@ -17,7 +18,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={roboto.className}>
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );
