@@ -55,7 +55,7 @@ const AuthProvider = ({ children }) => {
                     headers,
                 }
             );
-            if (!data) return handleLogout();
+            if (data === "Unauthorized!") return handleLogout();
             const dataUser = await fetchWithCredentials(
                 `${process.env.NEXT_PUBLIC_APP_JIRA_API_PATH}/api/2/user?username=${data.name}`,
                 {
@@ -79,8 +79,7 @@ const AuthProvider = ({ children }) => {
                     headers,
                 }
             );
-            if (!dataUser) return handleLogout();
-
+            if (dataUser === "Unauthorized!") return handleLogout();
             const dataRes = await fetchWithCredentials(
                 `${process.env.NEXT_PUBLIC_APP_JIRA_API_PATH}/api/2/user?username=${dataUser.name}`,
                 {
@@ -88,7 +87,6 @@ const AuthProvider = ({ children }) => {
                     headers,
                 }
             );
-            if (!dataRes) return handleLogout();
             setCurrentUser(dataRes);
         } catch (error) {
             console.error(error);

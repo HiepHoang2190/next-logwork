@@ -4,7 +4,6 @@ import { processLeaveItem } from "@/app/lib/logWorkAction";
 import { Buffer } from 'buffer';
 import { cookies } from "next/headers";
 
-
 export const fetchWithCredentials = async (url, options = {}) => {
   try {
     const response = await fetch(url, {
@@ -31,7 +30,7 @@ export const fetchWithCredentials = async (url, options = {}) => {
 };
 
 export const fetchWithAuth = async (url, options = {}) => {
-  const cookieStore = await cookies();
+  const cookieStore = cookies();
   const token = cookieStore.get("JSESSIONID");
   const headers = {
     ...options.headers,
@@ -42,7 +41,7 @@ export const fetchWithAuth = async (url, options = {}) => {
 
 export const getCurrentUserData = async () => {
   try {
-    const cookieStore = await cookies();
+    const cookieStore = cookies();
     const token = cookieStore.get("JSESSIONID");
     
     const headers = {
@@ -67,7 +66,7 @@ export const getCurrentUserData = async () => {
 
 export const getAvatar = async (url) => {
   try {
-    const cookieStore = await cookies();
+    const cookieStore = cookies();
     const token = cookieStore.get("JSESSIONID");
     const headers = {
       Cookie: `JSESSIONID=${token?.value}`,
