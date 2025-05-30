@@ -33,6 +33,9 @@ const LeavePage = ({ searchParams }) => {
 
   const isUserAdmin = userAdmin.includes(currentUser?.name);
 
+  //Get Username
+  const username = searchParams?.username || currentUser?.name;
+
   const { replace } = useRouter();
 
   const handleChange = async (event) => {
@@ -50,15 +53,14 @@ const LeavePage = ({ searchParams }) => {
   };
 
   useEffect(() => {
+    if (!username) return;
+
     const fetchData = async () => {
       setLoading(true);
 
       try {
         //Fetch Data
         const dataAllUsers = await getAllDataUser();
-
-        var username = searchParams?.username;
-        username = username !== undefined ? username : currentUser?.name;
 
         const currentUserData = dataAllUsers.find(
           (data) => data.user_name === username
@@ -69,7 +71,7 @@ const LeavePage = ({ searchParams }) => {
         );
 
         const currentYearData = processLeaveItem(arr_time_leave_total);
-        
+
         setData({
           currentUser,
           username,
@@ -85,7 +87,7 @@ const LeavePage = ({ searchParams }) => {
       }
     }
     fetchData();
-  }, [searchParams]);
+  }, [searchParams, username]);
 
   if (loading) {
     return <Loading />;
@@ -156,6 +158,7 @@ const LeavePage = ({ searchParams }) => {
                     className={styles.issueInfo}
                     component="th"
                     scope="row"
+                    style={{ maxWidth: "500px" }}
                   >
                     {row.desc}
                   </TableCell>

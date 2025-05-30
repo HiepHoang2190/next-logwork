@@ -1,50 +1,53 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import "react-datepicker/dist/react-datepicker.css";
-import LogWorkExcelPage from "@/app/ui/dashboard/logwork/logworkExcel";
-import LogWorkDatePicker from "@/app/ui/dashboard/logwork/logworkDatePicker";
+import { useAuth } from "@/app/lib/AuthContext";
+import { getAllDataUser, getUserIssues } from "@/app/lib/fetchApi";
 import {
-  processData,
+  filterWorklogsByAuthor,
+  getDatefromDay,
   groupData,
-  logTimeTotal,
-  logTimeElement,
   logCommentElement,
+  logTimeElement,
+  logTimeTotal,
   logTimeTotalIssue,
   logTimeTotalIssueByDay,
-  getDatefromDay,
+  processData,
 } from "@/app/lib/logWorkAction";
-import styles from "./logwork.module.css";
-import { auth } from "@/app/auth";
-import { PiWarningBold } from "react-icons/pi";
 import Loading from "@/app/ui/dashboard/loading/loading";
-import { getAllDataUser, getUserIssues } from "@/app/lib/fetchApi";
+import LogWorkDatePicker from "@/app/ui/dashboard/logwork/logworkDatePicker";
+import LogWorkExcelPage from "@/app/ui/dashboard/logwork/logworkExcel";
 import Unauthorized from "@/app/ui/dashboard/unauthorized/unauthorized";
-import { filterWorklogsByAuthor } from "@/app/lib/logWorkAction";
-import { useAuth } from "@/app/lib/AuthContext";
+import clsx from "clsx";
+import { useEffect, useState } from "react";
+import "react-datepicker/dist/react-datepicker.css";
+import { PiWarningBold } from "react-icons/pi";
+import styles from "./logwork.module.css";
 
-const LogWorkTablePage = ({searchParams}) => {
+const LogWorkTablePage = ({ searchParams }) => {
 
   const { currentUser } = useAuth();
 
   const [dataTable, setDataTable] = useState();
-  
+
   const [loading, setLoading] = useState(true);
-  
+
   const [data, setData] = useState(null);
-  
+
   const [error, setError] = useState(null);
 
   const year = searchParams?.year || new Date().getFullYear();
-  
+
   const month = searchParams?.month || new Date().getMonth() + 1;
 
+  //Get Username
+  const username = searchParams?.username || currentUser?.name;
+
   useEffect(() => {
+    if (!username) return;
+
     const fetchData = async () => {
       setLoading(true);
       try {
-
-        let username = searchParams?.username || currentUser.name;
 
         const dataAllUser = await getAllDataUser();
         const dataUsers = await getUserIssues(username, year, month);
@@ -77,7 +80,7 @@ const LogWorkTablePage = ({searchParams}) => {
     };
 
     fetchData();
-  }, [searchParams]);
+  }, [searchParams, username]);
 
 
   useEffect(() => {
@@ -85,9 +88,9 @@ const LogWorkTablePage = ({searchParams}) => {
   }, [data?.dataIssue]);
 
   const year_url = year.toString().substr(-2);
-  
+
   const issue_list = processData(dataTable, year_url, month);
-  
+
   const arr_group = groupData(issue_list);
 
   const current = new Date().getDate();
@@ -153,10 +156,10 @@ const LogWorkTablePage = ({searchParams}) => {
                 <th
                   key={item}
                   className={`${item == current &&
-                      new Date().getMonth() + 1 == month &&
-                      new Date().getFullYear() == year
-                      ? "current date"
-                      : "date"
+                    new Date().getMonth() + 1 == month &&
+                    new Date().getFullYear() == year
+                    ? "current date"
+                    : "date"
                     }`}
                   id={
                     ["SA", "SU"].includes(getDatefromDay(item, month, thisyear))
@@ -172,145 +175,74 @@ const LogWorkTablePage = ({searchParams}) => {
           </tr>
         </thead>
         <tbody>
-          {Object.keys(arr_group).map((index) => (
-            <tr key={index}>
-              {arr_days_tbody &&
-                arr_days_tbody.map((element, ind) => {
-                  const { key, pkey, summary, logs } = arr_group[index];
+          {Object.entries(arr_group).map(([index, group]) => {
+            const { key, pkey, summary, logs } = group;
+            const logValues = Object.values(logs);
 
-                  switch (element) {
-                    case 1:
-                      return (
-                        <td
-                          key={ind}
-                          className={
-                            pkey === "LRM"
-                              ? "title-issue leave-date"
-                              : "title-issue"
-                          }
+            return (
+              <tr key={index}>
+                {arr_days_tbody.map((element, ind) => {
+                  if (element === 1) {
+                    return (
+                      <td key={ind} className={clsx("title-issue", pkey === "LRM" && "leave-date")}>
+                        <a
+                          href={`https://pm.lotustest.net/browse/${key}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="title"
                         >
-                          <a
-                            target="_blank"
-                            rel="noreferrer"
-                            href={`https://pm.lotustest.net/browse/${key}`}
-                            className="title"
-                          >
-                            {summary}
-                          </a>
-                        </td>
-                      );
-                    case 2:
-                      return (
-                        <td
-                          className={pkey === "LRM" ? "leave-date" : ""}
-                          key={ind}
-                        >
-                          {key}
-                        </td>
-                      );
-                    case 3:
-                      return (
-                        <td
-                          className={pkey === "LRM" ? "leave-date" : ""}
-                          key={ind}
-                        >
-                          {pkey}
-                        </td>
-                      );
-                    case 4:
-                      return (
-                        <td
-                          className={pkey === "LRM" ? "leave-date" : ""}
-                          key={ind}
-                        >
-                          {pkey === "LRM"
-                            ? ""
-                            : `${logTimeTotal(Object.values(logs))}h`}
-                        </td>
-                      );
-                    default:
-                      return ["SA", "SU"].includes(
-                        getDatefromDay(element - 4, month, thisyear)
-                      ) ? (
-                        <td
-                          className={pkey === "LRM" ? "leave-date" : ""}
-                          key={ind}
-                          id="weekend"
-                        >
-                          {logTimeElement(Object.values(logs), element - 4) !==
-                            null && (
-                              <div className={`${styles.tooltip}`}>
-                                {logTimeElement(Object.values(logs), element - 4)}
-                                h
-                                <div className={`${styles.tooltip_container}`}>
-                                  <div className={`${styles.tooltip_text}`}>
-                                    <p>
-                                      {logCommentElement(
-                                        Object.values(logs),
-                                        element - 4
-                                      ) ? (
-                                        logCommentElement(
-                                          Object.values(logs),
-                                          element - 4
-                                        )
-                                      ) : (
-                                        <>
-                                          <PiWarningBold /> This logwork doesn't
-                                          have a comment!
-                                        </>
-                                      )}
-                                    </p>
-                                  </div>
-                                  <div
-                                    className={`${styles.tooltip_text_bottom}`}
-                                  ></div>
-                                </div>
-                              </div>
-                            )}
-                        </td>
-                      ) : (
-                        <td
-                          className={pkey === "LRM" ? "leave-date" : ""}
-                          key={ind}
-                        >
-                          {logTimeElement(Object.values(logs), element - 4) !==
-                            null ? (
-                            <div className={`${styles.tooltip}`}>
-                              {logTimeElement(Object.values(logs), element - 4)}
-                              h
-                              <div className={`${styles.tooltip_container}`}>
-                                <div className={`${styles.tooltip_text}`}>
-                                  <p>
-                                    {logCommentElement(
-                                      Object.values(logs),
-                                      element - 4
-                                    ) ? (
-                                      logCommentElement(
-                                        Object.values(logs),
-                                        element - 4
-                                      )
-                                    ) : (
-                                      <>
-                                        <PiWarningBold /> This logwork doesn't
-                                        have a comment!
-                                      </>
-                                    )}
-                                  </p>
-                                </div>
-                                <div
-                                  className={`${styles.tooltip_text_bottom}`}
-                                ></div>
-                              </div>
-                            </div>
-                          ) : (
-                            ""
-                          )}
-                        </td>
-                      );
+                          {summary}
+                        </a>
+                      </td>
+                    );
                   }
+
+                  if (element === 2) {
+                    return <td key={ind} className={clsx(pkey === "LRM" && "leave-date")}>{key}</td>;
+                  }
+
+                  if (element === 3 || element === 4) {
+                    return (
+                      <td key={ind} className={clsx(pkey === "LRM" && "leave-date")}>
+                        {element === 4 && pkey !== "LRM" ? `${logTimeTotal(logValues)}h` : pkey}
+                      </td>
+                    );
+                  }
+
+                  const day = element - 4;
+                  const isWeekend = ["SA", "SU"].includes(getDatefromDay(day, month, thisyear));
+                  const logTime = logTimeElement(logValues, day);
+                  const comment = logCommentElement(logValues, day);
+
+                  return (
+                    <td
+                      key={ind}
+                      className={clsx(pkey === "LRM" && "leave-date")}
+                      id={isWeekend ? "weekend" : ""}
+                    >
+                      {logTime && (
+                        <div className={styles.tooltip}>
+                          {logTime}h
+                          <div className={styles.tooltip_container}>
+                            <div className={styles.tooltip_text}>
+                              <p>
+                                {comment || (
+                                  <>
+                                    <PiWarningBold /> This logwork doesn't have a comment!
+                                  </>
+                                )}
+                              </p>
+                            </div>
+                            <div className={styles.tooltip_text_bottom} />
+                          </div>
+                        </div>
+                      )}
+                    </td>
+                  );
                 })}
-            </tr>
-          ))}
+              </tr>
+            );
+          })}
 
           <tr className="last">
             <td colSpan={3}>Total</td>
