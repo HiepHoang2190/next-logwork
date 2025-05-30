@@ -12,6 +12,25 @@ const Unauthorized = (props) => {
 
   const { logout } = useAuth();
 
+  const isUnauthorized = status === "Unauthorized!";
+
+  const isServerError =
+    status === "fetch failed" || status === "An unexpected error occurred.";
+
+  const title = isUnauthorized ? "401" : isServerError ? "502" : "";
+
+  const heading = isUnauthorized
+    ? "Unauthorized!"
+    : isServerError
+      ? "Something went wrong!"
+      : "";
+
+  const message = isUnauthorized
+    ? "Please Logout and try again"
+    : isServerError
+      ? "Please try again later"
+      : "";
+
   return (
     <div
       style={{
@@ -30,22 +49,17 @@ const Unauthorized = (props) => {
           }}
         >
           <div className={styles.containerText}>
-            <h1 className={styles.h1}>
-              {status === "Unauthorized!" && "401"}
-              {status === "fetch failed" || status === "An unexpected error occurred." && "502"}
-            </h1>
+            <h1 className={styles.h1}>{title}</h1>
             <h3
               className={styles.h3}
               style={{ marginTop: "10px", marginBottom: "15px" }}
             >
-              {status === "Unauthorized!" && "Unauthorized!"}
-              {status === "fetch failed" || status === "An unexpected error occurred." && "Something when wrong!"}
+              {heading}
             </h3>
             <span className={styles.text}>
-              {status === "Unauthorized!" && "Please Logout and try again"}
-              {status === "fetch failed" || status === "An unexpected error occurred." && "Please try again later"}
+              {message}
             </span>
-            {status === "Unauthorized!" && (
+            {isUnauthorized && (
               <button className={styles.logout} onClick={() => logout()}>
                 <MdLogout />
                 Logout

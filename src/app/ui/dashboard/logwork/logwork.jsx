@@ -13,8 +13,8 @@ import Unauthorized from "@/app/ui/dashboard/unauthorized/unauthorized";
 import Loading from "@/app/ui/dashboard/loading/loading";
 import { useAuth } from "@/app/lib/AuthContext";
 
-const LogWorksUi = ({searchParams}) => {
-  
+const LogWorksUi = ({ searchParams }) => {
+
   const { currentUser } = useAuth();
 
   const [loading, setLoading] = useState(true);
@@ -33,16 +33,17 @@ const LogWorksUi = ({searchParams}) => {
 
   const { replace } = useRouter();
 
+  //Get Username
+  const username = paramsUserName || currentUser?.name;
+
   useEffect(() => {
+    if (!username) return;
+
     const fetchData = async () => {
       setLoading(true);
       try {
         const year = searchParams?.year || new Date().getFullYear();
         const month = searchParams?.month || new Date().getMonth() + 1;
-        
-        //Get User Info
-        var username = searchParams?.username;
-        username = username !== undefined ? username : currentUser?.name;
 
         const dataAllUser = await getAllDataUser();
         const dataUsers = await getUserIssues(username, year, month);
@@ -77,7 +78,7 @@ const LogWorksUi = ({searchParams}) => {
     };
 
     fetchData();
-  }, [searchParams]);
+  }, [searchParams, username]);
 
 
   const newLogWork = data?.userLogwork.map((item) => ({
@@ -101,7 +102,7 @@ const LogWorksUi = ({searchParams}) => {
 
   }, [data?.userLogwork, searchParams]);
 
-  
+
   const handleChange = async (event) => {
     setUserName(event.target.value);
     updateQueryParam("username", event.target.value, searchParams, replace);
