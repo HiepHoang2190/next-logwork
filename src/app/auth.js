@@ -1,10 +1,12 @@
 "use server";
 
 import { fetchWithCredentials } from "@/app/lib/fetchApi";
+import { cookies } from "next/headers";
 
 export const login = async (credentials) => {
   try {
     const user = {};
+    const cookieStore = cookies();
 
     const sessionResponse = await fetchWithCredentials(
       `${process.env.NEXT_PUBLIC_APP_JIRA_API_PATH}/auth/1/session`,
@@ -51,6 +53,7 @@ export const login = async (credentials) => {
     user.email = userDetailResponse.emailAddress;
     user.displayName = userDetailResponse.displayName;
     user.avatarUrls = Object.values(userDetailResponse.avatarUrls);
+    cookieStore.set("JSESSIONID", sessionResponse.session.value);
     return user;
   } catch (err) {
     return { error: err.message };

@@ -1,11 +1,11 @@
-import { authConfig } from '@/app/authconfig'
 import { NextResponse } from 'next/server'
+import { cookies } from "next/headers";
 
 export async function middleware(request) {
   
   const url = request.nextUrl
-
-  const existingToken = request.cookies.get('JSESSIONID');
+  const cookieStore = cookies();
+  const existingToken = cookieStore.get("JSESSIONID");
 
   const authPaths = ['/login']
   const dashboardPath = '/dashboard'

@@ -220,6 +220,7 @@ const LoginForm = () => {
                     sx={{ ...inputStyles }}
                     label="Username"
                     id="username"
+                    value={values.username || ''}
                     onChange={handleChange("username")}
                     onKeyDown={handleKeyDown}
                   />
@@ -236,7 +237,7 @@ const LoginForm = () => {
                   <OutlinedInput
                     sx={{ ...inputStyles, paddingRight: "20px" }}
                     label="Password"
-                    value={values.password || undefined}
+                    value={values.password || ''}
                     id="auth-login-password"
                     onChange={handleChange("password")}
                     onKeyDown={handleKeyDown}
