@@ -1,4 +1,4 @@
-"use server";
+export const dynamic = "force-dynamic";
 
 import { getCurrentUserData, getAllDataUser } from "@/app/lib/fetchApi";
 import LogWorkTablePage from "@/app/ui/dashboard/logwork/logworkTable";

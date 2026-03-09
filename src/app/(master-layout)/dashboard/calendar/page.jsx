@@ -1,4 +1,4 @@
-"use server";
+export const dynamic = "force-dynamic";
 
 import { getAllDataUser, getCurrentUserData } from "@/app/lib/fetchApi";
 import ComponentCalendar from "@/app/ui/dashboard/logwork/logwork";
