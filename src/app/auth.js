@@ -12,10 +12,10 @@ export const login = async (credentials) => {
       `${process.env.NEXT_PUBLIC_APP_JIRA_API_PATH}/auth/1/session`,
       {
         method: "POST",
-        body: JSON.stringify({
+        data: {
           username: credentials.username,
           password: credentials.password,
-        }),
+        },
       }
     );
     
