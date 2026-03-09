@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getCurrentUserData } from "@/app/lib/fetchApi";
 import styles from "@/app/ui/dashboard/dashboard.module.css";
 import ComponentOpenTickets from "@/app/ui/dashboard/openTickets/openTicket";
