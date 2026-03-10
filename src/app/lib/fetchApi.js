@@ -63,9 +63,6 @@ export const fetchWithCredentials = async (url, options = {}) => {
       method,
       headers: {
         Accept: 'application/json, text/plain, */*',
-        // GET requests must not carry Content-Type (Jira returns 400 "No content
-        // to map…"). Non-GET requests must explicitly declare application/json
-        // or Jira returns 415 when axios falls back to form-urlencoded.
         ...(method.toUpperCase() !== 'GET' && { 'Content-Type': 'application/json' }),
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
@@ -78,7 +75,6 @@ export const fetchWithCredentials = async (url, options = {}) => {
 
     return response.data;
   } catch (error) {
-    console.log(error.response)
     if (axios.isAxiosError(error)) {
       const status = error.response?.status;
       if ([400, 401, 403].includes(status)) return 'Unauthorized!';
@@ -136,14 +132,42 @@ export const getAvatar = async (url) => {
 };
 
 export const getUserIssues = async (username, year, month) => {
-  const nextMonth = Number(month) + 1 > 12 ? 1          : Number(month) + 1;
-  const nextYear  = Number(month) + 1 > 12 ? Number(year) + 1 : year;
-  const url = `${process.env.NEXT_PUBLIC_APP_JIRA_API_PATH}/api/2/search?jql=(worklogAuthor%20in%20(%22${username}%22))%20AND%20(worklogDate%20%3E%3D%20%27${year}-${month}-01%27%20and%20worklogDate%20%3C%20%27${nextYear}-${nextMonth}-01%27)%20ORDER%20BY%20key%20ASC%20&fields=summary%2Cworklog%2Ccreated%2Cupdated%2Cissuetype%2Cparent%2Cproject%2Cstatus%2Cassignee%2Creporter%2Caggregatetimespent%2Ctimeoriginalestimate%2Ctimeestimate&maxResults=1000`;
-  return fetchWithAuth(url, { method: 'GET' });
+  const nextMonth = month + 1 > 12 ? 1 : month + 1;
+  const nextYear = month + 1 > 12 ? year + 1 : year;
+
+  const jql = encodeURIComponent(`
+    worklogAuthor in ("${username}")
+    AND worklogDate >= "${year}-${String(month).padStart(2, "0")}-01"
+    AND worklogDate < "${nextYear}-${String(nextMonth).padStart(2, "0")}-01"
+    ORDER BY key ASC
+  `);
+
+  const fields = [
+    "summary",
+    "worklog",
+    "created",
+    "updated",
+    "issuetype",
+    "parent",
+    "project",
+    "status",
+    "assignee",
+    "reporter",
+    "aggregatetimespent",
+    "timeoriginalestimate",
+    "timeestimate",
+  ].join(",");
+
+  const url = `${process.env.NEXT_PUBLIC_APP_JIRA_API_PATH}/api/2/search?jql=${jql}&fields=${fields}&maxResults=1000`;
+
+  return fetchWithAuth(url, { method: "GET" });
 };
 
 export const getUserCurrentIssues = async () => {
-  const url = `${process.env.NEXT_PUBLIC_APP_JIRA_API_PATH}/api/2/search?jql=assignee%3DcurrentUser()%20AND%20resolution%3DUnresolved%20and%20status%20!%3D%20Closed%20ORDER%20BY%20created%20ASC&fields=issuetype%2Csummary%2Creporter%2Cpriority%2Cstatus%2Cresolution%2Ccreated%2Cupdated&maxResults=1000`;
+  const jql = encodeURIComponent(
+    "assignee = currentUser() AND resolution = Unresolved AND status != Closed ORDER BY created ASC"
+  );
+  const url = `${process.env.NEXT_PUBLIC_APP_JIRA_API_PATH}/api/2/search?jql=${jql}&fields=issuetype,summary,reporter,priority,status,resolution,created,updated&maxResults=1000`;
   return fetchWithAuth(url, { method: 'GET' });
 };
 
